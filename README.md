@@ -81,7 +81,7 @@ Before your AI agent can join a meeting, you'll need to create a meeting ID. You
 
 ```bash
 curl -X POST https://api.videosdk.live/v2/rooms \
-  -H "Authorization: YOUR_JWT_TOKEN_HERE" \
+  -H "Authorization: VIDEOSDK_AUTH_TOKEN" \
   -H "Content-Type: application/json"
 ```
 

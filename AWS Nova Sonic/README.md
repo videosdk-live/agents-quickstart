@@ -16,7 +16,7 @@ Before using AWS Nova Sonic with the VideoSDK AI Agent, ensure the following:
 Install the AWS-enabled VideoSDK Agents package:
 
 ```bash
-pip install "videosdk-agents[aws]"
+pip install "videosdk-plugins[aws]"
 ```
 
 ## Configuration
