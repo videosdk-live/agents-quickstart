@@ -41,7 +41,7 @@ async def get_weather(
 class MyVoiceAgent(Agent):
     def __init__(self):
         super().__init__(
-            instructions="Your Name is VideoSDK's Voice Agent. You are a helpful voice assistant that can answer questions and help with tasks.",
+            instructions="You Are VideoSDK's Voice Agent. You are a helpful voice assistant that can answer questions and help with tasks.",
             tools=[get_weather]
         )
 
@@ -81,11 +81,12 @@ class MyVoiceAgent(Agent):
 async def main(context: dict):
     model = NovaSonicRealtime(
         model="amazon.nova-sonic-v1:0",
-        region="us-east-1",  # Pass the Default region for supported model
-        aws_access_key_id="UKXXXXXXXXXXXXXXXXXXXX", # or pass it as an environment variable
-        aws_secret_access_key="AECXXXXXXXXXXXXXXXXXXXX", # or pass it as an environment variable
+        # When AWS credentials and region are set in .env - DON'T pass credential parameters
+        region="us-east-1",  
+        aws_access_key_id="UKXXXXXXXXXXXXXXXXXXXX", 
+        aws_secret_access_key="AECXXXXXXXXXXXXXXXXXXXX", 
         config=NovaSonicConfig(
-            voice="tiffany",
+            voice="tiffany", #  "tiffany","matthew", "amy"
             temperature=0.7,
             top_p=0.9,
             max_tokens=1024

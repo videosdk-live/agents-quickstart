@@ -62,7 +62,7 @@ python gemini_agent_quickstart.py
 
 The agent uses Google's Gemini models for real-time, multi-modal AI interactions. Configuration options include:
 
-- `model`: The Gemini model to use (e.g., `"gemini-2.0-flash-live-001"`)
+- `model`: The Gemini model to use (e.g., `"gemini-2.0-flash-live-001"`) and Other supported models include: "gemini-2.5-flash-preview-native-audio-dialog" and "gemini-2.5-flash-exp-native-audio-thinking-dialog".
 - `api_key`: Your Google API key (can also be set via environment variable)
 - `config`: Advanced configuration options including voice, language code, temperature, etc.
 

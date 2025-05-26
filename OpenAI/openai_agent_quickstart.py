@@ -43,7 +43,7 @@ async def get_weather(
 class MyVoiceAgent(Agent):
     def __init__(self):
         super().__init__(
-            instructions="Your Name is VideoSDK's Voice Agent.You are a helpful voice assistant that can answer questions and help with tasks.",
+            instructions="You Are VideoSDK's Voice Agent.You are a helpful voice assistant that can answer questions and help with tasks.",
             tools=[get_weather]
         )
 
@@ -83,8 +83,10 @@ class MyVoiceAgent(Agent):
 async def main(context: dict):
     model = OpenAIRealtime(
         model="gpt-4o-realtime-preview",
-        api_key="sk-proj-XXXXXXXXXXXXXXXXXXXX", #Or pass it as an environment variable
+        # When OPENAI_API_KEY is set in .env - DON'T pass api_key parameter
+        api_key="sk-proj-XXXXXXXXXXXXXXXXXXXX",
         config=OpenAIRealtimeConfig(
+            voice="alloy", # alloy, ash, ballad, coral, echo, fable, onyx, nova, sage, shimmer, and verse
             modalities=["text", "audio"],
             input_audio_transcription=InputAudioTranscription(model="whisper-1"),
             turn_detection=TurnDetection(
