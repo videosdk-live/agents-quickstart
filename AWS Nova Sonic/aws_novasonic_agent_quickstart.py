@@ -1,7 +1,10 @@
 import asyncio
 import aiohttp
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool,MCPServerStdio, MCPServerHTTP
 from videosdk.plugins.aws import NovaSonicRealtime, NovaSonicConfig
+from pathlib import Path
+import sys
+
 
 
 @function_tool
@@ -40,9 +43,21 @@ async def get_weather(
 
 class MyVoiceAgent(Agent):
     def __init__(self):
+        mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
         super().__init__(
             instructions="You Are VideoSDK's Voice Agent. You are a helpful voice assistant that can answer questions and help with tasks.",
-            tools=[get_weather]
+            tools=[get_weather],
+            mcp_servers=[
+                MCPServerStdio(
+                    command=sys.executable,
+                    args=[str(mcp_script)],
+                    client_session_timeout_seconds=30
+                ),
+                MCPServerHTTP(
+                    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+                    client_session_timeout_seconds=30
+                )
+            ]
         )
 
     async def on_enter(self) -> None:

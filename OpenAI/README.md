@@ -1,6 +1,6 @@
 # 🚀 OpenAI Agent for VideoSDK
 
-This directory contains example code for integrating an OpenAI-powered voice agent into VideoSDK meetings.
+This directory contains example code for integrating an OpenAI-powered voice agent into VideoSDK meetings with Model Context Protocol (MCP) support.
 
 ## 🛠️ Installation
 
@@ -8,6 +8,7 @@ Install the OpenAI-enabled VideoSDK Agents package:
 
 ```bash
 pip install "videosdk-plugins-openai"
+pip install fastmcp  # For MCP server support
 ```
 
 ## Configuration
@@ -57,6 +58,34 @@ python openai_agent_quickstart.py
 - **Function Calling**: Retrieve weather data and other information
 - **Custom Agent Behaviors**: Define agent personality and interaction style
 - **Call Control**: Agents can manage call flow and termination
+- **🔗 MCP Integration**: Connect to multiple Model Context Protocol servers for extended functionality
+  - **MCPServerStdio**: Local process communication for development and testing
+  - **MCPServerHTTP**: Remote service integration for production environments
+  - **Multiple MCP Servers**: Support for simultaneous connections to various data sources and tools
+
+## 🔗 MCP (Model Context Protocol) Integration
+
+This agent demonstrates MCP integration with both STDIO and HTTP transport methods:
+
+```python
+from videosdk.agents import MCPServerStdio, MCPServerHTTP
+
+# STDIO transport for local MCP server
+mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
+MCPServerStdio(
+    command=sys.executable,
+    args=[str(mcp_script)],
+    client_session_timeout_seconds=30
+)
+
+# HTTP transport for remote services (e.g., Zapier)
+MCPServerHTTP(
+    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+    client_session_timeout_seconds=30
+)
+```
+
+For more details on MCP integration, see the [MCP Server README](../MCP Server/README.md).
 
 ## 🧠 OpenAI Configuration
 

@@ -1,0 +1,7 @@
+# VideoSDK AI Agents
+videosdk-agent
+videosdk-plugins-openai
+videosdk-plugins-google
+videosdk-plugins-aws
+fastmcp
+aiohttp

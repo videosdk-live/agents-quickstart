@@ -1,9 +1,9 @@
 import asyncio
 import aiohttp
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool, MCPServerStdio, MCPServerHTTP
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
-from google.genai.types import AudioTranscriptionConfig
-
+from pathlib import Path
+import sys
 
 @function_tool
 async def get_weather(
@@ -41,9 +41,21 @@ async def get_weather(
 
 class MyVoiceAgent(Agent):
     def __init__(self):
+        mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
         super().__init__(
             instructions="You Are VideoSDK's Voice Agent.You are a helpful voice assistant that can answer questions and help with tasks.",
-            tools=[get_weather]
+            tools=[get_weather],
+            mcp_servers=[
+                MCPServerStdio(
+                    command=sys.executable,
+                    args=[str(mcp_script)],
+                    client_session_timeout_seconds=30
+                ),
+                MCPServerHTTP(
+                    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+                    client_session_timeout_seconds=30
+                )
+            ]
         )
 
     async def on_enter(self) -> None:
@@ -83,11 +95,10 @@ async def main(context: dict):
     model = GeminiRealtime(
         model="gemini-2.0-flash-live-001",
         # When GOOGLE_API_KEY is set in .env - DON'T pass api_key parameter
-        api_key="AIXXXXXXXXXXXXXXXXXXXX", 
+        # api_key="AIXXXXXXXXXXXXXXXXXXXX", 
         config=GeminiLiveConfig(
             voice="Leda", # Puck, Charon, Kore, Fenrir, Aoede, Leda, Orus, and Zephyr.
-            response_modalities=["AUDIO"],
-            output_audio_transcription=AudioTranscriptionConfig()
+            response_modalities=["AUDIO"]
         )
     )
 
@@ -108,6 +119,6 @@ async def main(context: dict):
 
 if __name__ == "__main__":
     def make_context():
-        return {"meetingId": "meeting_id", "name": "Gemini Agent", "videosdk_auth": "videosdk_auth_token"}
+        return {"meetingId": "obsk-dfh0-qmyb", "name": "Gemini Agent"}
     
     asyncio.run(main(context=make_context()))

@@ -1,10 +1,10 @@
 import asyncio
 import aiohttp
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool,MCPServerStdio, MCPServerHTTP
 from videosdk.plugins.openai import OpenAIRealtime, OpenAIRealtimeConfig
 from openai.types.beta.realtime.session import InputAudioTranscription, TurnDetection
-
-
+from pathlib import Path
+import sys  
 
 @function_tool
 async def get_weather(
@@ -42,9 +42,21 @@ async def get_weather(
 
 class MyVoiceAgent(Agent):
     def __init__(self):
+        mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
         super().__init__(
             instructions="You Are VideoSDK's Voice Agent.You are a helpful voice assistant that can answer questions and help with tasks.",
-            tools=[get_weather]
+            tools=[get_weather],
+            mcp_servers=[
+                MCPServerStdio(
+                    command=sys.executable,
+                    args=[str(mcp_script)],
+                    client_session_timeout_seconds=30
+                ),
+                MCPServerHTTP(
+                    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+                    client_session_timeout_seconds=30
+                )
+            ]
         )
 
     async def on_enter(self) -> None:
@@ -84,7 +96,7 @@ async def main(context: dict):
     model = OpenAIRealtime(
         model="gpt-4o-realtime-preview",
         # When OPENAI_API_KEY is set in .env - DON'T pass api_key parameter
-        api_key="sk-proj-XXXXXXXXXXXXXXXXXXXX",
+        # api_key="sk-proj-XXXXXXXXXXXXXXXXXXXX",
         config=OpenAIRealtimeConfig(
             voice="alloy", # alloy, ash, ballad, coral, echo, fable, onyx, nova, sage, shimmer, and verse
             modalities=["text", "audio"],
@@ -115,6 +127,6 @@ async def main(context: dict):
 
 if __name__ == "__main__":
     def make_context():
-        return {"meetingId": "meeting_id", "name": "OpenAI Agent", "videosdk_auth": "videosdk_auth_token"}
+        return {"meetingId": "obsk-dfh0-qmyb", "name": "OpenAI Agent"}
     
     asyncio.run(main(context=make_context()))
