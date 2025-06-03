@@ -1,5 +1,5 @@
 # VideoSDK AI Agents
-videosdk-agent
+videosdk-agents
 videosdk-plugins-openai
 videosdk-plugins-google
 videosdk-plugins-aws
