@@ -2,10 +2,6 @@
 
 The Agent to Agent (A2A) protocol enables seamless collaboration between specialized AI agents, allowing them to communicate, share knowledge, and coordinate responses based on their unique capabilities and domain expertise.
 
-:::info Complete Documentation
-For comprehensive implementation guides, detailed examples, and advanced configurations, visit our complete [A2A Integration Documentation](https://docs.videosdk.live/ai_agents/a2a/overview).
-:::
-
 ![A2A Architecture](https://cdn.videosdk.live/website-resources/docs-resources/a2a_diagram.png)
 
 ## 🌟 How It Works
