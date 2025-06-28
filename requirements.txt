@@ -1,7 +1,12 @@
 # VideoSDK AI Agents
-videosdk-agents
-videosdk-plugins-openai
-videosdk-plugins-google
-videosdk-plugins-aws
+videosdk-agents==0.0.16
+videosdk-plugins-openai>=0.0.16
+videosdk-plugins-google>=0.0.16
+videosdk-plugins-aws>=0.0.16
+videosdk-plugins-deepgram>=0.0.16
+videosdk-plugins-elevenlabs>=0.0.16
+videosdk-plugins-silero>=0.0.16
+videosdk-plugins-turn-detector>=0.0.16
+videosdk-plugins-sarvamai>=0.0.16
 fastmcp
 aiohttp

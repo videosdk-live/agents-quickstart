@@ -19,6 +19,7 @@ The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents t
 - **🤖 Agent to Agent (A2A) Communication**: Enable specialized agents to collaborate and share domain expertise
 - **Function Tools**: Enable your agents with capabilities like retrieving data or performing actions
 - **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
+- **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.(Note: Vision is exclusively supported with Gemini models via the Gemini Live API)
 
 ## 🧠 Core Components
 

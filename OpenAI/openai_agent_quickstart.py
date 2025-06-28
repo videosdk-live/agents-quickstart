@@ -127,6 +127,6 @@ async def main(context: dict):
 
 if __name__ == "__main__":
     def make_context():
-        return {"meetingId": "obsk-dfh0-qmyb", "name": "OpenAI Agent"}
+        return {"meetingId": "YOUR_MEETING_ID", "name": "OpenAI Agent"}
     
     asyncio.run(main(context=make_context()))

@@ -1,6 +1,6 @@
 # 🚀 Google Gemini (LiveAPI) Agent for VideoSDK
 
-This directory contains example code for integrating a Google Gemini (LiveAPI)-powered voice agent into VideoSDK meetings with Model Context Protocol (MCP) support.
+This directory contains example code for integrating a Google Gemini-powered voice and vision agent (via Live API) into VideoSDK meetings, with full support for the Model Context Protocol (MCP).
 
 ## 🛠️ Installation
 
@@ -58,6 +58,7 @@ python gemini_agent_quickstart.py
 - **Function Calling**: Retrieve weather data and other information
 - **Custom Agent Behaviors**: Define agent personality and interaction style
 - **Call Control**: Agents can manage call flow and termination
+- **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.
 - **🔗 MCP Integration**: Connect to multiple Model Context Protocol servers for extended functionality
   - **MCPServerStdio**: Local process communication for development and testing
   - **MCPServerHTTP**: Remote service integration for production environments
@@ -72,6 +73,28 @@ The agent uses Google's Gemini models for real-time, multi-modal AI interactions
 - `config`: Advanced configuration options including voice, language code, temperature, etc.
 
 For complete configuration options, see the [official VideoSDK Google Gemini (LiveAPI) plugin documentation](https://docs.videosdk.live/ai_agents/plugins/google).
+
+
+## Vision Support
+
+Google Gemini Live can also accept `video stream` directly from the VideoSDK room. To enable this, simply turn on your camera and set the vision flag to true in the session context. Once that's done, start your agent as usual—no additional changes are required in the pipeline.
+
+```python
+pipeline = RealTimePipeline(model=model)
+
+session = AgentSession(
+    agent=my_agent,
+    pipeline=pipeline,
+    context={
+        "meetingId": "your_actual_meeting_id_here",  # Replace with actual meeting ID
+        "name": "AI Voice Agent", 
+        "videosdk_auth": "your_videosdk_auth_token_here"  # Replace with actual token
+        "vision": True
+    }
+)
+```
+
+* `vision` (bool, session context) – when `True`, forwards Video Stream from VideoSDK's room to Gemini’s LiveAPI (defaults to `False`).
 
 ## 🔗 MCP (Model Context Protocol) Integration
 
