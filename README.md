@@ -16,6 +16,7 @@ The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents t
 
 - **Voice-Enabled AI Agents**: Integrate AI agents that can speak and listen in real-time meetings
 - **Multiple LLM Providers**: Support for OpenAI, Google Gemini LiveAPI, and AWS Nova Sonic
+- **Modular & Flexible Pipelines**: Choose between integrated real-time pipelines or build your own with the `CascadingPipeline` to mix and match STT, LLM, and TTS providers.
 - **🤖 Agent to Agent (A2A) Communication**: Enable specialized agents to collaborate and share domain expertise
 - **Function Tools**: Enable your agents with capabilities like retrieving data or performing actions
 - **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
@@ -23,11 +24,14 @@ The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents t
 
 ## 🧠 Core Components
 
-The SDK consists of three primary components:
+The SDK is built around several core components that work together to create powerful AI agents:
 
-1. **Agent** - Base class for defining agent behavior and capabilities
-2. **Pipeline** - Manages model selection and configuration
-3. **Agent Session** - Combines all components into a cohesive workflow
+- **Agent**: The base class for defining your agent's identity, including its instructions, tools (functions), and connections to external services via MCP.
+- **Pipeline**: Manages the real-time flow of audio and data between the user and the AI models. The SDK offers two types of pipelines:
+    - **`RealtimePipeline`**: An all-in-one pipeline for providers like Google Gemini Live, optimized for low-latency, conversational AI.
+    - **`CascadingPipeline`**: A modular pipeline that gives you the flexibility to mix and match different providers for Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS). This allows you to tailor your agent's stack for cost, performance, or specific language needs. See our [Cascading Pipeline example](./Cascading%20Pipeline) to learn more.
+- **Conversation Flow**: An inheritable class that works with the `CascadingPipeline` to let you define custom turn-taking logic, preprocess transcripts, and integrate memory or Retrieval-Augmented Generation (RAG) before the LLM is called.
+- **Agent Session**: Manages the agent's lifecycle within a VideoSDK meeting, bringing together the agent, pipeline, and conversation flow to create a seamless interactive experience.
 
 ## 🤖 Agent to Agent (A2A) Multi-Agent System
 
@@ -130,6 +134,7 @@ pip install videosdk-agents
 - [🤖 Agent to Agent (A2A) Multi-Agent System](./A2A) **← Featured**
 - [OpenAI Agent](./OpenAI)
 - [Google Gemini LiveAPI Agent](./Google%20Gemini%20%28LiveAPI%29)
+- [Cascading Pipeline Agent](./Cascading%20Pipeline)
 - [AWS Nova Sonic Agent](./AWS%20Nova%20Sonic)
 - [🔗 MCP Server Examples](./MCP%20Server)
 
@@ -204,6 +209,7 @@ agents-quickstart/
 │
 ├── OpenAI/                        # OpenAI-based agent examples
 ├── Google Gemini (LiveAPI)/       # Google Gemini LiveAPI examples  
+├── Cascading Pipeline/            # Example of a modular pipeline
 ├── AWS Nova Sonic/                # AWS Nova Sonic examples
 ├── MCP Server/                    # Model Context Protocol examples
 ├── requirements.txt               # All dependencies
@@ -215,7 +221,9 @@ agents-quickstart/
 For more information about VideoSDK AI Agents:
 - [Official Documentation](https://docs.videosdk.live/ai_agents/introduction)
 - [AI Voice Agent Quick Start Guide](https://docs.videosdk.live/ai_agents/voice-agent-quick-start)
-- [Core Components Overview](https://docs.videosdk.live/ai_agents/core-components/overview) 
+- [Core Components Overview](https://docs.videosdk.live/ai_agents/core-components/overview)
+- [Cascading Pipeline Documentation](https://docs.videosdk.live/ai_agents/core-components/cascading-pipeline)
+- [Conversation Flow Documentation](https://docs.videosdk.live/ai_agents/core-components/conversation-flow)
 - [MCP Integration](https://docs.videosdk.live/ai_agents/mcp-integration)
 - [A2A Integration Documentation](https://docs.videosdk.live/ai_agents/a2a/overview)
 ---

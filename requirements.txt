@@ -6,6 +6,20 @@ videosdk-plugins-openai>=0.0.18
 videosdk-plugins-google>=0.0.18
 videosdk-plugins-aws>=0.0.18
 
+# Speech-to-Text (STT) Plugins
+videosdk-plugins-deepgram>=0.0.18
+videosdk-plugins-elevenlabs>=0.0.18
+
+# Voice Activity Detection (VAD) and Turn Detection Plugins
+videosdk-plugins-silero>=0.0.18
+videosdk-plugins-turn-detector>=0.0.18
+
+# Text-to-Speech (TTS) Plugins
+videosdk-plugins-sarvamai>=0.0.18
+videosdk-plugins-cartesia>=0.0.18
+videosdk-plugins-resemble>=0.0.18
+videosdk-plugins-smallestai>=0.0.18
+
 # Core Dependencies
 fastmcp
 aiohttp
