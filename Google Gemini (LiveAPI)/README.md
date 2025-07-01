@@ -24,25 +24,22 @@ Before running the agent, make sure to:
    )
    ```
 
-2. Set your VideoSDK credentials in the context dictionary:
+2. Set your VideoSDK credentials in the `make_context` function:
    ```python
-   def make_context():
-       return {
-           "meetingId": "your-meeting-id",               # VideoSDK meeting ID
-           "name": "Gemini Agent",                       # Name displayed in the meeting
-           "videosdk_auth": "your-videosdk-auth-token"   # VideoSDK auth token
-       }
+   from videosdk.agents import JobContext, RoomOptions
+
+   def make_context() -> JobContext:
+       room_options = RoomOptions(
+           room_id="your-meeting-id",                 # VideoSDK meeting ID
+           auth_token="your-videosdk-auth-token",     # Or use environment variable VIDEOSDK_AUTH_TOKEN
+           name="Gemini Agent",
+           playground=True,
+           vision=True  # Enable vision for Gemini
+       )
+       return JobContext(room_options=room_options)
    ```
 
-   You can also use environment variables instead:
-   ```python
-   def make_context():
-       return {
-           "meetingId": os.environ.get("VIDEOSDK_MEETING_ID"),
-           "name": "Gemini Agent",
-           "videosdk_auth": os.environ.get("VIDEOSDK_AUTH_TOKEN")
-       }
-   ```
+   You can also use environment variables for `VIDEOSDK_MEETING_ID` and `VIDEOSDK_AUTH_TOKEN`.
 
 ## Running the Example
 
@@ -50,6 +47,14 @@ To run the Gemini-powered agent:
 
 ```bash
 python gemini_agent_quickstart.py
+```
+
+When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.
+
+```
+Agent started in playground mode
+Interact with agent here at:
+https://playground.videosdk.live?token=...&meetingId=...
 ```
 
 ## ✨ Key Features
@@ -77,24 +82,19 @@ For complete configuration options, see the [official VideoSDK Google Gemini (Li
 
 ## Vision Support
 
-Google Gemini Live can also accept `video stream` directly from the VideoSDK room. To enable this, simply turn on your camera and set the vision flag to true in the session context. Once that's done, start your agent as usual—no additional changes are required in the pipeline.
+Google Gemini Live can also accept `video stream` directly from the VideoSDK room. To enable this, simply turn on your camera and set the `vision` flag to `True` in `RoomOptions`. Once that's done, start your agent as usual—no additional changes are required in the pipeline.
 
 ```python
-pipeline = RealTimePipeline(model=model)
-
-session = AgentSession(
-    agent=my_agent,
-    pipeline=pipeline,
-    context={
-        "meetingId": "your_actual_meeting_id_here",  # Replace with actual meeting ID
-        "name": "AI Voice Agent", 
-        "videosdk_auth": "your_videosdk_auth_token_here"  # Replace with actual token
-        "vision": True
-    }
-)
+def make_context() -> JobContext:
+    room_options = RoomOptions(
+        room_id="your-meeting-id",
+        name="Gemini Agent",
+        vision=True  # Set to True to enable video streaming
+    )
+    return JobContext(room_options=room_options)
 ```
 
-* `vision` (bool, session context) – when `True`, forwards Video Stream from VideoSDK's room to Gemini’s LiveAPI (defaults to `False`).
+* `vision` (bool, RoomOptions) – when `True`, forwards Video Stream from VideoSDK's room to Gemini's LiveAPI (defaults to `False`).
 
 ## 🔗 MCP (Model Context Protocol) Integration
 

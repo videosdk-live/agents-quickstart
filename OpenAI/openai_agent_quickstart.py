@@ -1,6 +1,6 @@
 import asyncio
 import aiohttp
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool,MCPServerStdio, MCPServerHTTP
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool, MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.openai import OpenAIRealtime, OpenAIRealtimeConfig
 from openai.types.beta.realtime.session import InputAudioTranscription, TurnDetection
 from pathlib import Path
@@ -92,7 +92,7 @@ class MyVoiceAgent(Agent):
         
 
 
-async def main(context: dict):
+async def start_session(context: JobContext):
     model = OpenAIRealtime(
         model="gpt-4o-realtime-preview",
         # When OPENAI_API_KEY is set in .env - DON'T pass api_key parameter
@@ -113,20 +113,28 @@ async def main(context: dict):
     pipeline = RealTimePipeline(model=model)
     session = AgentSession(
         agent=MyVoiceAgent(),
-        pipeline=pipeline,
-        context=context
+        pipeline=pipeline
     )
 
     try:
+        await context.connect()
         await session.start()
         await asyncio.Event().wait()
-    except KeyboardInterrupt:
-        print("Shutting down...")
     finally:
         await session.close()
+        await context.shutdown()
+
+def make_context() -> JobContext:
+    room_options = RoomOptions(
+        room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
+        # auth_token = "<VIDEOSDK_AUTH_TOKEN>", # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
+        name="OpenAI Agent", 
+        playground=True,
+    )
+    
+    return JobContext(room_options=room_options)
+
 
 if __name__ == "__main__":
-    def make_context():
-        return {"meetingId": "YOUR_MEETING_ID", "name": "OpenAI Agent"}
-    
-    asyncio.run(main(context=make_context()))
+    job = WorkerJob(entrypoint=start_session, jobctx=make_context)
+    job.start()

@@ -1,6 +1,6 @@
 import asyncio
 import aiohttp
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool, MCPServerStdio, MCPServerHTTP
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool, MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 from pathlib import Path
 import sys
@@ -91,7 +91,7 @@ class MyVoiceAgent(Agent):
         
 
 
-async def main(context: dict):
+async def start_session(context: JobContext):
     model = GeminiRealtime(
         model="gemini-2.0-flash-live-001",
         # When GOOGLE_API_KEY is set in .env - DON'T pass api_key parameter
@@ -105,20 +105,29 @@ async def main(context: dict):
     pipeline = RealTimePipeline(model=model)
     session = AgentSession(
         agent=MyVoiceAgent(),
-        pipeline=pipeline,
-        context=context
+        pipeline=pipeline
     )
 
     try:
+        await context.connect()
         await session.start()
         await asyncio.Event().wait()
-    except KeyboardInterrupt:
-        print("Shutting down...")
     finally:
         await session.close()
+        await context.shutdown()
+
+def make_context() -> JobContext:
+    room_options = RoomOptions(
+        room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
+        # auth_token = "<VIDEOSDK_AUTH_TOKEN>", # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
+        name="Gemini Agent",
+        playground=True,
+        vision=True,  # Only available when using the Google Gemini Live API
+    )
+
+    return JobContext(room_options=room_options)
+
 
 if __name__ == "__main__":
-    def make_context():
-        return {"meetingId": "YOUR_MEETING_ID", "name": "Gemini Agent","vision" : True}
-    
-    asyncio.run(main(context=make_context()))
+    job = WorkerJob(entrypoint=start_session, jobctx=make_context)
+    job.start()

@@ -35,25 +35,21 @@ Before running the agent, make sure to:
    )
    ```
 
-2. Set your VideoSDK credentials in the context dictionary:
+2. Set your VideoSDK credentials in the `make_context` function:
    ```python
-   def make_context():
-       return {
-           "meetingId": "your-meeting-id",               # VideoSDK meeting ID
-           "name": "AWS Agent",                          # Name displayed in the meeting
-           "videosdk_auth": "your-videosdk-auth-token"   # VideoSDK auth token
-       }
+   from videosdk.agents import JobContext, RoomOptions
+
+   def make_context() -> JobContext:
+       room_options = RoomOptions(
+           room_id="your-meeting-id",               # VideoSDK meeting ID
+           auth_token="your-videosdk-auth-token",   # Or use environment variable VIDEOSDK_AUTH_TOKEN
+           name="AWS Agent",
+           playground=True
+       )
+       return JobContext(room_options=room_options)
    ```
 
-   You can also use environment variables instead:
-   ```python
-   def make_context():
-       return {
-           "meetingId": os.environ.get("VIDEOSDK_MEETING_ID"),
-           "name": "AWS Agent",
-           "videosdk_auth": os.environ.get("VIDEOSDK_AUTH_TOKEN")
-       }
-   ```
+   You can also use environment variables for `VIDEOSDK_MEETING_ID` and `VIDEOSDK_AUTH_TOKEN`.
 
 ## Running the Example
 
@@ -61,6 +57,14 @@ To run the AWS-powered agent:
 
 ```bash
 python aws_novasonic_agent_quickstart.py
+```
+
+When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.
+
+```
+Agent started in playground mode
+Interact with agent here at:
+https://playground.videosdk.live?token=...&meetingId=...
 ```
 
 > **Note**: To initiate a conversation with Amazon Nova Sonic, the user must speak first. The model listens for user input to begin the interaction.

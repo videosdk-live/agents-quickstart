@@ -1,12 +1,11 @@
-# VideoSDK AI Agents
-videosdk-agents==0.0.16
-videosdk-plugins-openai>=0.0.16
-videosdk-plugins-google>=0.0.16
-videosdk-plugins-aws>=0.0.16
-videosdk-plugins-deepgram>=0.0.16
-videosdk-plugins-elevenlabs>=0.0.16
-videosdk-plugins-silero>=0.0.16
-videosdk-plugins-turn-detector>=0.0.16
-videosdk-plugins-sarvamai>=0.0.16
+# VideoSDK AI Agents Core
+videosdk-agents==0.0.18
+
+# Real-time API and LLM-based TTS/STT Providers
+videosdk-plugins-openai>=0.0.18
+videosdk-plugins-google>=0.0.18
+videosdk-plugins-aws>=0.0.18
+
+# Core Dependencies
 fastmcp
 aiohttp

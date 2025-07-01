@@ -178,6 +178,16 @@ After setting up your AI Agent, you'll need a client application to connect with
 
 When setting up your client application, make sure to use the same meeting ID that your AI Agent is using.
 
+### Playground Mode
+
+All quickstart examples are configured to run in playground mode by default (`playground=True`). When you run an agent, a direct link to the VideoSDK Playground will be printed in your console. You can open this link in your browser to interact with your agent without needing a separate client application.
+
+```
+Agent started in playground mode
+Interact with agent here at:
+https://playground.videosdk.live?token=...&meetingId=...
+```
+
 ## 📁 Repository Structure
 
 ```
