@@ -6,6 +6,12 @@ This repository contains quick start examples for integrating AI-powered voice a
 
 The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents to join VideoSDK rooms as participants. This framework serves as a real-time bridge between AI models (like OpenAI, Google Gemini LiveAPI, and AWS) and your users, facilitating seamless voice and media interactions.
 
+The framework offers two distinct approaches to building AI agents:
+
+1. **Integrated Real-time Pipelines**: Use providers like Google Gemini Live API for end-to-end, low-latency conversational AI with built-in STT, LLM, and TTS capabilities.
+
+2. **Cascading Pipelines**: Build custom AI agents by mixing and matching different providers for Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS). This approach gives you complete control over your agent's architecture, allowing you to optimize for cost, performance, language support, or specific use cases.
+
 ### Architecture Overview
 
 - **Your Backend**: Hosts the Worker and Agent Job that powers the AI agents
@@ -16,11 +22,21 @@ The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents t
 
 - **Voice-Enabled AI Agents**: Integrate AI agents that can speak and listen in real-time meetings
 - **Multiple LLM Providers**: Support for OpenAI, Google Gemini LiveAPI, and AWS Nova Sonic
-- **Modular & Flexible Pipelines**: Choose between integrated real-time pipelines or build your own with the `CascadingPipeline` to mix and match STT, LLM, and TTS providers.
+- **Modular & Flexible Pipelines**: Choose between integrated real-time pipelines or build your own with the `CascadingPipeline` to mix and match STT, LLM, and TTS providers
 - **🤖 Agent to Agent (A2A) Communication**: Enable specialized agents to collaborate and share domain expertise
 - **Function Tools**: Enable your agents with capabilities like retrieving data or performing actions
 - **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
 - **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.(Note: Vision is exclusively supported with Gemini models via the Gemini Live API)
+
+### 🔧 Why Choose Cascading Pipeline?
+
+The `CascadingPipeline` approach is particularly powerful for:
+
+- **Cost Optimization**: Mix premium and cost-effective services (e.g., use Deepgram for STT, OpenAI for LLM, and a budget TTS provider)
+- **Multi-language Support**: Use specialized STT providers for different languages while keeping the same LLM
+- **Performance Tuning**: Choose the fastest provider for each component based on your requirements
+- **Compliance & Regional Requirements**: Use specific providers that meet your regulatory or data residency needs
+- **Custom Processing**: Add your own logic between STT and LLM processing through `ConversationFlow`
 
 ## 🧠 Core Components
 
