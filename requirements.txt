@@ -20,6 +20,9 @@ videosdk-plugins-cartesia>=0.0.18
 videosdk-plugins-resemble>=0.0.18
 videosdk-plugins-smallestai>=0.0.18
 
+# Virtual Avatar Plugins
+videosdk-plugins-simli>=0.0.18
+
 # Core Dependencies
 fastmcp
 aiohttp

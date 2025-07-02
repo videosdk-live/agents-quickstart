@@ -1,6 +1,6 @@
 # 🚀 VideoSDK AI Agent Quick Start
 
-This repository contains quick start examples for integrating AI-powered voice agents into VideoSDK meetings using different LLM providers (OpenAI, Google Gemini LiveAPI, and AWS NovaSonic). **Featured**: Complete **Agent to Agent (A2A)** multi-agent system implementation.
+This repository contains quick start examples for integrating AI-powered voice agents into VideoSDK meetings using different LLM providers (OpenAI, Google Gemini LiveAPI, and AWS NovaSonic). **Featured**: Complete **Agent to Agent (A2A)** multi-agent system implementation.and support for virtual avatars—realistic, lip-synced avatars that mirror speech in real time and give your AI agents a visual, human-like presence.
 
 ## What are VideoSDK AI Agents?
 
@@ -27,6 +27,7 @@ The framework offers two distinct approaches to building AI agents:
 - **Function Tools**: Enable your agents with capabilities like retrieving data or performing actions
 - **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
 - **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.(Note: Vision is exclusively supported with Gemini models via the Gemini Live API)
+- **Virtual Avatar**: Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) integration. Create more engaging and interactive experiences.(Works with both RealtimePipeline and CascadingPipeline approaches)
 
 ### 🔧 Why Choose Cascading Pipeline?
 
@@ -148,6 +149,7 @@ pip install videosdk-agents
 
 4. Then navigate to your choice of example available:
 - [🤖 Agent to Agent (A2A) Multi-Agent System](./A2A) **← Featured**
+- [🎭 Virtual Avatar Examples](./Virtual%20Avatar) **← With Simli Integration**
 - [OpenAI Agent](./OpenAI)
 - [Google Gemini LiveAPI Agent](./Google%20Gemini%20%28LiveAPI%29)
 - [Cascading Pipeline Agent](./Cascading%20Pipeline)
@@ -223,6 +225,11 @@ agents-quickstart/
 │   ├── main.py                    # A2A system entry point
 │   └── README.md                  # A2A overview and setup
 │
+├── Virtual Avatar/                # Simli virtual avatar integration examples
+│   ├── simli_cascading_example.py # Cascading pipeline with Simli avatar
+│   ├── simli_realtime_example.py  # Realtime pipeline with Simli avatar
+│   └── README.md                  # Virtual avatar setup and configuration
+│
 ├── OpenAI/                        # OpenAI-based agent examples
 ├── Google Gemini (LiveAPI)/       # Google Gemini LiveAPI examples  
 ├── Cascading Pipeline/            # Example of a modular pipeline
@@ -242,6 +249,7 @@ For more information about VideoSDK AI Agents:
 - [Conversation Flow Documentation](https://docs.videosdk.live/ai_agents/core-components/conversation-flow)
 - [MCP Integration](https://docs.videosdk.live/ai_agents/mcp-integration)
 - [A2A Integration Documentation](https://docs.videosdk.live/ai_agents/a2a/overview)
+- [Virtual Avatar](https://docs.videosdk.live/ai_agents/plugins/avatar/simli)
 ---
 
 🤝 Join our [Discord community](https://discord.com/invite/f2WsNDN9S5) for support and discussions.
