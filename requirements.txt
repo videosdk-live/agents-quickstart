@@ -1,27 +1,38 @@
 # VideoSDK AI Agents Core
-videosdk-agents==0.0.18
+videosdk-agents==0.0.19
 
 # Real-time API and LLM-based TTS/STT Providers
-videosdk-plugins-openai>=0.0.18
-videosdk-plugins-google>=0.0.18
-videosdk-plugins-aws>=0.0.18
+videosdk-plugins-openai>=0.0.19
+videosdk-plugins-google>=0.0.19
+videosdk-plugins-aws>=0.0.19
+
+# Large Language Model (LLM) Plugins
+videosdk-plugins-anthropic>=0.0.19
+videosdk-plugins-cerebras>=0.0.19
 
 # Speech-to-Text (STT) Plugins
-videosdk-plugins-deepgram>=0.0.18
-videosdk-plugins-elevenlabs>=0.0.18
+videosdk-plugins-deepgram>=0.0.19
+videosdk-plugins-elevenlabs>=0.0.19
 
 # Voice Activity Detection (VAD) and Turn Detection Plugins
-videosdk-plugins-silero>=0.0.18
-videosdk-plugins-turn-detector>=0.0.18
+videosdk-plugins-silero>=0.0.19
+videosdk-plugins-turn-detector>=0.0.19
 
 # Text-to-Speech (TTS) Plugins
-videosdk-plugins-sarvamai>=0.0.18
-videosdk-plugins-cartesia>=0.0.18
-videosdk-plugins-resemble>=0.0.18
-videosdk-plugins-smallestai>=0.0.18
+videosdk-plugins-sarvamai>=0.0.19
+videosdk-plugins-cartesia>=0.0.19
+videosdk-plugins-resemble==0.0.19
+videosdk-plugins-smallestai>=0.0.19
+videosdk-plugins-inworldai>=0.0.19
+videosdk-plugins-lmnt>=0.0.19
+videosdk-plugins-neuphonic>=0.0.19
+videosdk-plugins-humeai>=0.0.19
+videosdk-plugins-rime>=0.0.19
+videosdk-plugins-speechify>=0.0.19
+videosdk-plugins-groq>=0.0.19
 
 # Virtual Avatar Plugins
-videosdk-plugins-simli>=0.0.18
+videosdk-plugins-simli>=0.0.19
 
 # Core Dependencies
 fastmcp

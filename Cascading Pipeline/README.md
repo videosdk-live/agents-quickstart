@@ -34,11 +34,19 @@ This quick start script includes commented-out code for various providers, makin
 | :------------------- | :------------------------- | :------------------- |
 | `GoogleSTT`          | `GoogleLLM`                | `GoogleTTS`          |
 | `OpenAISTT`          | `OpenAILLM`                | `OpenAITTS`          |
-| `DeepgramSTT`        | `SarvamAILLM`              | `ElevenLabsTTS`      |
-| `CartesiaSTT`        |                            | `CartesiaTTS`        |
-| `SarvamAISTT`        |                            | `SmallestAITTS`      |
+| `SarvamAISTT`        | `SarvamAILLM`              | `SarvamAITTS`        |
+| `DeepgramSTT`        | `AnthropicLLM`             | `ElevenLabsTTS`      |
+| `CartesiaSTT`        | `CerebrasLLM`              | `CartesiaTTS`        |
+|                      |                            | `SmallestAITTS`      |
 |                      |                            | `ResembleTTS`        |
-|                      |                            | `SarvamAITTS`        |
+|                      |                            | `AWSTTS`             |
+|                      |                            | `GroqTTS`            |
+|                      |                            | `HumeAITTS`          |
+|                      |                            | `InworldAITTS`       |
+|                      |                            | `LMNTTTS`            |
+|                      |                            | `NeurophonicTTS`     |
+|                      |                            | `RimeTTS`            |
+|                      |                            | `SpeechifyTTS`       |
 
 ## 📦 Plugin Installation
 
@@ -53,14 +61,24 @@ Here are the installation commands for the providers used in this example:
 
 | Provider   | Installation Command                            |
 | :--------- | :---------------------------------------------- |
+| Anthropic  | `pip install "videosdk-plugins-anthropic"`      |
+| AWS        | `pip install "videosdk-plugins-aws"`            |
 | Cartesia   | `pip install "videosdk-plugins-cartesia"`       |
+| Cerebras   | `pip install "videosdk-plugins-cerebras"`       |
 | Deepgram   | `pip install "videosdk-plugins-deepgram"`       |
 | ElevenLabs | `pip install "videosdk-plugins-elevenlabs"`     |
 | Google     | `pip install "videosdk-plugins-google"`         |
+| Groq       | `pip install "videosdk-plugins-groq"`           |
+| Hume AI    | `pip install "videosdk-plugins-humeai"`         |
+| Inworld AI | `pip install "videosdk-plugins-inworldai"`      |
+| LMNT       | `pip install "videosdk-plugins-lmnt"`           |
+| Neuphonic  | `pip install "videosdk-plugins-neuphonic"`      |
 | OpenAI     | `pip install "videosdk-plugins-openai"`         |
 | Resemble   | `pip install "videosdk-plugins-resemble"`       |
+| Rime       | `pip install "videosdk-plugins-rime"`           |
 | SarvamAI   | `pip install "videosdk-plugins-sarvamai"`       |
 | SmallestAI | `pip install "videosdk-plugins-smallestai"`     |
+| Speechify  | `pip install "videosdk-plugins-speechify"`      |
 
 ## ⚙️ How to Run This Example
 

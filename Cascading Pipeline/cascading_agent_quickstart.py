@@ -16,6 +16,16 @@ from videosdk.plugins.sarvamai import SarvamAITTS, SarvamAILLM, SarvamAISTT
 from videosdk.plugins.cartesia import CartesiaTTS, CartesiaSTT
 from videosdk.plugins.smallestai import SmallestAITTS
 from videosdk.plugins.resemble import ResembleTTS
+from videosdk.plugins.inworldai import InworldAITTS
+from videosdk.plugins.lmnt import LMNTTTS
+from videosdk.plugins.cerebras import CerebrasLLM
+from videosdk.plugins.aws import AWSPollyTTS
+from videosdk.plugins.neuphonic import NeuphonicTTS
+from videosdk.plugins.anthropic import AnthropicLLM
+from videosdk.plugins.humeai import HumeAITTS
+from videosdk.plugins.rime import RimeTTS
+from videosdk.plugins.speechify import SpeechifyTTS
+from videosdk.plugins.groq import GroqTTS
 
 # Pre-downloading the Turn Detector model
 pre_download_model()
@@ -142,18 +152,29 @@ async def start_session(context: JobContext):
     # stt = SarvamAISTT(api_key=os.getenv("SARVAMAI_API_KEY"))
 
     # LLM Providers
-    llm = GoogleLLM(api_key=os.getenv("GOOGLE_API_KEY"))
+    # llm = GoogleLLM(api_key=os.getenv("GOOGLE_API_KEY"))
     # llm = OpenAILLM(api_key=os.getenv("OPENAI_API_KEY"))
     # llm = SarvamAILLM(api_key=os.getenv("SARVAMAI_API_KEY"))
+    # llm=CerebrasLLM(api_key=os.getenv("CEREBRAS_API_KEY")),
+    llm=AnthropicLLM(api_key=os.getenv("ANTHROPIC_API_KEY")),
+
 
     # TTS Providers
-    tts = GoogleTTS(api_key=os.getenv("GOOGLE_API_KEY"))
+    # tts = GoogleTTS(api_key=os.getenv("GOOGLE_API_KEY"))
     # tts = OpenAITTS(api_key=os.getenv("OPENAI_API_KEY"))
     # tts = ElevenLabsTTS(api_key=os.getenv("ELEVENLABS_API_KEY"))
     # tts = CartesiaTTS(api_key=os.getenv("CARTESIA_API_KEY"))
     # tts = SmallestAITTS(api_key=os.getenv("SMALLESTAI_API_KEY"))
     # tts = ResembleTTS(api_key=os.getenv("RESEMBLE_API_KEY"))
     # tts = SarvamAITTS(api_key=os.getenv("SARVAMAI_API_KEY"))
+    # tts=AWSPollyTTS(api_key=os.getenv("AWS_API_KEY")),
+    # tts=NeuphonicTTS(api_key=os.getenv("NEUPHONIC_API_KEY")),
+    # tts=InworldAITTS(api_key=os.getenv("INWORLD_API_KEY")),
+    # tts=LMNTTTS(api_key=os.getenv("LMNT_API_KEY")),
+    # tts=HumeAITTS(api_key=os.getenv("HUMEAI_API_KEY")),
+    # tts=RimeTTS(api_key=os.getenv("RIME_API_KEY")),
+    tts=SpeechifyTTS(api_key=os.getenv("SPEECHIFY_API_KEY")),
+    # tts=GroqTTS(api_key=os.getenv("GROQ_API_KEY")), 
     
     vad = SileroVAD()
     turn_detector = TurnDetector(threshold=0.8)
