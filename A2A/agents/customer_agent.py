@@ -43,8 +43,8 @@ class CustomerServiceAgent(Agent):
             await asyncio.sleep(0.5)
             prompt = f"The loan specialist has responded: {response}"
             methods_to_try = [
-                (self.session.pipeline.send_text_message, prompt),
-                (self.session.pipeline.model.send_message, response),
+                (self.session.pipeline.send_text_message, prompt),# While using Cascading as main agent, comment this
+                (self.session.pipeline.model.send_message, response),# While using Cascading as main agent, comment this
                 (self.session.say, response)
             ]
             for method, arg in methods_to_try:
@@ -55,6 +55,7 @@ class CustomerServiceAgent(Agent):
                     print(f"Error with {method.__name__}: {e}")
 
     async def on_enter(self):
+        print("CustomerAgent joined the meeting")
         await self.register_a2a(AgentCard(
             id="customer_service_1",
             name="Customer Service Agent",

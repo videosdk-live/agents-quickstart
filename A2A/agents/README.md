@@ -79,9 +79,10 @@ A2A/
 **Purpose**: Configure different agent modalities and capabilities
 
 **Pipeline Configuration**:
-- **Customer Agent**: Audio-enabled pipeline for real-time voice interaction
-- **Specialist Agent**: Text-only pipeline for efficient processing
-- **Voice Selection**: Available voices include Puck, Charon, Kore, Fenrir, Aoede, Leda, Orus, Zephyr
+- **Customer Agent**: **RealTimePipeline** with Gemini Realtime model (`gemini-2.0-flash-live-001`) for low-latency voice interaction
+- **Specialist Agent**: **CascadingPipeline** with OpenAI LLM for efficient text processing
+- **Voice Configuration**: Customer agent uses "Leda" voice with audio response modality
+- **Modality Separation**: Audio pipeline for user interaction, text pipeline for specialist processing
 
 **Session Strategy**:
 - Customer agent joins VideoSDK meetings for user interaction
@@ -95,7 +96,7 @@ A2A/
 - Both agents are created and configured with their respective pipelines
 - Customer agent joins VideoSDK meeting for user interaction
 - Specialist agent runs in background mode
-- Environment requires `VIDEOSDK_AUTH_TOKEN` and `GOOGLE_API_KEY`
+- Environment requires `VIDEOSDK_AUTH_TOKEN`, `GOOGLE_API_KEY`, and `OPENAI_API_KEY`
 
 **Resource Management**:
 - Proper startup sequence ensures agents register before queries arrive
@@ -111,10 +112,10 @@ python main.py
 
 ## 🔧 Agent Specifications
 
-| Agent | ID | Domain | Modality | Meeting Join | Function |
-|-------|-----|---------|----------|--------------|----------|
-| **Customer Service** | `customer_service_1` | `customer_service` | Audio | ✅ Yes | User interface and query routing |
-| **Loan Specialist** | `specialist_1` | `loan` | Text | ❌ No | Loan expertise and information |
+| Agent | ID | Domain | Pipeline | Modality | Meeting Join | Function |
+|-------|-----|---------|----------|----------|--------------|----------|
+| **Customer Service** | `customer_service_1` | `customer_service` | RealTimePipeline | Audio | ✅ Yes | User interface and query routing |
+| **Loan Specialist** | `specialist_1` | `loan` | CascadingPipeline | Text | ❌ No | Loan expertise and information |
 
 ## 🌟 Key Features
 

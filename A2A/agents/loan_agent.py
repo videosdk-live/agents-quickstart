@@ -33,7 +33,6 @@ class LoanAgent(Agent):
 
 
     async def on_enter(self):
-        print("LoanAgent joined the meeting")
         await self.register_a2a(AgentCard(
             id="specialist_1",
             name="Loan Specialist Agent",
@@ -45,4 +44,4 @@ class LoanAgent(Agent):
         self.a2a.on_message("model_response", self.handle_model_response)
 
     async def on_exit(self):
-        print("LoanAgent Left the meeting")
+        print("LoanAgent Left")

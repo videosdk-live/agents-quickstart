@@ -33,6 +33,7 @@ Customer Service Agent → Relays response to client
 - Python 3.12 or higher
 - VideoSDK authentication token
 - Google Gemini API key
+- OpenAI API key (for specialist agents)
 - VideoSDK meeting ID
 
 ### Installation & Setup
@@ -51,11 +52,12 @@ pip install videosdk-agents
 ```bash
 export VIDEOSDK_AUTH_TOKEN="your_videosdk_token"
 export GOOGLE_API_KEY="your_gemini_api_key"
+export OPENAI_API_KEY="your_openai_api_key"
 ```
 
 4. **Update meeting ID** in `main.py`:
 ```python
-"meetingId": "YOUR_MEETING_ID"  # Replace with your meeting ID
+room_id="YOUR_MEETING_ID"  # Replace with your meeting ID
 ```
 
 5. **Run the system**:
@@ -93,14 +95,44 @@ A2A/
 ## 🔧 Agent Configuration
 
 ### Customer Service Agent
-- **Audio-enabled** for real-time voice interaction
+- **RealTimePipeline** with Gemini Realtime model for low-latency voice interaction
+- **Audio-enabled** with voice "Leda" for real-time conversation
 - **Joins VideoSDK meeting** for user communication
 - **Routes queries** to appropriate specialists
 
 ### Loan Specialist Agent
-- **Text-based processing** for efficient responses
+- **CascadingPipeline** with OpenAI LLM for efficient text processing
+- **Text-based processing** for specialist responses
 - **Background operation** (no meeting join required)
 - **Domain expertise** in loan products and rates
+
+## 🔧 Pipeline Architecture
+
+The system uses a **hybrid pipeline approach** for optimal performance:
+
+### RealTimePipeline (Customer Agent)
+- **Model**: Gemini Realtime (`gemini-2.0-flash-live-001`)
+- **Voice**: "Leda" with audio response modality
+- **Purpose**: Low-latency voice interaction with users
+- **Benefits**: Natural conversation flow, real-time audio processing
+
+### CascadingPipeline (Specialist Agent)
+- **Model**: OpenAI LLM 
+- **Processing**: Text-only for efficient specialist responses
+- **Purpose**: Background processing of domain-specific queries
+- **Benefits**: Cost-effective, optimized for text-based reasoning
+
+This architecture ensures **fast user interaction** while maintaining **efficient specialist processing** in the background.
+
+### 🔧 Pipeline Flexibility
+
+The VideoSDK AI Agents framework provides **flexible pipeline configurations**. You can run a full **RealTimePipeline** or **CascadingPipeline** for both modalities, or create a **hybrid setup** that combines the two. This allows you to tailor the use of STT, TTS, and LLM to suit your specific use case, whether for low-latency interactions, complex processing flows, or a mix of both.
+
+**Configuration Examples** (available in `session_manager.py`):
+- **Hybrid Setup** (Current): RealTimePipeline + CascadingPipeline
+- **Full RealTime**: Both agents using RealTimePipeline
+- **Full Cascading**: Both agents using CascadingPipeline  
+- **Custom Mix**: Any combination based on your requirements
 
 ## 🌟 Benefits
 
