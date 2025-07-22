@@ -59,6 +59,7 @@ export OPENAI_API_KEY="your_openai_api_key"
 ```python
 room_id="YOUR_MEETING_ID"  # Replace with your meeting ID
 ```
+> ⚠️ **Important:** Ensure that the JobContext is created only for the primary (main) agent, i.e., the agent responsible for user-facing interaction (e.g., Customer Agent). The background agent (e.g., Loan Agent) should not have its own context or initiate a separate connection.
 
 5. **Run the system**:
 ```bash
@@ -133,6 +134,12 @@ The VideoSDK AI Agents framework provides **flexible pipeline configurations**. 
 - **Full RealTime**: Both agents using RealTimePipeline
 - **Full Cascading**: Both agents using CascadingPipeline  
 - **Custom Mix**: Any combination based on your requirements
+
+### ⚠️ Important
+> While setting up pipelines:
+> 
+> - The **customer agent** must have **voice capabilities only** using the `RealTimePipeline`.
+> - The **specialist agent** should operate in **text-only mode** using the `CascadingPipeline`.
 
 ## 🌟 Benefits
 
