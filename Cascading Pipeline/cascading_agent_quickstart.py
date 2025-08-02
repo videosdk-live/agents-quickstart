@@ -6,26 +6,12 @@ import sys
 from typing import AsyncIterator
 
 from videosdk.agents import Agent, AgentSession, CascadingPipeline, function_tool, MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob, ConversationFlow, ChatRole
-from videosdk.plugins.openai import OpenAILLM, OpenAISTT, OpenAITTS
-from videosdk.plugins.google import GoogleTTS, GoogleLLM, GoogleSTT
+from videosdk.plugins.openai import OpenAILLM
 from videosdk.plugins.deepgram import DeepgramSTT
+from videosdk.plugins.elevenlabs import ElevenLabsTTS
 from videosdk.plugins.silero import SileroVAD
 from videosdk.plugins.turn_detector import TurnDetector, pre_download_model
-from videosdk.plugins.elevenlabs import ElevenLabsTTS
-from videosdk.plugins.sarvamai import SarvamAITTS, SarvamAILLM, SarvamAISTT
-from videosdk.plugins.cartesia import CartesiaTTS, CartesiaSTT
-from videosdk.plugins.smallestai import SmallestAITTS
-from videosdk.plugins.resemble import ResembleTTS
-from videosdk.plugins.inworldai import InworldAITTS
-from videosdk.plugins.lmnt import LMNTTTS
-from videosdk.plugins.cerebras import CerebrasLLM
-from videosdk.plugins.aws import AWSPollyTTS
-from videosdk.plugins.neuphonic import NeuphonicTTS
-from videosdk.plugins.anthropic import AnthropicLLM
-from videosdk.plugins.humeai import HumeAITTS
-from videosdk.plugins.rime import RimeTTS
-from videosdk.plugins.speechify import SpeechifyTTS
-from videosdk.plugins.groq import GroqTTS
+
 
 # Pre-downloading the Turn Detector model
 pre_download_model()
@@ -73,10 +59,6 @@ class MyVoiceAgent(Agent):
                 MCPServerStdio(
                     command=sys.executable,
                     args=[str(mcp_script)],
-                    client_session_timeout_seconds=30
-                ),
-                MCPServerHTTP(
-                    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
                     client_session_timeout_seconds=30
                 )
             ]
@@ -140,41 +122,15 @@ class MyConversationFlow(ConversationFlow):
 
 
 async def start_session(context: JobContext):
-    # This example uses Google's services by default.
-    # You can switch to other providers by commenting and uncommenting the relevant lines.
-    # Make sure you have the necessary API keys set as environment variables.
 
     # STT Providers
-    stt = GoogleSTT(model="latest_long")
-    # stt = OpenAISTT(api_key=os.getenv("OPENAI_API_KEY"))
-    # stt = DeepgramSTT(api_key=os.getenv("DEEPGRAM_API_KEY"))
-    # stt = CartesiaSTT(api_key=os.getenv("CARTESIA_API_KEY"))
-    # stt = SarvamAISTT(api_key=os.getenv("SARVAMAI_API_KEY"))
+    stt = DeepgramSTT(api_key=os.getenv("DEEPGRAM_API_KEY"))
 
     # LLM Providers
-    # llm = GoogleLLM(api_key=os.getenv("GOOGLE_API_KEY"))
-    # llm = OpenAILLM(api_key=os.getenv("OPENAI_API_KEY"))
-    # llm = SarvamAILLM(api_key=os.getenv("SARVAMAI_API_KEY"))
-    # llm=CerebrasLLM(api_key=os.getenv("CEREBRAS_API_KEY")),
-    llm=AnthropicLLM(api_key=os.getenv("ANTHROPIC_API_KEY")),
-
+    llm = OpenAILLM(api_key=os.getenv("OPENAI_API_KEY"))
 
     # TTS Providers
-    # tts = GoogleTTS(api_key=os.getenv("GOOGLE_API_KEY"))
-    # tts = OpenAITTS(api_key=os.getenv("OPENAI_API_KEY"))
-    # tts = ElevenLabsTTS(api_key=os.getenv("ELEVENLABS_API_KEY"))
-    # tts = CartesiaTTS(api_key=os.getenv("CARTESIA_API_KEY"))
-    # tts = SmallestAITTS(api_key=os.getenv("SMALLESTAI_API_KEY"))
-    # tts = ResembleTTS(api_key=os.getenv("RESEMBLE_API_KEY"))
-    # tts = SarvamAITTS(api_key=os.getenv("SARVAMAI_API_KEY"))
-    # tts=AWSPollyTTS(api_key=os.getenv("AWS_API_KEY")),
-    # tts=NeuphonicTTS(api_key=os.getenv("NEUPHONIC_API_KEY")),
-    # tts=InworldAITTS(api_key=os.getenv("INWORLD_API_KEY")),
-    # tts=LMNTTTS(api_key=os.getenv("LMNT_API_KEY")),
-    # tts=HumeAITTS(api_key=os.getenv("HUMEAI_API_KEY")),
-    # tts=RimeTTS(api_key=os.getenv("RIME_API_KEY")),
-    tts=SpeechifyTTS(api_key=os.getenv("SPEECHIFY_API_KEY")),
-    # tts=GroqTTS(api_key=os.getenv("GROQ_API_KEY")), 
+    tts = ElevenLabsTTS(api_key=os.getenv("ELEVENLABS_API_KEY"))
     
     vad = SileroVAD()
     turn_detector = TurnDetector(threshold=0.8)
@@ -206,8 +162,7 @@ async def start_session(context: JobContext):
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-        room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
-        # auth_token = "<VIDEOSDK_AUTH_TOKEN>", # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
+        room_id="j0qm-tgu9-yi4y", # Replace it with your actual meetingID
         name="Cascading Agent",
         playground=True,
     )

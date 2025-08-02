@@ -50,10 +50,6 @@ class MyVoiceAgent(Agent):
                     command=sys.executable,
                     args=[str(mcp_script)],
                     client_session_timeout_seconds=30
-                ),
-                MCPServerHTTP(
-                    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
-                    client_session_timeout_seconds=30
                 )
             ]
         )
@@ -119,10 +115,8 @@ async def start_session(context: JobContext):
 def make_context() -> JobContext:
     room_options = RoomOptions(
         room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
-        # auth_token = "<VIDEOSDK_AUTH_TOKEN>", # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
         name="Gemini Agent",
         playground=True,
-        vision=True,  # Only available when using the Google Gemini Live API
     )
 
     return JobContext(room_options=room_options)

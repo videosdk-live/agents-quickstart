@@ -51,10 +51,6 @@ class MyVoiceAgent(Agent):
                     command=sys.executable,
                     args=[str(mcp_script)],
                     client_session_timeout_seconds=30
-                ),
-                MCPServerHTTP(
-                    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
-                    client_session_timeout_seconds=30
                 )
             ]
         )
