@@ -52,9 +52,9 @@ mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py
 
 mcp_servers=[
     MCPServerStdio(
-        command=sys.executable,
-        args=[str(mcp_script)],
-        client_session_timeout_seconds=30
+        executable_path=sys.executable,
+        process_arguments=[str(mcp_script)],
+        session_timeout=30
     )
 ]
 ```
@@ -67,8 +67,8 @@ from videosdk.agents import MCPServerHTTP
 
 mcp_servers=[
     MCPServerHTTP(
-        url="https://your-mcp-server.com/api/mcp",
-        client_session_timeout_seconds=30
+        endpoint_url="https://your-mcp-server.com/api/mcp",
+        session_timeout=30
     )
 ]
 ```
@@ -79,13 +79,13 @@ You can use both transport types simultaneously:
 ```python
 mcp_servers=[
     MCPServerStdio(
-        command=sys.executable,
-        args=[str(mcp_script)],
-        client_session_timeout_seconds=30
+        executable_path=sys.executable,
+        process_arguments=[str(mcp_script)],
+        session_timeout=30
     ),
     MCPServerHTTP(
-        url="https://mcp.zapier.com/api/mcp/s/your-server-id",
-        client_session_timeout_seconds=30
+        endpoint_url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+        session_timeout=30
     )
 ]
 ```
@@ -103,9 +103,9 @@ class MyVoiceAgent(Agent):
             tools=[your_custom_tools],
             mcp_servers=[
                 MCPServerStdio(
-                    command=sys.executable,
-                    args=[str(mcp_script)],
-                    client_session_timeout_seconds=30
+                    executable_path=sys.executable,
+                    process_arguments=[str(mcp_script)],
+                    session_timeout=30
                 )
             ]
         )
@@ -123,7 +123,7 @@ pip install videosdk-agents  # VideoSDK agents with MCP support
 ## 🔧 Transport Types
 
 ### STDIO Transport
-- **Use case**: Local integrations, command-line tools, shell scripts
+- **Use case**: Local integrations, executable_path-line tools, shell scripts
 - **Security**: Process-level isolation
 - **Performance**: Low latency, direct process communication
 - **Best for**: Development, testing, local services

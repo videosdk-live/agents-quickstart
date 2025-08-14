@@ -49,9 +49,9 @@ class MyVoiceAgent(Agent):
             tools=[get_weather],
             mcp_servers=[
                 MCPServerStdio(
-                    command=sys.executable,
-                    args=[str(mcp_script)],
-                    client_session_timeout_seconds=30
+                    executable_path=sys.executable,
+                    process_arguments=[str(mcp_script)],
+                    session_timeout=30
                 )
             ]
         )
@@ -110,6 +110,15 @@ async def start_session(context: JobContext):
         agent=MyVoiceAgent(),
         pipeline=pipeline
     )
+
+       # For the user and agent transcription.
+
+    def on_transcription(data: dict):
+        role = data.get("role")
+        text = data.get("text")
+        print(f"[TRANSCRIPT][{role}: {text}")
+    pipeline.on("realtime_model_transcription", on_transcription)
+
 
     try:
         await context.connect()

@@ -57,9 +57,9 @@ class MyVoiceAgent(Agent):
             tools=[get_weather],
             mcp_servers=[
                 MCPServerStdio(
-                    command=sys.executable,
-                    args=[str(mcp_script)],
-                    client_session_timeout_seconds=30
+                    executable_path=sys.executable,
+                    process_arguments=[str(mcp_script)],
+                    session_timeout=30
                 )
             ]
         )
@@ -162,7 +162,7 @@ async def start_session(context: JobContext):
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-        room_id="j0qm-tgu9-yi4y", # Replace it with your actual meetingID
+        room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
         name="Cascading Agent",
         playground=True,
     )

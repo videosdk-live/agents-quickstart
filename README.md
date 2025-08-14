@@ -28,6 +28,8 @@ The framework offers two distinct approaches to building AI agents:
 - **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
 - **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.(Note: Vision is exclusively supported with Gemini models via the Gemini Live API)
 - **Virtual Avatar**: Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) integration. Create more engaging and interactive experiences.(Works with both RealtimePipeline and CascadingPipeline approaches)
+- **Human in the Loop (HITL)**: Escalate specific queries to a human operator via Discord, then relay responses back to users
+- **Wake Up Call**: Detect user inactivity and trigger callbacks to re-engage users automatically
 
 ### 🔧 Why Choose Cascading Pipeline?
 
@@ -154,6 +156,8 @@ pip install videosdk-agents
 - [Google Gemini LiveAPI Agent](./Google%20Gemini%20%28LiveAPI%29)
 - [Cascading Pipeline Agent](./Cascading%20Pipeline)
 - [AWS Nova Sonic Agent](./AWS%20Nova%20Sonic)
+- [Human in the Loop](./Human%20In%20The%20Loop)
+- [Wake Up Call](./Wakeup%20Call)
 - [🔗 MCP Server Examples](./MCP%20Server)
 
 ## 🔗 Model Context Protocol (MCP) Integration

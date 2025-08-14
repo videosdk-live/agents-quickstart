@@ -106,19 +106,32 @@ from videosdk.agents import MCPServerStdio, MCPServerHTTP
 # STDIO transport for local MCP server
 mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
 MCPServerStdio(
-    command=sys.executable,
-    args=[str(mcp_script)],
-    client_session_timeout_seconds=30
+    executable_path=sys.executable,
+    process_arguments=[str(mcp_script)],
+    session_timeout=30
 )
 
 # HTTP transport for remote services (e.g., Zapier)
 MCPServerHTTP(
-    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
-    client_session_timeout_seconds=30
+    endpoint_url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+    session_timeout=30
 )
 ```
 
 For more details on MCP integration, see the [MCP Server README](../MCP Server/README.md).
+
+## 📝 Transcription Support
+
+Capture real-time transcripts from both the user and the agent by subscribing to the transcription event on the pipeline:
+
+```python
+def on_transcription(data: dict):
+    role = data.get("role")
+    text = data.get("text")
+    print(f"[TRANSCRIPT][{role}]: {text}")
+
+pipeline.on("realtime_model_transcription", on_transcription)
+```
 
 ---
 

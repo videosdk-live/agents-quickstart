@@ -77,15 +77,15 @@ from videosdk.agents import MCPServerStdio, MCPServerHTTP
 # STDIO transport for local MCP server
 mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
 MCPServerStdio(
-    command=sys.executable,
-    args=[str(mcp_script)],
-    client_session_timeout_seconds=30
+    executable_path=sys.executable,
+    process_arguments=[str(mcp_script)],
+    session_timeout=30
 )
 
 # HTTP transport for remote services (e.g., Zapier)
 MCPServerHTTP(
-    url="https://mcp.zapier.com/api/mcp/s/your-server-id",
-    client_session_timeout_seconds=30
+    endpoint_url="https://mcp.zapier.com/api/mcp/s/your-server-id",
+    session_timeout=30
 )
 ```
 
@@ -100,6 +100,29 @@ The agent uses OpenAI's real-time models for text and audio interactions. Config
 - `config`: Advanced configuration options including voice, temperature, turn detection, etc.
 
 For complete configuration options, see the [official VideoSDK OpenAI plugin documentation](https://docs.videosdk.live/ai_agents/plugins/openai).
+
+## 📝 Transcription Support
+
+You can capture real-time transcripts from both the user and the agent. Enable input audio transcription in the model config and subscribe to the transcription event on the pipeline:
+
+```python
+# Enable transcription in the model config
+model = OpenAIRealtime(
+    model="gpt-4o-realtime-preview",
+    config=OpenAIRealtimeConfig(
+        # ... other config
+        input_audio_transcription=InputAudioTranscription(model="whisper-1"),
+    ),
+)
+
+# Listen for transcripts (user and agent)
+def on_transcription(data: dict):
+    role = data.get("role")
+    text = data.get("text")
+    print(f"[TRANSCRIPT][{role}]: {text}")
+
+pipeline.on("realtime_model_transcription", on_transcription)
+```
 
 ---
 
