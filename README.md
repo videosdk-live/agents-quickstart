@@ -30,6 +30,7 @@ The framework offers two distinct approaches to building AI agents:
 - **Virtual Avatar**: Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) integration. Create more engaging and interactive experiences.(Works with both RealtimePipeline and CascadingPipeline approaches)
 - **Human in the Loop (HITL)**: Escalate specific queries to a human operator via Discord, then relay responses back to users
 - **Wake Up Call**: Detect user inactivity and trigger callbacks to re-engage users automatically
+- **Recording**: Record complete sessions (audio and transcripts) for playback and analysis; enable by setting `recording=True` in `RoomOptions`
 
 ### 🔧 Why Choose Cascading Pipeline?
 
@@ -87,6 +88,26 @@ Customer Service Agent → Relays response to client (audio format)
 - **Real-Time Collaboration**: Agents communicate seamlessly without user intervention
 
 For detailed A2A implementation, see the [A2A README](./A2A/README.md).
+
+## Human in the Loop (HITL)
+
+Enable human oversight by escalating specific queries (e.g., discounts, policy decisions) to a human operator via Discord, then relay the response back to the user while preserving conversation flow.
+
+- Escalate low-confidence or policy-bound requests to humans
+- Uses a Discord-backed MCP server for human responses
+- Seamless handoff between AI automation and human intervention
+
+See the example in `Human In The Loop/` and the official guide: [Human in the Loop](https://docs.videosdk.live/ai_agents/human-in-the-loop).
+
+## Wake Up Call
+
+Detect user inactivity and automatically trigger a callback to re-engage users after a configured timeout in `AgentSession`.
+
+- Monitor inactivity during sessions
+- Trigger custom async callbacks after specified timeouts
+- Re-engage users with proactive prompts or actions
+
+See the example in `Wakeup Call/` and the official guide: [Wake Up Call](https://docs.videosdk.live/ai_agents/wakeup-call).
 
 ## Prerequisites
 
@@ -158,6 +179,7 @@ pip install videosdk-agents
 - [AWS Nova Sonic Agent](./AWS%20Nova%20Sonic)
 - [Human in the Loop](./Human%20In%20The%20Loop)
 - [Wake Up Call](./Wakeup%20Call)
+- [Recording](./Recording)
 - [🔗 MCP Server Examples](./MCP%20Server)
 
 ## 🔗 Model Context Protocol (MCP) Integration
@@ -238,6 +260,18 @@ agents-quickstart/
 ├── Google Gemini (LiveAPI)/       # Google Gemini LiveAPI examples  
 ├── Cascading Pipeline/            # Example of a modular pipeline
 ├── AWS Nova Sonic/                # AWS Nova Sonic examples
+├── Human In The Loop/             # Discord-based human oversight example
+│   ├── customer_agent.py
+│   ├── discord_mcp_server.py
+│   └── README.md
+│
+├── Wakeup Call/                   # Inactivity detection and callback example
+│   ├── wakeup_call.py
+│   └── README.md
+│
+├── Recording/                     # Session recording example
+│   ├── recording_example.py
+│   └── README.md
 ├── MCP Server/                    # Model Context Protocol examples
 ├── requirements.txt               # All dependencies
 └── README.md                      # This file
@@ -254,6 +288,9 @@ For more information about VideoSDK AI Agents:
 - [MCP Integration](https://docs.videosdk.live/ai_agents/mcp-integration)
 - [A2A Integration Documentation](https://docs.videosdk.live/ai_agents/a2a/overview)
 - [Virtual Avatar](https://docs.videosdk.live/ai_agents/plugins/avatar/simli)
+- [Human in the Loop](https://docs.videosdk.live/ai_agents/human-in-the-loop)
+- [Wake Up Call](https://docs.videosdk.live/ai_agents/wakeup-call)
+- [Recording](https://docs.videosdk.live/ai_agents/recording)
 ---
 
 🤝 Join our [Discord community](https://discord.com/invite/f2WsNDN9S5) for support and discussions.
