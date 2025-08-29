@@ -90,7 +90,7 @@ class MyVoiceAgent(Agent):
 
 async def start_session(context: JobContext):
     model = OpenAIRealtime(
-        model="gpt-4o-realtime-preview",
+        model="gpt-realtime-2025-08-28",
         # When OPENAI_API_KEY is set in .env - DON'T pass api_key parameter
         # api_key="sk-proj-XXXXXXXXXXXXXXXXXXXX",
         config=OpenAIRealtimeConfig(
@@ -129,7 +129,7 @@ async def start_session(context: JobContext):
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-        room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
+        room_id="<room_id>", # Replace it with your actual meetingID
         # auth_token = "<VIDEOSDK_AUTH_TOKEN>", # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
         name="OpenAI Agent", 
         playground=True,
