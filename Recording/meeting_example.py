@@ -1,43 +1,63 @@
 
 import os
 import requests
+import aiohttp
 
-VIDEOSDK_AUTH_TOKEN = os.getenv("VIDEOSDK_AUTH_TOKEN")
+# Meeting Recording (Composite output for entire meeting)
 
-# -----------------------------
-# Meeting Recording
-# (Composite output for entire meeting)
-# -----------------------------
-def start_meeting_recording(room_id: str, config: dict = None) -> dict:
+async def start_meeting_recording(room_id: str) -> dict:
     url = "https://api.videosdk.live/v2/recordings/start"
-    headers = {"Authorization": VIDEOSDK_AUTH_TOKEN, "Content-Type": "application/json"}
-    payload = {"roomId": room_id, "config": config or {"layout": "grid"}}
-    response = requests.post(url, json=payload, headers=headers)
-    response.raise_for_status()
-    return response.json()
+    headers = {
+        "Authorization": VIDEOSDK_AUTH_TOKEN,
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "roomId": room_id,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=payload, headers=headers) as response:
+            if response.status != 200:
+                text = await response.text()
+                raise Exception(f"Failed to start meeting recording: {response.status}, {text}")
+            return await response.json()
 
 
-def stop_meeting_recording(room_id: str) -> dict:
-    url = "https://api.videosdk.live/v2/recordings/stop"
-    headers = {"Authorization": VIDEOSDK_AUTH_TOKEN, "Content-Type": "application/json"}
-    payload = {"roomId": room_id}
-    response = requests.post(url, json=payload, headers=headers)
-    response.raise_for_status()
-    return response.json()
+
+async def stop_meeting_recording(room_id: str) -> dict:
+    url = "https://api.videosdk.live/v2/recordings/end"
+    headers = {
+        "Authorization": VIDEOSDK_AUTH_TOKEN,
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "roomId": room_id
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=payload, headers=headers) as response:
+            if response.status != 200:
+                text = await response.text()
+                raise Exception(f"Failed to stop meeting recording: {response.status}, {text}")
+            return await response.json()
 
 
-# -----------------------------
 # Example usage
-# -----------------------------
-if __name__ == "__main__":
-    ROOM_ID = "abcd-efgh-ijkl"  # Replace with your actual room ID
 
-    # Meeting Recording (composite)
-    print("Starting meeting recording...")
-    meeting_resp = start_meeting_recording(ROOM_ID)
-    print("Meeting recording started:", meeting_resp)
+async def on_enter(self) -> None:
+    await self.session.say("Hello! I will start recording this meeting.")
+    try:
+        await start_meeting_recording(room_id)
+        print("Meeting recording started")
+    except Exception as e:
+        print(f"Failed to start meeting recording: {e}")
 
-    # Stop recordings (for demo purposes, usually triggered later)
-
-    print("Stopping meeting recording...")
-    print(stop_meeting_recording(ROOM_ID))
+async def on_exit(self) -> None:
+    await self.session.say("Goodbye! Stopping the recording now.")
+    try:
+        await stop_meeting_recording(room_id)
+        print("Meeting recording stopped")
+    except Exception as e:
+        print(f"Failed to stop meeting recording: {e}")
