@@ -1,58 +1,17 @@
-import asyncio
-import aiohttp
-import os
-from pathlib import Path
-import sys
-from typing import AsyncIterator
-from dotenv import load_dotenv
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, function_tool, MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob, ConversationFlow, ChatRole
-from videosdk.plugins.openai import OpenAILLM
-from videosdk.plugins.deepgram import DeepgramSTT
-from videosdk.plugins.elevenlabs import ElevenLabsTTS
-from videosdk.plugins.silero import SileroVAD
-from videosdk.plugins.turn_detector import TurnDetector, pre_download_model
 
+import asyncio, os, aiohttp, requests
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, JobContext, RoomOptions, WorkerJob
+from videosdk.plugins.openai import OpenAIRealtime, OpenAIRealtimeConfig
+from openai.types.beta.realtime.session import  TurnDetection
+from dotenv import load_dotenv
 load_dotenv()
 
-auth_token =os.getenv("VIDEOSDK_AUTH_TOKEN")
-room_id = os.getenv("ROOM_ID")
+auth_token = os.getenv("VIDEOSDK_AUTH_TOKEN")
 
-# Pre-downloading the Turn Detector model
-pre_download_model()
+ROOM_ID=None
 
-@function_tool
-async def get_weather(
-    latitude: str,
-    longitude: str,
-):
-        """Called when the user asks about the weather. This function will return the weather for
-        the given location. When given a location, please estimate the latitude and longitude of the
-        location and do not ask the user for them.
 
-        Args:
-            latitude: The latitude of the location
-            longitude: The longitude of the location
-        """
-        print("###Getting weather for", latitude, longitude)
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m"
-        weather_data = {}
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as response:
-                if response.status == 200:
-                    data = await response.json()
-                    print("###Weather data", data)
-                    weather_data = {
-                        "temperature": data["current"]["temperature_2m"],
-                        "temperature_unit": "Celsius",
-                    }
-                else:
-                    raise Exception(
-                        f"Failed to get weather data, status code: {response.status}"
-                    )
-
-        return weather_data
-
-async def start_meeting_recording() -> dict:
+async def start_meeting_recording(room_id) -> dict:
     url = "https://api.videosdk.live/v2/recordings/start"
     headers = {
         "Authorization": auth_token,
@@ -72,7 +31,7 @@ async def start_meeting_recording() -> dict:
 
 
 
-async def stop_meeting_recording() -> dict:
+async def stop_meeting_recording(room_id) -> dict:
     url = "https://api.videosdk.live/v2/recordings/end"
     headers = {
         "Authorization": auth_token,
@@ -89,137 +48,87 @@ async def stop_meeting_recording() -> dict:
                 text = await response.text()
                 raise Exception(f"Failed to stop meeting recording: {response.status}, {text}")
             return await response.json()
+        
+# Create a ROOM ID
+def get_room_id() -> str:
+    url = "https://api.videosdk.live/v2/rooms"
+    headers = {
+        "Authorization": os.getenv("VIDEOSDK_AUTH_TOKEN")
+    }
+    response = requests.post(url, headers=headers)
+    response.raise_for_status()
+    return response.json()["roomId"]
 
 
 class MyVoiceAgent(Agent):
-    def __init__(self):
-        mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
-        super().__init__(
-            instructions="You are VideoSDK's Voice Agent. You are a helpful voice assistant that can answer questions about weather, horoscopes and help with other tasks.",
-            tools=[get_weather],
-            mcp_servers=[
-                MCPServerStdio(
-                    executable_path=sys.executable,
-                    process_arguments=[str(mcp_script)],
-                    session_timeout=30
-                )
-            ]
-        )
+    def __init__(self, room_id):
+        super().__init__(instructions="You are a helpful voice assistant that can answer questions and help with tasks.")
+        self.room_id = room_id
 
     async def on_enter(self) -> None:
         await self.session.say("Hello! I will start recording this meeting.")
         try:
-            await start_meeting_recording()
+            await start_meeting_recording(self.room_id)
         except Exception as e:
-            print(f"Failed to start meeting recording: {e}")
+            pass
 
     async def on_exit(self) -> None:
         await self.session.say("Goodbye! Stopping the recording now.")
         try:
-            await stop_meeting_recording()
+            await stop_meeting_recording(self.room_id)
         except Exception as e:
-            print(f"Failed to stop meeting recording: {e}")
+            pass
+
         
-    @function_tool
-    async def get_horoscope(self, sign: str) -> dict:
-        """Get today's horoscope for a given zodiac sign.
-
-        Args:
-            sign: The zodiac sign (e.g., Aries, Taurus, Gemini, etc.)
-        """
-        horoscopes = {
-            "Aries": "Today is your lucky day!",
-            "Taurus": "Focus on your goals today.",
-            "Gemini": "Communication will be important today.",
-        }
-        return {
-            "sign": sign,
-            "horoscope": horoscopes.get(sign, "The stars are aligned for you today!"),
-        }
-    
-    @function_tool
-    async def end_call(self) -> None:
-        """End the call upon request by the user"""
-        await self.session.say("Goodbye!")
-        await asyncio.sleep(1)
-        await self.session.leave()
-        
-
-class MyConversationFlow(ConversationFlow):
-    def __init__(self, agent: Agent):
-        super().__init__(agent)
-
-    async def run(self, transcript: str) -> AsyncIterator[str]:
-        """Main conversation loop: handle a user turn."""
-        await self.on_turn_start(transcript)
-        processed_transcript = transcript.lower().strip()
-        self.agent.chat_context.add_message(
-            role=ChatRole.USER, content=processed_transcript
-        )
-        async for response_chunk in self.process_with_llm():
-            yield response_chunk
-        await self.on_turn_end()
-
-    async def on_turn_start(self, transcript: str) -> None:
-        """Called at the start of a user turn."""
-        self.is_turn_active = True
-        print(f"User transcript: {transcript}")
-
-    async def on_turn_end(self) -> None:
-        """Called at the end of a user turn."""
-        self.is_turn_active = False
-        print("Agent turn ended.")
-
-
 async def start_session(context: JobContext):
-
-    # STT Providers
-    stt = DeepgramSTT(api_key=os.getenv("DEEPGRAM_API_KEY"))
-
-    # LLM Providers
-    llm = OpenAILLM(api_key=os.getenv("OPENAI_API_KEY"))
-
-    # TTS Providers
-    tts = ElevenLabsTTS(api_key=os.getenv("ELEVENLABS_API_KEY"))
     
-    vad = SileroVAD()
-    turn_detector = TurnDetector(threshold=0.8)
+    # Initialize Model
+    model = OpenAIRealtime(
+        model="gpt-realtime-2025-08-28",
+        config=OpenAIRealtimeConfig(
+            voice="alloy",  # Available voices:alloy, ash, ballad, coral, echo, fable, onyx, nova, sage, shimmer, and verse
+            modalities=["text", "audio"],
+            turn_detection=TurnDetection(
+                type="server_vad",
+                threshold=0.5,
+                prefix_padding_ms=300,
+                silence_duration_ms=200,
+            )
+        )
+    )
 
-    agent = MyVoiceAgent()
-    conversation_flow = MyConversationFlow(agent)
-
-    pipeline = CascadingPipeline(
-        stt=stt, 
-        llm=llm, 
-        tts=tts, 
-        vad=vad, 
-        turn_detector=turn_detector
+    # Create pipeline
+    pipeline = RealTimePipeline(
+        model=model
     )
 
     session = AgentSession(
-        agent=agent,
-        pipeline=pipeline,
-        conversation_flow=conversation_flow
+        agent=MyVoiceAgent(room_id=ROOM_ID),
+        pipeline=pipeline
     )
 
     try:
         await context.connect()
         await session.start()
+        # Keep the session running until manually terminated
         await asyncio.Event().wait()
     finally:
+        # Clean up resources when done
         await session.close()
         await context.shutdown()
 
 def make_context() -> JobContext:
+    global ROOM_ID
+    room_id = get_room_id()
+    ROOM_ID = room_id
     room_options = RoomOptions(
-        room_id, # Replace it with your actual meetingID
-        name="Recording Example Agent",
+        # room_id= ROOM_ID,  # omit to auto-create
+        name="VideoSDK Realtime Agent",
         playground=True,
-        recording=True
+        recording= True
     )
 
     return JobContext(room_options=room_options)
-
 
 if __name__ == "__main__":
     job = WorkerJob(entrypoint=start_session, jobctx=make_context)
