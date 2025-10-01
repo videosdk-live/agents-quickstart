@@ -3,7 +3,7 @@
 The AI Agent SDK supports session recordings, enabled via a simple context flag. When enabled, all user–agent interactions are recorded. Recordings can be played back from the dashboard with autoscrolling transcripts and precise timestamps, or downloaded for offline analysis.
 
 
-## Enabling Recording 
+## Enabling Recording (Participant Recording)
 
 Set the `recording` flag to `True` in the session context. No pipeline changes are required.
 
