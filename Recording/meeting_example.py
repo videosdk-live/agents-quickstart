@@ -91,7 +91,6 @@ def make_context() -> JobContext:
         room_id=ROOM_ID,
         name="VideoSDK Realtime Agent",
         playground=True,
-        recording=True
     )
     return JobContext(room_options=room_options)
 

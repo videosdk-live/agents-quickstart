@@ -1,33 +1,44 @@
 import asyncio
 import os
 import requests
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, JobContext, RoomOptions, WorkerJob
-from videosdk.plugins.openai import OpenAIRealtime, OpenAIRealtimeConfig
-from openai.types.beta.realtime.session import TurnDetection
 from dotenv import load_dotenv
 
-load_dotenv()
+from videosdk.agents import (
+    Agent,
+    AgentSession,
+    RealTimePipeline,
+    JobContext,
+    RoomOptions,
+    WorkerJob,
+)
+from videosdk.plugins.openai import OpenAIRealtime, OpenAIRealtimeConfig
+from openai.types.beta.realtime.session import TurnDetection
 
+load_dotenv()
 auth_token = os.getenv("VIDEOSDK_AUTH_TOKEN")
-ROOM_ID = None
+ROOM_ID = None  # global room ID
 
 def start_track_recording(room_id: str, participant_id: str, kind: str = "audio") -> dict:
     url = "https://api.videosdk.live/v2/recordings/participant/track/start"
+    payload = {
+        "roomId": room_id,
+        "participantId": participant_id,
+        "kind": kind,
+    }
     headers = {"Authorization": auth_token, "Content-Type": "application/json"}
-    payload = {"roomId": room_id, "participantId": participant_id, "kind": kind}
     response = requests.post(url, json=payload, headers=headers)
     response.raise_for_status()
-    
+
     return response.json()
 
 
 def stop_track_recording(room_id: str, participant_id: str, kind: str = "audio") -> dict:
     url = "https://api.videosdk.live/v2/recordings/participant/track/stop"
-    headers = {"Authorization": auth_token, "Content-Type": "application/json"}
     payload = {"roomId": room_id, "participantId": participant_id, "kind": kind}
+    headers = {"Authorization": auth_token, "Content-Type": "application/json"}
     response = requests.post(url, json=payload, headers=headers)
     response.raise_for_status()
-    
+
     return response.json()
 
 
@@ -39,33 +50,17 @@ def get_room_id() -> str:
     return response.json()["roomId"]
 
 
-
 class MyVoiceAgent(Agent):
-    def __init__(self):
-        super().__init__(instructions="You are a helpful voice assistant that starts/stops track recording.")
+    def __init__(self, room_id):
+        super().__init__(instructions="Track all participants")
+        self.room_id = room_id
 
     async def on_enter(self):
-        print("Agent entered the room")
         await self.session.say("Hello! Meeting started.")
 
     async def on_exit(self):
-        print("Agent exiting the room")
         await self.session.say("Goodbye! Meeting ended.")
-
-    async def on_stream_enabled(self, participant_id: str, kind="audio"):
         
-        try:
-            start_track_recording(ROOM_ID, participant_id, kind)
-        except Exception as e:
-            print(f"Error starting track: {e}")
-
-    async def on_stream_disabled(self, participant_id: str, kind="audio"):
-        
-        try:
-            stop_track_recording(ROOM_ID, participant_id, kind)
-        except Exception as e:
-            print(f"Error stopping track: {e}")
-
 
 
 async def start_session(context: JobContext):
@@ -75,15 +70,46 @@ async def start_session(context: JobContext):
             voice="alloy",
             modalities=["text", "audio"],
             turn_detection=TurnDetection(
-                type="server_vad", threshold=0.5, prefix_padding_ms=300, silence_duration_ms=200
+                type="server_vad",
+                threshold=0.5,
+                prefix_padding_ms=300,
+                silence_duration_ms=200,
             ),
         ),
     )
 
     pipeline = RealTimePipeline(model=model)
-    session = AgentSession(agent=MyVoiceAgent(), pipeline=pipeline)
+    agent = MyVoiceAgent(room_id=ROOM_ID)
+    session = AgentSession(agent=agent, pipeline=pipeline)
 
     await context.connect()
+
+    
+    async def monitor_participants():
+        previous_ids = set()
+        while True:
+            current_ids = set(context.room.participants_data.keys())
+            # Detect joins
+            for pid in current_ids - previous_ids:
+                pdata = context.room.participants_data.get(pid, {})
+                name = pdata.get("name", "Unknown")
+                
+                
+                asyncio.create_task(asyncio.to_thread(start_track_recording, ROOM_ID, pid))
+
+            # Detect leaves
+            for pid in previous_ids - current_ids:
+                pdata = context.room.participants_data.get(pid, {})
+                name = pdata.get("name", "Unknown")
+                
+                asyncio.create_task(asyncio.to_thread(stop_track_recording, ROOM_ID, pid))
+
+            previous_ids = current_ids
+            await asyncio.sleep(1)
+
+    asyncio.create_task(monitor_participants())
+
+    # Start agent session
     await session.start()
     
     await asyncio.Event().wait()
@@ -92,7 +118,12 @@ async def start_session(context: JobContext):
 def make_context() -> JobContext:
     global ROOM_ID
     ROOM_ID = get_room_id()
-    room_options = RoomOptions(room_id=ROOM_ID, name="VideoSDK Realtime Agent", recording=True)
+    
+    room_options = RoomOptions(
+        room_id=ROOM_ID,
+        name="VideoSDK Realtime Agent",
+        playground=True
+    )
     return JobContext(room_options=room_options)
 
 
