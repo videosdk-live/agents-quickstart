@@ -10,7 +10,7 @@ class MyVoiceAgent(Agent):
     async def on_exit(self): await self.session.say("Goodbye!")
 
 async def start_session(context: JobContext):
-    # Initialize Model
+
     model = OpenAIRealtime(
         model="gpt-realtime-2025-08-28",
         config=OpenAIRealtimeConfig(
