@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head> </head>
+
+<body>
+    <div id="join-screen">
+        <!-- Join Static Meeting Button -->
+        <button id="createMeetingBtn">Join Agent Meeting</button>
+    </div>
+
+    <!-- for Managing meeting status -->
+    <div id="textDiv"></div>
+
+    <div id="grid-screen" style="display: none">
+        <!-- To Display MeetingId -->
+        <h3 id="meetingIdHeading"></h3>
+
+        <!-- Controllers -->
+        <button id="leaveBtn">Leave</button>
+        <button id="toggleMicBtn">Toggle Mic</button>
+
+        <!-- Audio only - no video container needed -->
+        <div id="audioContainer"></div>
+    </div>
+    <script src="https://sdk.videosdk.live/js-sdk/0.0.82/videosdk.js"></script>
+    <script src="config.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
