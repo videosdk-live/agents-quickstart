@@ -4,6 +4,7 @@ from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 
 logging.getLogger().setLevel(logging.CRITICAL)
+
 class RealtimeAgent(Agent):
     def __init__(self):
         super().__init__(
@@ -17,8 +18,7 @@ class RealtimeAgent(Agent):
         await self.session.say("Goodbye!")
 
 async def entrypoint(ctx: JobContext):
-
-# Initialize Model
+    # Initialize Model
     model = GeminiRealtime(
         model="gemini-2.0-flash-live-001",
         config=GeminiLiveConfig(

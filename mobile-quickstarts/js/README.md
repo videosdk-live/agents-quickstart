@@ -114,7 +114,8 @@ room_options = RoomOptions(room_id="YOUR_MEETING_ID", name="Sandbox Agent", play
 
 2. **Install Python dependencies:**
    ```bash
-    pip install "videosdk-plugins-google"
+   pip install videosdk-agents
+   pip install "videosdk-plugins-google"
    ```
 
 3. **Set up environment variables:**

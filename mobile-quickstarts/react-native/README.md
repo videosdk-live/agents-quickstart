@@ -147,6 +147,7 @@ npm run ios
 
 2. **Install Python dependencies:**
    ```bash
+   pip install videosdk-agents
    pip install "videosdk-plugins-google"
    ```
 

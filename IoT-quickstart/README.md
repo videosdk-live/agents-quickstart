@@ -136,6 +136,7 @@ room_options = RoomOptions(room_id="YOUR_MEETING_ID", name="Sandbox Agent", play
 
 ```bash
 cd agents-quickstart/IoT-quickstart
+pip install videosdk-agents
 pip install "videosdk-plugins-google"
 ```
 
