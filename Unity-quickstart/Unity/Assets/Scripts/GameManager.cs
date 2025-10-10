@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     private VideoSurface _localParticipant;
     private Meeting videosdk;
-    private readonly string _token = "YOUR_TOKEN";
+    private readonly string _token = "YOUR_VIDEOSDK_AUTH_TOKEN";
+    private readonly string _staticMeetingId = "YOUR_MEETING_ID";
     
     [SerializeField] TMP_Text _meetIdTxt;
     [SerializeField] TMP_InputField _meetIdInputField;
@@ -29,8 +30,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _meetControlls.SetActive(false);
-        _meetCreateActivity.SetActive(false);
+        _meetCreateActivity.SetActive(false); // Hide create meeting button for static room
         _meetJoinActivity.SetActive(false);
+        _meetIdInputField.gameObject.SetActive(false); // Hide meeting ID input field
         RequestForPermission(Permission.Camera);
     }
     void Start()
@@ -43,8 +45,8 @@ public class GameManager : MonoBehaviour
         videosdk.OnCreateMeetingIdFailedCallback += OnCreateMeetFailed;
         videosdk.OnMeetingStateChangedCallback += OnMeetingStateChanged;
         videosdk.OnErrorCallback += OnError;
-        _meetCreateActivity.SetActive(true);
-        _meetJoinActivity.SetActive(true);
+        // _meetCreateActivity.SetActive(true); // Don't show create meeting button for static room
+        _meetJoinActivity.SetActive(true); // Only show join button
     }
 
     private void OnError(Error error)
@@ -120,8 +122,8 @@ public class GameManager : MonoBehaviour
 
     private void OnLeave()
     {
-        _meetCreateActivity.SetActive(true);
-        _meetJoinActivity.SetActive(true);
+        // _meetCreateActivity.SetActive(true); // Don't show create meeting button for static room
+        _meetJoinActivity.SetActive(true); // Only show join button
         _meetControlls.SetActive(false);
         camToggle = true;
         micToggle = true;
@@ -144,13 +146,15 @@ public class GameManager : MonoBehaviour
         Debug.Log("User Request for Create meet-ID");
         _meetCreateActivity.SetActive(false);
         _meetJoinActivity.SetActive(false);
-        videosdk.CreateMeetingId(_token);
+        // videosdk.CreateMeetingId(_token);
+        // Use static meeting ID instead of creating new one
+        OnCreateMeet(_staticMeetingId);
     }
 
     private void OnCreateMeetFailed(string obj)
     {
-        _meetCreateActivity.SetActive(true);
-        _meetJoinActivity.SetActive(true);
+        // _meetCreateActivity.SetActive(true); // Don't show create meeting button for static room
+        _meetJoinActivity.SetActive(true); // Only show join button
         Debug.LogError(obj);
         Toast.Show($"OnCreateMeetFailed: {obj}", 1f, Color.red, ToastPosition.TopCenter);
     }
@@ -163,11 +167,12 @@ public class GameManager : MonoBehaviour
 
     public void JoinMeet()
     {
-        if (string.IsNullOrEmpty(_meetIdInputField.text)) return;
-
+        // if (string.IsNullOrEmpty(_meetIdInputField.text)) return;
+        // Use static meeting ID instead of input field
         try
         {
-            videosdk.Join(_token, _meetIdInputField.text, "User", true, false);
+            // videosdk.Join(_token, _meetIdInputField.text, "User", true, false);
+            videosdk.Join(_token, _staticMeetingId, "User", true, false);
         }
         catch (Exception ex)
         {
