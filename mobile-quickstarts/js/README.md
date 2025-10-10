@@ -1,4 +1,8 @@
-# VideoSDK AI Agent with JavaScript Frontend
+# VideoSDK AI Agent with JavaScript
+
+<!-- [![Documentation](https://img.shields.io/badge/Read-Documentation-blue)](https://docs.videosdk.live/react/guide/video-and-audio-calling-api-sdk/getting-started) -->
+[![Discord](https://img.shields.io/discord/876774498798551130?label=Join%20on%20Discord)](https://discord.gg/kgAvyxtTxv)
+[![Register](https://img.shields.io/badge/Contact-Know%20More-blue)](https://app.videosdk.live/signup)
 
 This project demonstrates a real-time AI agent integration using VideoSDK with a JavaScript frontend and Python backend. The agent acts as a high-energy game show host that guides users to guess a secret number.
 
@@ -164,7 +168,7 @@ js/
 - **Room Management**: Waits for participants and manages the session
 
 ### Configuration
-- **Static Room ID**: `"2q32-j5m5-kpjl"` ensures both frontend and backend connect to the same room
+- **Static Room ID**: `"YOUR_MEETING_ID"` ensures both frontend and backend connect to the same room
 - **Environment Variables**: Secure storage of API keys and tokens
 
 ## Troubleshooting
@@ -185,12 +189,6 @@ js/
    - Verify your Google API key is correctly set in the environment
    - Check that the Gemini Live API is enabled in your Google Cloud Console
 
-### Browser Compatibility:
-- Chrome/Chromium (recommended)
-- Firefox
-- Safari (with limitations)
-- Edge
-
 ## Security Notes
 
 - Never commit your `.env` file or `config.js` with real tokens to version control
@@ -203,3 +201,4 @@ js/
 - Add more interactive features to the frontend
 - Implement additional game mechanics or conversation flows
 - Deploy to a production environment with proper security measures
+

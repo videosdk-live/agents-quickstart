@@ -1,0 +1,16 @@
+menu "SET Microcontroller"
+
+choice AUDIO_BOARD
+    prompt "Audio hardware board"
+    default ESP32S3_XIAO
+    help
+        Select an audio board to use
+
+config ESP32_S3_KORVO_2_V3_0_BOARD
+    bool "ESP32-S3-Korvo-2"
+    depends on IDF_TARGET_ESP32S3
+config ESP32S3_XIAO
+    bool "ESP32-S3-XIAO"
+endchoice
+
+endmenu

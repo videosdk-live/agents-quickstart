@@ -1,4 +1,4 @@
-# VideoSDK Agent React 
+# VideoSDK AI Agent with React 
 
 Minimal React example to join a static meeting room with microphone only (webcam disabled). Uses `@videosdk.live/react-sdk`.
 

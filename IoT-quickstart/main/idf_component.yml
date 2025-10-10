@@ -1,0 +1,9 @@
+## IDF Component Manager Manifest File
+dependencies:
+  iot-sdk: 
+     path: /Users/jayshah/esp/iot-sdk
+  protocol_examples_common:
+    path: ${IDF_PATH}/examples/common_components/protocol_examples_common
+  idf:
+    version: =5.3.0
+

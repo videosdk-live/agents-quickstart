@@ -1,0 +1,4 @@
+<resources>
+    <!-- Define the color 'red' used in notifications -->
+    <color name="red">#FC0303</color>
+</resources>

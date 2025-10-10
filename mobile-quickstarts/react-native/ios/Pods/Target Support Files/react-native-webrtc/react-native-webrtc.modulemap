@@ -1,0 +1,6 @@
+module react_native_webrtc {
+  umbrella header "react-native-webrtc-umbrella.h"
+
+  export *
+  module * { export * }
+}

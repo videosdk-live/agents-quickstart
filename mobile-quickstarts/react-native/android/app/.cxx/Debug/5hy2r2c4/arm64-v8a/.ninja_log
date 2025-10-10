@@ -1,0 +1,11 @@
+# ninja log v5
+2017	2120	1759744215971480279	/Users/pavanfaldu/MyApp/android/app/build/intermediates/cxx/Debug/5hy2r2c4/obj/arm64-v8a/libappmodules.so	f26c5318504a80da
+2	2017	1759744215864029100	CMakeFiles/appmodules.dir/OnLoad.cpp.o	c6a314e7d1262e3c
+0	1824	1759744215670249317	CMakeFiles/appmodules.dir/Users/pavanfaldu/MyApp/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	1ccf0816fa371cc8
+1	32	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
+1	14	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
+0	25	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
+0	31	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
+0	30	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
+0	34	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
+2	54	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/arm64-v8a/CMakeFiles/cmake.verify_globs	e83abedb6abdc0d
