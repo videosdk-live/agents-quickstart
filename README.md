@@ -31,6 +31,9 @@ The framework offers two distinct approaches to building AI agents:
 - **Human in the Loop (HITL)**: Escalate specific queries to a human operator via Discord, then relay responses back to users
 - **Wake Up Call**: Detect user inactivity and trigger callbacks to re-engage users automatically
 - **Recording**: Record complete sessions (audio and transcripts) for playback and analysis; enable by setting `recording=True` in `RoomOptions`
+- **Background Audio**: Enhance the user experience by playing background audio while the agent is in a "thinking" state.
+- **Pub/Sub Messaging**: Enable real-time, bidirectional communication between the agent and the user with Pub/Sub messaging.
+- **Reply and Interrupt**: Programmatically trigger the agent to speak a predefined message or immediately stop its current speech/action.
 
 ### 🔧 Why Choose Cascading Pipeline?
 
@@ -173,14 +176,15 @@ pip install videosdk-agents
 4. Then navigate to your choice of example available:
 - [🤖 Agent to Agent (A2A) Multi-Agent System](./A2A) **← Featured**
 - [🎭 Virtual Avatar Examples](./Virtual%20Avatar) **← With Simli Integration**
-- [OpenAI Agent](./OpenAI)
-- [Google Gemini LiveAPI Agent](./Google%20Gemini%20%28LiveAPI%29)
+- [Realtime Pipeline Examples](./Realtime%20Pipeline)
 - [Cascading Pipeline Agent](./Cascading%20Pipeline)
-- [AWS Nova Sonic Agent](./AWS%20Nova%20Sonic)
 - [Human in the Loop](./Human%20In%20The%20Loop)
 - [Wake Up Call](./Wakeup%20Call)
 - [Recording](./Recording)
-- [🔗 MCP Server Examples](./MCP%20Server)
+- [Background Audio](./Background%20Audio)
+- [Pubsub](./Pubsub)
+- [Reply Interrupt Agent](./Reply%20Interrupt%20Agent)
+- [🔗 MCP Examples](./MCP)
 
 ## 🔗 Model Context Protocol (MCP) Integration
 
@@ -256,10 +260,13 @@ agents-quickstart/
 │   ├── simli_realtime_example.py  # Realtime pipeline with Simli avatar
 │   └── README.md                  # Virtual avatar setup and configuration
 │
-├── OpenAI/                        # OpenAI-based agent examples
-├── Google Gemini (LiveAPI)/       # Google Gemini LiveAPI examples  
+├── Realtime Pipeline/             # Examples for real-time, low-latency pipelines
+│   ├── OpenAI/                    # OpenAI-based agent examples
+│   ├── Google Gemini (LiveAPI)/   # Google Gemini LiveAPI examples  
+│   └── AWS Nova Sonic/            # AWS Nova Sonic examples
+│
 ├── Cascading Pipeline/            # Example of a modular pipeline
-├── AWS Nova Sonic/                # AWS Nova Sonic examples
+│
 ├── Human In The Loop/             # Discord-based human oversight example
 │   ├── customer_agent.py
 │   ├── discord_mcp_server.py
@@ -272,7 +279,24 @@ agents-quickstart/
 ├── Recording/                     # Session recording example
 │   ├── recording_example.py
 │   └── README.md
-├── MCP Server/                    # Model Context Protocol examples
+│
+├── Reply Interrupt Agent/         # Example for reply and interrupt
+│   ├── reply_interrupt_agent.py
+│   └── README.md
+│
+├── Background Audio/              # Example for background audio
+│   ├── background_audio.py
+│   └── README.md
+│
+├── Pubsub/                        # Example for Pub/Sub messaging
+│   ├── pubsub_agent.py
+│   └── README.md
+│
+├── MCP/                           # Model Context Protocol examples
+│   ├── mcp_agent.py
+│   ├── mcp_stdio_server.py
+│   └── README.md
+│
 ├── requirements.txt               # All dependencies
 └── README.md                      # This file
 ```
