@@ -1,17 +1,12 @@
 import asyncio
 import aiohttp
-import os
-from pathlib import Path
-import sys
 from typing import AsyncIterator
-
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, function_tool, MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob, ConversationFlow, ChatRole
+from videosdk.agents import Agent, AgentSession, CascadingPipeline, function_tool, JobContext, RoomOptions, WorkerJob, ConversationFlow, ChatRole
 from videosdk.plugins.openai import OpenAILLM
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.elevenlabs import ElevenLabsTTS
 from videosdk.plugins.silero import SileroVAD
 from videosdk.plugins.turn_detector import TurnDetector, pre_download_model
-
 
 # Pre-downloading the Turn Detector model
 pre_download_model()
@@ -51,17 +46,9 @@ async def get_weather(
 
 class MyVoiceAgent(Agent):
     def __init__(self):
-        mcp_script = Path(__file__).parent.parent / "MCP Server" / "mcp_stdio_example.py"
         super().__init__(
             instructions="You are VideoSDK's Voice Agent. You are a helpful voice assistant that can answer questions about weather, horoscopes and help with other tasks.",
-            tools=[get_weather],
-            mcp_servers=[
-                MCPServerStdio(
-                    executable_path=sys.executable,
-                    process_arguments=[str(mcp_script)],
-                    session_timeout=30
-                )
-            ]
+            tools=[get_weather]
         )
 
     async def on_enter(self) -> None:
@@ -123,27 +110,14 @@ class MyConversationFlow(ConversationFlow):
 
 async def start_session(context: JobContext):
 
-    # STT Providers
-    stt = DeepgramSTT(api_key=os.getenv("DEEPGRAM_API_KEY"))
-
-    # LLM Providers
-    llm = OpenAILLM(api_key=os.getenv("OPENAI_API_KEY"))
-
-    # TTS Providers
-    tts = ElevenLabsTTS(api_key=os.getenv("ELEVENLABS_API_KEY"))
-    
-    vad = SileroVAD()
-    turn_detector = TurnDetector(threshold=0.8)
-
     agent = MyVoiceAgent()
     conversation_flow = MyConversationFlow(agent)
-
     pipeline = CascadingPipeline(
-        stt=stt, 
-        llm=llm, 
-        tts=tts, 
-        vad=vad, 
-        turn_detector=turn_detector
+        stt=DeepgramSTT(),
+        llm=OpenAILLM(),
+        tts=ElevenLabsTTS(),
+        vad=SileroVAD(),
+        turn_detector=TurnDetector()
     )
 
     session = AgentSession(
@@ -152,23 +126,16 @@ async def start_session(context: JobContext):
         conversation_flow=conversation_flow
     )
 
-    try:
-        await context.connect()
-        await session.start()
-        await asyncio.Event().wait()
-    finally:
-        await session.close()
-        await context.shutdown()
+    await context.run_until_shutdown(session=session,wait_for_participant=True)
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-        room_id="YOUR_MEETING_ID", # Replace it with your actual meetingID
+        room_id="<room_id>", # Replace it with your actual room_id
         name="Cascading Agent",
         playground=True,
     )
 
     return JobContext(room_options=room_options)
-
 
 if __name__ == "__main__":
     job = WorkerJob(entrypoint=start_session, jobctx=make_context)

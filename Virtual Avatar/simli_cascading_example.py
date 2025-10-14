@@ -1,4 +1,3 @@
-import asyncio
 import aiohttp
 import os
 from typing import AsyncIterator
@@ -14,44 +13,10 @@ from videosdk.plugins.elevenlabs import ElevenLabsTTS
 # Pre-downloading the Turn Detector model
 pre_download_model()
 
-@function_tool
-async def get_weather(
-    latitude: str,
-    longitude: str,
-):
-    """Called when the user asks about the weather. This function will return the weather for
-    the given location. When given a location, please estimate the latitude and longitude of the
-    location and do not ask the user for them.
-
-    Args:
-        latitude: The latitude of the location
-        longitude: The longitude of the location
-    """
-    print("###Getting weather for", latitude, longitude)
-    url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m"
-    weather_data = {}
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            if response.status == 200:
-                data = await response.json()
-                print("###Weather data", data)
-                weather_data = {
-                    "temperature": data["current"]["temperature_2m"],
-                    "temperature_unit": "Celsius",
-                }
-            else:
-                raise Exception(
-                    f"Failed to get weather data, status code: {response.status}"
-                )
-
-    return weather_data
-
-
 class MyVoiceAgent(Agent):
     def __init__(self):
         super().__init__(
             instructions="You are VideoSDK's AI Avatar Voice Agent with real-time capabilities. You are a helpful virtual assistant with a visual avatar that can answer questions about weather help with other tasks in real-time.",
-            tools=[get_weather]
         )
 
     async def on_enter(self) -> None:
@@ -104,17 +69,11 @@ async def start_session(context: JobContext):
         conversation_flow=conversation_flow
     )
 
-    try:
-        await context.connect()
-        await session.start()
-        await asyncio.Event().wait()
-    finally:
-        await session.close()
-        await context.shutdown()
+    await context.run_until_shutdown(session=session,wait_for_participant=True)
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-        room_id="YOUR_MEETING_ID",  # Replace it with your actual meetingID
+        room_id="<room_id>",  # Replace it with your actual room_id
         # auth_token = "<VIDEOSDK_AUTH_TOKEN>",  # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
         name="Simli Avatar Cascading Agent",
         playground=False
