@@ -30,3 +30,4 @@ fastmcp
 aiohttp
 python-dotenv>=1.1.1
 requests>=2.31.0
+mem0ai==0.1.116
