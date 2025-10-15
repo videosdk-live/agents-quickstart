@@ -1,0 +1,25 @@
+{
+  "name": "ReactNativeIncallManager",
+  "version": "0.1.3",
+  "summary": "zujonow react-native incallmanager",
+  "description": "zujonow react-native incallmanager",
+  "homepage": "https://github.com/zujonow/zn-rn-incallmanager#readme",
+  "license": "ISC",
+  "authors": "zujonow",
+  "source": {
+    "git": "https://github.com/zujonow/zn-rn-incallmanager.git",
+    "tag": "0.1.3"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "preserve_paths": [
+    "LICENSE",
+    "package.json"
+  ],
+  "source_files": "**/*.{h,m}",
+  "exclude_files": "example/**/*",
+  "dependencies": {
+    "React-Core": []
+  }
+}

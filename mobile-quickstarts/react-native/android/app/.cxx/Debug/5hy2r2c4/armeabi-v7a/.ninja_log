@@ -1,0 +1,11 @@
+# ninja log v5
+0	1066	1759744218047038895	CMakeFiles/appmodules.dir/Users/pavanfaldu/MyApp/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	74a3ae59a4c1414f
+1195	1257	1759744218240895595	/Users/pavanfaldu/MyApp/android/app/build/intermediates/cxx/Debug/5hy2r2c4/obj/armeabi-v7a/libappmodules.so	bb05a0d07eb1a4fc
+1	1195	1759744218174242138	CMakeFiles/appmodules.dir/OnLoad.cpp.o	8244f996b49d4cb2
+1	10	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297
+0	10	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297
+0	9	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297
+1	9	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297
+0	8	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297
+0	16	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297
+0	30	0	/Users/pavanfaldu/MyApp/android/app/.cxx/Debug/5hy2r2c4/armeabi-v7a/CMakeFiles/cmake.verify_globs	36a2a051d1963297

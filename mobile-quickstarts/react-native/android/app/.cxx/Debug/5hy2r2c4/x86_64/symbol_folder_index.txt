@@ -1,0 +1,1 @@
+/Users/pavanfaldu/MyApp/android/app/build/intermediates/cxx/Debug/5hy2r2c4/obj/x86_64

@@ -4,3 +4,10 @@ venv/
 env/
 .env
 .env.local
+
+config.js
+package-lock.json
+node_modules
+build
+
+

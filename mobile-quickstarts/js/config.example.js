@@ -1,0 +1,2 @@
+TOKEN="YOUR_VIDEOSDK_AUTH_TOKEN";
+ROOM_ID="YOUR_MEETING_ID";  // Create this using VideoSDK API: curl -X POST https://api.videosdk.live/v2/rooms -H "Authorization: YOUR_JWT_TOKEN_HERE" -H "Content-Type: application/json"

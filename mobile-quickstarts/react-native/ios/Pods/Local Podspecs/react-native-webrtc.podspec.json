@@ -1,0 +1,43 @@
+{
+  "name": "react-native-webrtc",
+  "version": "0.0.20",
+  "summary": "WebRTC for React Native",
+  "homepage": "https://github.com/zujonow/zn-rn-webrtc",
+  "license": "MIT",
+  "authors": "https://github.com/zujonow/zn-rn-webrtc/graphs/contributors",
+  "source": {
+    "git": "https://github.com/zujonow/zn-rn-webrtc.git",
+    "tag": "release #{s.version}"
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "12.0",
+    "osx": "10.13",
+    "tvos": "16.0"
+  },
+  "preserve_paths": "ios/**/*",
+  "source_files": "ios/**/*.{h,m}",
+  "libraries": [
+    "c",
+    "sqlite3",
+    "stdc++"
+  ],
+  "frameworks": [
+    "AudioToolbox",
+    "AVFoundation",
+    "CoreAudio",
+    "CoreGraphics",
+    "CoreVideo",
+    "GLKit",
+    "VideoToolbox"
+  ],
+  "dependencies": {
+    "React-Core": [],
+    "WebRTC-SDK": [
+      "125.6422.07"
+    ]
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES"
+  }
+}
