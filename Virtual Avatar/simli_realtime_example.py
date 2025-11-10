@@ -46,7 +46,7 @@ async def start_session(context: JobContext):
 
     session = AgentSession(agent=MyVoiceAgent(), pipeline=pipeline)
 
-    await context.run_until_shutdown(session=session,wait_for_participant=True)
+    await session.start(wait_for_participant=True, run_until_shutdown=True)
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
