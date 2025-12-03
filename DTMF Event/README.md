@@ -128,21 +128,21 @@ elif digit == "3":
     asyncio.create_task(agent.session.say("You selected [new service]. How may I help?"))
 ```
 
-## Troubleshooting
+### Worker Options
 
-### Common Issues
+```python
+Options(
+    agent_id="dtmf_agent",
+    max_processes=5,
+    register=True,
+    log_level="INFO",
+    host="localhost",
+    port=8071
+)
+```
 
-1. **DTMF Events Not Received**
-   - Verify the PubSub topic name matches (`DTMF_EVENT`)
-   - Check that DTMF events are being published correctly
-   - Ensure the agent is properly subscribed to the topic
-
-2. **Context Not Updating**
-   - Confirm the `agent_obj` is passed in the PubSub wrapper
-   - Check that the digit value is being parsed correctly
-   - Verify the chat context is being modified
-
-3. **Voice Issues**
-   - Ensure all API keys are set correctly
-   - Check Deepgram, Google, and SarvamAI API credentials
-   - Verify network connectivity to API services
+- `agent_id`: Unique identifier for the agent
+- `max_processes`: Maximum concurrent sessions
+- `register`: Register agent with VideoSDK
+- `log_level`: Logging verbosity
+- `host` & `port`: Server binding configuration
