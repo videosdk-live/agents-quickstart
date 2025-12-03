@@ -32,8 +32,9 @@ def on_pubsub_message(message):
     {
         "digit": "1"
     }
-    We extended this to include agent_obj so that the callback 
-    can manipulate its chat_context.
+
+    We extend this to include agent_obj so the callback
+    can modify the agent's chat_context.
     """
     print("PubSub DTMF message received:", message)
 
@@ -79,21 +80,21 @@ def on_pubsub_message(message):
 async def entrypoint(ctx: JobContext):
     agent = VoiceAgent()
     conversation_flow = ConversationFlow(agent)
-    # Create pipeline
+
     pipeline = CascadingPipeline(
         stt=DeepgramSTT(),
         llm=GoogleLLM(),
         tts=SarvamAITTS(),
         vad=SileroVAD(),
-        turn_detector=TurnDetector()
+        turn_detector=TurnDetector(),
     )
 
     session = AgentSession(
         agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow
+        conversation_flow=conversation_flow,
     )
-    # Wrapper to pass agent into pubsub callback
+
     def pubsub_callback_wrapper(msg):
         msg["agent_obj"] = agent
         on_pubsub_message(msg)
@@ -108,6 +109,7 @@ async def entrypoint(ctx: JobContext):
         await ctx.room.subscribe_to_pubsub(subscribe_config)
 
         await session.start()
+
         # Keep session alive
         await asyncio.Event().wait()
 
@@ -120,7 +122,7 @@ def make_context() -> JobContext:
     room_options = RoomOptions(
         name="DTMF Agent",
         auto_end_session=True,
-        session_timeout_seconds=5
+        session_timeout_seconds=5,
     )
     return JobContext(room_options=room_options)
 
@@ -131,13 +133,13 @@ options = Options(
     register=True,
     log_level="INFO",
     host="localhost",
-    port=8071
+    port=8071,
 )
 
 if __name__ == "__main__":
     job = WorkerJob(
         entrypoint=entrypoint,
         jobctx=make_context,
-        options=options
+        options=options,
     )
     job.start()
