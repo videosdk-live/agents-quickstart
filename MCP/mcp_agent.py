@@ -32,7 +32,7 @@ class MyVoiceAgent(Agent):
 async def start_session(context: JobContext):
     agent = MyVoiceAgent()
     model = GeminiRealtime(
-        model="gemini-2.0-flash-live-001",
+        model="gemini-2.5-flash-native-audio-preview-09-2025",
         config=GeminiLiveConfig(
             voice="Leda",
             response_modalities=["AUDIO"]

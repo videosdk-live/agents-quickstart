@@ -11,3 +11,10 @@ node_modules
 build
 
 
+pubspec.lock
+package_config_subset
+package_config.json
+package_graph.json
+.dart_tool
+.flutter-plugins-dependencies
+.flutter-plugins

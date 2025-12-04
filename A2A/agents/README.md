@@ -79,7 +79,7 @@ A2A/
 **Purpose**: Configure different agent modalities and capabilities
 
 **Pipeline Configuration**:
-- **Customer Agent**: **RealTimePipeline** with Gemini Realtime model (`gemini-2.0-flash-live-001`) for low-latency voice interaction
+- **Customer Agent**: **RealTimePipeline** with Gemini Realtime model (`gemini-2.5-flash-native-audio-preview-09-2025`) for low-latency voice interaction
 - **Specialist Agent**: **CascadingPipeline** with OpenAI LLM for efficient text processing
 - **Voice Configuration**: Customer agent uses "Leda" voice with audio response modality
 - **Modality Separation**: Audio pipeline for user interaction, text pipeline for specialist processing
