@@ -112,7 +112,7 @@ A2A/
 The system uses a **hybrid pipeline approach** for optimal performance:
 
 ### RealTimePipeline (Customer Agent)
-- **Model**: Gemini Realtime (`gemini-2.0-flash-live-001`)
+- **Model**: Gemini Realtime (`gemini-2.5-flash-native-audio-preview-09-2025`)
 - **Voice**: "Leda" with audio response modality
 - **Purpose**: Low-latency voice interaction with users
 - **Benefits**: Natural conversation flow, real-time audio processing
