@@ -31,13 +31,3 @@ A multi-agent healthcare system built with VideoSDK Agents that routes users to 
     ```bash
     python "Multi Agent Switch /Health Care Agent /health_care_agent.py"
     ```
-
-## Technology Stack
-
-- VideoSDK Agents
-- Deepgram STT (Speech-to-Text)
-- Google LLM
-- Cartesia TTS (Text-to-Speech)
-- Silero VAD (Voice Activity Detection)
-- Turn Detector
-
