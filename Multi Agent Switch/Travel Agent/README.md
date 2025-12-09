@@ -33,5 +33,5 @@ The `inherit_context` flag in the agent's constructor controls whether the conve
 
 3.  **Run the agent**:
     ```bash
-    python "Multi Agent Switch /multi_agent_switch.py"
+    python "Multi Agent Switch /Travel Agent /travel_agent.py"
     ```
