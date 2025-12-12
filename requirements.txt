@@ -1,30 +1,30 @@
 # VideoSDK AI Agents Core
-videosdk-agents>=0.0.49
+videosdk-agents>=0.0.50
 
 # Real-time API and LLM-based TTS/STT Providers
-videosdk-plugins-openai>=0.0.49
-videosdk-plugins-google>=0.0.49
-videosdk-plugins-aws>=0.0.49
-videosdk-plugins-sarvamai>=0.0.49
-videosdk-plugins-cartesia>=0.0.49
+videosdk-plugins-openai>=0.0.50
+videosdk-plugins-google>=0.0.50
+videosdk-plugins-aws>=0.0.50
+videosdk-plugins-sarvamai>=0.0.50
+videosdk-plugins-cartesia>=0.0.50
 
 
 # Speech-to-Text (STT) Plugins
-videosdk-plugins-deepgram>=0.0.49
+videosdk-plugins-deepgram>=0.0.50
 
 
 # Voice Activity Detection (VAD) and Turn Detection Plugins
-videosdk-plugins-silero>=0.0.49
-videosdk-plugins-turn-detector>=0.0.49
+videosdk-plugins-silero>=0.0.50
+videosdk-plugins-turn-detector>=0.0.50
 
 # Text-to-Speech (TTS) Plugins
-videosdk-plugins-elevenlabs>=0.0.49
+videosdk-plugins-elevenlabs>=0.0.50
 
 # LLM Plugins
-videosdk-plugins-anthropic>=0.0.49
+videosdk-plugins-anthropic>=0.0.50
 
 # Virtual Avatar Plugins
-videosdk-plugins-simli>=0.0.49
+videosdk-plugins-simli>=0.0.50
 
 # Core Dependencies
 fastmcp
