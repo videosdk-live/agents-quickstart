@@ -61,10 +61,6 @@ https://playground.videosdk.live?token=...&meetingId=...
 - **Function Calling**: Retrieve weather data and other information
 - **Custom Agent Behaviors**: Define agent personality and interaction style
 - **Call Control**: Agents can manage call flow and termination
-- **🔗 MCP Integration**: Connect to multiple Model Context Protocol servers for extended functionality
-  - **MCPServerStdio**: Local process communication for development and testing
-  - **MCPServerHTTP**: Remote service integration for production environments
-  - **Multiple MCP Servers**: Support for simultaneous connections to various data sources and tools
 
 ## 🧠 Ultravox Configuration
 
