@@ -1,20 +1,25 @@
-# 🎭 Simli Virtual Avatar Examples
+# 🎭 Virtual Avatar Examples
 
-Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) integration. Create more engaging and interactive experiences with:
+Enhance your AI agents with realistic, lip-synced virtual avatars using [Simli](https://simli.com/) or [Anam](https://www.anam.ai/) integrations. Create more engaging and interactive experiences with:
 
 - **Real-time Lip Sync**: Avatars that speak in sync with your AI agent's voice
 - **Visual Engagement**: Provide a face to your AI agent for better user connection
 - **Multiple Avatar Options**: Choose from various avatar faces or use custom ones
 - **Seamless Integration**: Works with both RealtimePipeline and CascadingPipeline approaches
+- **Multiple Providers**: Choose between Simli and Anam based on your needs
 
 ## Prerequisites
 
 ### Installation
 
-Install the required packages:
+Install the required packages for your chosen avatar provider:
 
 ```bash
+# For Simli Avatar
 pip install "videosdk-plugins-simli"
+
+# For Anam Avatar
+pip install "videosdk-plugins-anam"
 ```
 
 ### API Keys Required
@@ -22,36 +27,50 @@ pip install "videosdk-plugins-simli"
 You'll need the following API keys in your `.env` file:
 
 ```env
-# Required for Simli Avatar
-SIMLI_API_KEY=your_simli_api_key_here
-SIMLI_FACE_ID=your_face_id_here  # Optional - has default value
-
 # Required for VideoSDK
 VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
 
-# For Cascading Pipeline (Google services)
-GOOGLE_API_KEY=your_google_api_key
+# --- For Simli Avatar ---
+SIMLI_API_KEY=your_simli_api_key_here
+SIMLI_FACE_ID=your_face_id_here  # Optional - has default value
 
-# For Realtime Pipeline (Gemini Live API)
-# Uses GOOGLE_API_KEY from above
+# --- For Anam Avatar ---
+ANAM_API_KEY=your_anam_api_key_here
+ANAM_AVATAR_ID=your_anam_avatar_id_here
+
+# For Cascading Pipeline examples
+DEEPGRAM_API_KEY=your_deepgram_api_key
+OPENAI_API_KEY=your_openai_api_key
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+
+# For Realtime Pipeline examples (Gemini Live API)
+GOOGLE_API_KEY=your_google_api_key
 ```
 
-### Getting Simli Credentials
+### Getting Avatar Credentials
 
+#### Simli
 1. Visit the [Simli Dashboard](https://simli.com/dashboard) to get your API key
 2. Optionally, you can specify a custom `faceId` if you have one
 3. If no `faceId` is provided, Simli will use a default avatar
 
+#### Anam
+1. Visit the [Anam Dashboard](https://www.anam.ai/) to get your API key
+2. Get your `avatar_id` from the Anam platform
+3. Both `api_key` and `avatar_id` are required for Anam avatars
+
 ## Examples
 
-### 1. Cascading Pipeline with Simli Avatar
+### Simli Avatar Examples
+
+#### 1. Cascading Pipeline with Simli Avatar
 
 **File:** `simli_cascading_example.py`
 
 This example uses a cascading pipeline with:
-- **STT:** Google Speech-to-Text
-- **LLM:** Google LLM  
-- **TTS:** Google Text-to-Speech
+- **STT:** Deepgram (Nova 3)
+- **LLM:** OpenAI (GPT-4o-mini)
+- **TTS:** ElevenLabs
 - **Avatar:** Simli Avatar
 - **VAD:** Silero VAD
 - **Turn Detector:** VideoSDK Turn Detector
@@ -61,12 +80,12 @@ This example uses a cascading pipeline with:
 python simli_cascading_example.py
 ```
 
-### 2. Realtime Pipeline with Simli Avatar
+#### 2. Realtime Pipeline with Simli Avatar
 
 **File:** `simli_realtime_example.py`
 
 This example uses a realtime pipeline with:
-- **Model:** Google Gemini 2.0 Flash Live
+- **Model:** Google Gemini 2.5 Flash Native Audio
 - **Avatar:** Simli Avatar
 - **Voice:** Leda (configurable)
 
@@ -75,11 +94,44 @@ This example uses a realtime pipeline with:
 python simli_realtime_example.py
 ```
 
+### Anam Avatar Examples
+
+#### 3. Cascading Pipeline with Anam Avatar
+
+**File:** `anam_cascading_example.py`
+
+This example uses a cascading pipeline with:
+- **STT:** Deepgram (Nova 3)
+- **LLM:** OpenAI (GPT-4o-mini)
+- **TTS:** ElevenLabs
+- **Avatar:** Anam Avatar
+- **VAD:** Silero VAD
+- **Turn Detector:** VideoSDK Turn Detector
+
+**Usage:**
+```bash
+python anam_cascading_example.py
+```
+
+#### 4. Realtime Pipeline with Anam Avatar
+
+**File:** `anam_realtime_example.py`
+
+This example uses a realtime pipeline with:
+- **Model:** Google Gemini 2.5 Flash Native Audio
+- **Avatar:** Anam Avatar
+- **Voice:** Leda (configurable)
+
+**Usage:**
+```bash
+python anam_realtime_example.py
+```
+
 ## Configuration
 
 ### Room Options
 
-Before running either script, make sure to update the `room_id` in the `make_context()` function:
+Before running any script, make sure to update the `room_id` in the `make_context()` function:
 
 ```python
 room_options = RoomOptions(
@@ -91,32 +143,48 @@ room_options = RoomOptions(
 
 ### Simli Configuration
 
-Both examples use `SimliConfig` with the following options:
+Simli examples use `SimliConfig` with the following options:
 
 ```python
 simli_config = SimliConfig(
-    apiKey=os.getenv("SIMLI_API_KEY"),
-    faceId=os.getenv("SIMLI_FACE_ID"),  # Optional
+    faceId="your_face_id",
     maxSessionLength=1800,  # 30 minutes (default)
-    maxIdleTime=300,  # 5 minutes (default)
+    maxIdleTime=600,  # 10 minutes
+)
+
+simli_avatar = SimliAvatar(
+    api_key=os.getenv("SIMLI_API_KEY"),
+    config=simli_config,
+    is_trinity_avatar=True,
+)
+```
+
+### Anam Configuration
+
+Anam examples use `AnamAvatar` with the following options:
+
+```python
+anam_avatar = AnamAvatar(
+    api_key=os.getenv("ANAM_API_KEY"),
+    avatar_id=os.getenv("ANAM_AVATAR_ID"),
 )
 ```
 
 ## Available Functions
 
-Both agents come with these built-in function tools:
+All avatar agents come with these built-in function tools:
 
 ### 1. Weather Lookup
 Ask about weather in any location:
 - "What's the weather in New York?"
 - "How's the weather in Tokyo?"
-  
+
 
 ## Customization
 
 ### Changing Voice (Realtime Pipeline)
 
-For the realtime pipeline, you can change the Gemini voice:
+For the realtime pipeline examples, you can change the Gemini voice:
 
 ```python
 config=GeminiLiveConfig(
@@ -127,15 +195,19 @@ config=GeminiLiveConfig(
 
 ### Changing Avatar Face
 
-You can use different Simli faces by setting the `SIMLI_FACE_ID` environment variable or finding available faces in the [Simli Documentation](https://docs.simli.com/).
+**Simli:** Use different faces by setting the `faceId` in `SimliConfig` or finding available faces in the [Simli Documentation](https://docs.simli.com/).
+
+**Anam:** Use different avatars by setting the `ANAM_AVATAR_ID` environment variable or browsing available avatars on the [Anam platform](https://www.anam.ai/).
 
 ### Adding More Providers (Cascading Pipeline)
 
-The cascading example can be easily modified to use different providers for STT, LLM, or TTS. Check the commented lines in the script for alternatives like OpenAI, ElevenLabs, Deepgram, etc.
+The cascading examples can be easily modified to use different providers for STT, LLM, or TTS. Check the commented lines in the scripts for alternatives like OpenAI, ElevenLabs, Deepgram, etc.
 
 
 ## Learn More
 
 - [VideoSDK AI Agents Documentation](https://docs.videosdk.live/ai_agents/)
+- [VideoSDK Simli Plugin Documentation](https://docs.videosdk.live/ai_agents/plugins/avatar/simli)
+- [VideoSDK Anam Plugin Documentation](https://docs.videosdk.live/ai_agents/plugins/avatar/anam)
 - [Simli Documentation](https://docs.simli.com/)
-- [VideoSDK Simli Plugin Documentation](https://docs.videosdk.live/ai_agents/plugins/avatar/simli) 
+- [Anam Documentation](https://www.anam.ai/)

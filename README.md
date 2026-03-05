@@ -27,7 +27,7 @@ The framework offers two distinct approaches to building AI agents:
 - **Function Tools**: Enable your agents with capabilities like retrieving data or performing actions
 - **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
 - **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.(Note: Vision is exclusively supported with Gemini models via the Gemini Live API)
-- **Virtual Avatar**: Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) integration. Create more engaging and interactive experiences.(Works with both RealtimePipeline and CascadingPipeline approaches)
+- **Virtual Avatar**: Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) or [Anam](https://www.anam.ai/) integrations. Create more engaging and interactive experiences.(Works with both RealtimePipeline and CascadingPipeline approaches)
 - **Human in the Loop (HITL)**: Escalate specific queries to a human operator via Discord, then relay responses back to users
 - **Wake Up Call**: Detect user inactivity and trigger callbacks to re-engage users automatically
 - **Recording**: Record complete sessions (audio and transcripts) for playback and analysis; enable by setting `recording=True` in `RoomOptions`
@@ -175,7 +175,7 @@ pip install videosdk-agents
 
 4. Then navigate to your choice of example available:
 - [🤖 Agent to Agent (A2A) Multi-Agent System](./A2A) **← Featured**
-- [🎭 Virtual Avatar Examples](./Virtual%20Avatar) **← With Simli Integration**
+- [🎭 Virtual Avatar Examples](./Virtual%20Avatar) **← With Simli & Anam Integration**
 - [Realtime Pipeline Examples](./Realtime%20Pipeline)
 - [Cascading Pipeline Agent](./Cascading%20Pipeline)
 - [Human in the Loop](./Human%20In%20The%20Loop)
@@ -255,9 +255,11 @@ agents-quickstart/
 │   ├── main.py                    # A2A system entry point
 │   └── README.md                  # A2A overview and setup
 │
-├── Virtual Avatar/                # Simli virtual avatar integration examples
+├── Virtual Avatar/                # Virtual avatar integration examples (Simli & Anam)
 │   ├── simli_cascading_example.py # Cascading pipeline with Simli avatar
 │   ├── simli_realtime_example.py  # Realtime pipeline with Simli avatar
+│   ├── anam_cascading_example.py  # Cascading pipeline with Anam avatar
+│   ├── anam_realtime_example.py   # Realtime pipeline with Anam avatar
 │   └── README.md                  # Virtual avatar setup and configuration
 │
 ├── Realtime Pipeline/             # Examples for real-time, low-latency pipelines
