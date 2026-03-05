@@ -124,9 +124,30 @@ Before you begin, ensure you have:
 
 ## 🛠️ Installation
 
-### Quick Setup (Recommended)
+### Quick Setup with uv (Recommended)
 
-For the fastest setup, install all dependencies at once using the provided requirements file:
+[uv](https://docs.astral.sh/uv/) is a fast Python package manager. This is the recommended way to get started:
+
+```bash
+# 1. Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 2. Clone this repository
+git clone https://github.com/videosdk-live/agents-quickstart
+
+# 3. Navigate to the project directory
+cd agents-quickstart
+
+# 4. Install all dependencies
+uv sync
+
+# 5. Run any example
+uv run python "Cascading Pipeline/cascading_agent_quickstart.py"
+```
+
+### Quick Setup with pip
+
+For setup using pip, install all dependencies at once using the provided requirements file:
 
 ```bash
 # 1. Clone this repository
