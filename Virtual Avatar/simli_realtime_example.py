@@ -1,7 +1,44 @@
+import aiohttp
 import os
-from videosdk.agents import Agent, AgentSession, RealTimePipeline,JobContext, RoomOptions, WorkerJob
+
+from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 from videosdk.plugins.simli import SimliAvatar, SimliConfig
+import logging 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", handlers=[logging.StreamHandler()])
+
+@function_tool
+async def get_weather(
+    latitude: str,
+    longitude: str,
+):
+    """Called when the user asks about the weather. This function will return the weather for
+    the given location. When given a location, please estimate the latitude and longitude of the
+    location and do not ask the user for them.
+
+    Args:
+        latitude: The latitude of the location
+        longitude: The longitude of the location
+    """
+    print("###Getting weather for", latitude, longitude)
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m"
+    weather_data = {}
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                data = await response.json()
+                print("###Weather data", data)
+                weather_data = {
+                    "temperature": data["current"]["temperature_2m"],
+                    "temperature_unit": "Celsius",
+                }
+            else:
+                raise Exception(
+                    f"Failed to get weather data, status code: {response.status}"
+                )
+
+    return weather_data
+
 
 class MyVoiceAgent(Agent):
     def __init__(self):
@@ -20,7 +57,7 @@ class MyVoiceAgent(Agent):
 async def start_session(context: JobContext):
     # Initialize Gemini Realtime model
     model = GeminiRealtime(
-        model="gemini-2.5-flash-native-audio-preview-09-2025",
+        model="gemini-2.5-flash-native-audio-preview-12-2025",
         # When GOOGLE_API_KEY is set in .env - DON'T pass api_key parameter
         # api_key="AIXXXXXXXXXXXXXXXXXXXX", 
         config=GeminiLiveConfig(
@@ -31,12 +68,12 @@ async def start_session(context: JobContext):
 
     # Initialize Simli Avatar
     simli_config = SimliConfig(
-        apiKey=os.getenv("SIMLI_API_KEY"),
-        faceId="d2a5c7c6-fed9-4f55-bcb3-062f7cd20103",
+        faceId="cace3ef7-a4c4-425d-a8cf-a5358eb0c427",
         maxSessionLength=1800,
         maxIdleTime=600,
     )
     simli_avatar = SimliAvatar(
+        api_key=os.getenv("SIMLI_API_KEY"),
         config=simli_config,
         is_trinity_avatar=True,
     )
@@ -50,10 +87,9 @@ async def start_session(context: JobContext):
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-        room_id="<room_id>",  # Replace it with your actual room_id
-        # auth_token = "<VIDEOSDK_AUTH_TOKEN>",  # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
+        room_id="<room_id>",
         name="Simli Avatar Realtime Agent",
-        playground=False 
+        playground=True 
     )
 
     return JobContext(room_options=room_options)
