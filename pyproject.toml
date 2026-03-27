@@ -5,36 +5,36 @@ description = "VideoSDK AI Agent Quick Start Examples"
 requires-python = ">=3.12"
 dependencies = [
     # VideoSDK AI Agents Core
-    "videosdk-agents>=0.0.67",
+    "videosdk-agents>=1.0.0",
 
     # Real-time API and LLM-based TTS/STT Providers
-    "videosdk-plugins-openai>=0.0.67",
-    "videosdk-plugins-google>=0.0.67",
-    "videosdk-plugins-aws>=0.0.67",
-    "videosdk-plugins-sarvamai>=0.0.67",
-    "videosdk-plugins-cartesia>=0.0.67",
+    "videosdk-plugins-openai>=1.0.0",
+    "videosdk-plugins-google>=1.0.0",
+    "videosdk-plugins-aws>=1.0.0",
+    "videosdk-plugins-sarvamai>=1.0.0",
+    "videosdk-plugins-cartesia>=1.0.0",
 
     # Speech-to-Text (STT) Plugins
-    "videosdk-plugins-deepgram>=0.0.67",
+    "videosdk-plugins-deepgram>=1.0.0",
 
     # Voice Activity Detection (VAD) and Turn Detection Plugins
-    "videosdk-plugins-silero>=0.0.67",
-    "videosdk-plugins-turn-detector>=0.0.67",
+    "videosdk-plugins-silero>=1.0.0",
+    "videosdk-plugins-turn-detector>=1.0.0",
 
     # Text-to-Speech (TTS) Plugins
-    "videosdk-plugins-elevenlabs>=0.0.67",
+    "videosdk-plugins-elevenlabs>=1.0.0",
 
     # LLM Plugins
-    "videosdk-plugins-anthropic>=0.0.67",
-    "videosdk-plugins-cerebras>=0.0.67",
+    "videosdk-plugins-anthropic>=1.0.0",
+    "videosdk-plugins-cerebras>=1.0.0",
 
     # Virtual Avatar Plugins
-    "videosdk-plugins-simli>=0.0.67",
-    "videosdk-plugins-anam>=0.0.67",
+    "videosdk-plugins-simli>=1.0.0",
+    "videosdk-plugins-anam>=1.0.0",
 
     # Real-time Plugins
-    "videosdk-plugins-xai>=0.0.67",
-    "videosdk-plugins-ultravox>=0.0.67",
+    "videosdk-plugins-xai>=1.0.0",
+    "videosdk-plugins-ultravox>=1.0.0",
 
     # Core Dependencies
     "paho-mqtt>=2.0.0",
