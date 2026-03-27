@@ -1,5 +1,5 @@
 import aiohttp
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, function_tool, JobContext, RoomOptions, WorkerJob
+from videosdk.agents import Agent, AgentSession, Pipeline, function_tool, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.openai import OpenAIRealtime, OpenAIRealtimeConfig
 from openai.types.beta.realtime.session import InputAudioTranscription, TurnDetection
 
@@ -84,7 +84,7 @@ async def start_session(context: JobContext):
             tool_choice="auto",
         )
     )
-    pipeline = RealTimePipeline(model=model)
+    pipeline = Pipeline(llm=model)
     session = AgentSession(
         agent=MyVoiceAgent(),
         pipeline=pipeline

@@ -82,12 +82,12 @@ When a user returns, the agent:
 2. Includes them in the system prompt
 3. Greets them with personalized information
 
-### Conversation Flow
+### Pipeline Flow
 
 1. **Speech-to-Text**: Converts voice to text using Deepgram
-2. **Memory Check**: Determines if the message should be stored
+2. **Memory Check**: Determines if the message should be stored (via `@pipeline.on("user_turn_start")` hook)
 3. **LLM Processing**: Generates response using OpenAI GPT-4o
-4. **Memory Storage**: Saves important information to Mem0
+4. **Memory Storage**: Saves important information to Mem0 (via `@pipeline.on("user_turn_end")` hook)
 5. **Text-to-Speech**: Converts response to voice using ElevenLabs
 
 ## File Structure
@@ -110,7 +110,7 @@ Memory/
 ### `memory_utils.py`
 
 - `Mem0MemoryManager`: Handles all Mem0 interactions
-- `Mem0ConversationFlow`: Extends conversation flow with memory storage
+- Memory hooks via `@pipeline.on()`: Intercept pipeline stages for memory storage and retrieval
 - `build_agent_instructions`: Creates personalized system prompts
 
 ## Testing Memory

@@ -14,7 +14,7 @@ pip install "videosdk-plugins-ultravox"
 
 Before running the agent, make sure to:
 
-1. Replace the placeholder API key in `ultravox_agent_quickstart.py` with your actual Ultravox API key
+1. Replace the placeholder API key in `ultravox_realtime_agent.py` with your actual Ultravox API key
    ```python
    model = UltravoxRealtime(
        model="fixie-ai/ultravox",
@@ -44,7 +44,7 @@ Before running the agent, make sure to:
 To run the Ultravox-powered agent:
 
 ```bash
-python ultravox_agent_quickstart.py
+python ultravox_realtime_agent.py
 ```
 
 When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.

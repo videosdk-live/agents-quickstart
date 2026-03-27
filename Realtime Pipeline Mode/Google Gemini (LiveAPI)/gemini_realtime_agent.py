@@ -1,4 +1,4 @@
-from videosdk.agents import Agent, AgentSession, RealTimePipeline,JobContext, RoomOptions, WorkerJob
+from videosdk.agents import Agent, AgentSession, Pipeline, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 import logging
 logging.getLogger().setLevel(logging.INFO)
@@ -27,17 +27,11 @@ async def start_session(context: JobContext):
         )
     )
 
-    pipeline = RealTimePipeline(model=model)
+    pipeline = Pipeline(llm=model)
     session = AgentSession(
         agent=agent,
         pipeline=pipeline
     )
-
-    def on_transcription(data: dict):
-        role = data.get("role")
-        text = data.get("text")
-        print(f"[TRANSCRIPT][{role}: {text}")
-    pipeline.on("realtime_model_transcription", on_transcription)
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)
 

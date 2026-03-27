@@ -1,4 +1,4 @@
-from videosdk.agents import Agent, AgentSession,CascadingPipeline,WorkerJob, ConversationFlow, JobContext, RoomOptions, function_tool, RealTimePipeline
+from videosdk.agents import Agent, AgentSession, Pipeline, WorkerJob, JobContext, RoomOptions, function_tool
 from videosdk.plugins.openai import OpenAILLM,OpenAITTS
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.silero import SileroVAD
@@ -39,9 +39,8 @@ class VoiceAgent(Agent):
 async def entrypoint(ctx: JobContext):
     
     agent = VoiceAgent()
-    conversation_flow = ConversationFlow(agent)
 
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt=DeepgramSTT(),
         llm=OpenAILLM(),
         tts=OpenAITTS(),
@@ -50,9 +49,8 @@ async def entrypoint(ctx: JobContext):
     )
 
     session = AgentSession(
-        agent=agent, 
+        agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow,
     )
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)

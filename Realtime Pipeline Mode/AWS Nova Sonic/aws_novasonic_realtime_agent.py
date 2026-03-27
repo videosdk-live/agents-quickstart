@@ -1,4 +1,4 @@
-from videosdk.agents import Agent, AgentSession, RealTimePipeline, JobContext, RoomOptions, WorkerJob
+from videosdk.agents import Agent, AgentSession, Pipeline, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.aws import NovaSonicRealtime, NovaSonicConfig
 
 class MyVoiceAgent(Agent):
@@ -28,7 +28,7 @@ async def start_session(context: JobContext):
     )
 
     agent = MyVoiceAgent()
-    pipeline = RealTimePipeline(model=model)
+    pipeline = Pipeline(llm=model)
     session = AgentSession(
         agent=agent,
         pipeline=pipeline

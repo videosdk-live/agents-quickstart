@@ -14,7 +14,7 @@ pip install "videosdk-plugins-xai"
 
 Before running the agent, make sure to:
 
-1. Replace the placeholder API key in `xai_agent_quickstart.py` with your actual xAI API key
+1. Replace the placeholder API key in `xai_realtime_agent.py` with your actual xAI API key
    ```python
    model = XAIRealtime(
        model="grok-4-1-fast-non-reasoning",
@@ -50,7 +50,7 @@ Before running the agent, make sure to:
 To run the xAI Grok-powered agent:
 
 ```bash
-python xai_agent_quickstart.py
+python xai_realtime_agent.py
 ```
 
 When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.

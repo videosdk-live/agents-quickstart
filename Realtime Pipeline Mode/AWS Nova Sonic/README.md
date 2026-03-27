@@ -24,7 +24,7 @@ pip install fastmcp  # For MCP server support
 
 Before running the agent, make sure to:
 
-1. Replace the placeholder AWS credentials in `aws_novasonic_agent_quickstart.py` with your actual AWS credentials
+1. Replace the placeholder AWS credentials in `aws_novasonic_realtime_agent.py` with your actual AWS credentials
    ```python
    model = NovaSonicRealtime(
        model="amazon.nova-sonic-v1:0",
@@ -56,7 +56,7 @@ Before running the agent, make sure to:
 To run the AWS-powered agent:
 
 ```bash
-python aws_novasonic_agent_quickstart.py
+python aws_novasonic_realtime_agent.py
 ```
 
 When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.

@@ -1,6 +1,6 @@
 import os
 from typing import AsyncIterator
-from videosdk.agents import Agent, AgentSession, CascadingPipeline,JobContext, RoomOptions, WorkerJob, ConversationFlow
+from videosdk.agents import Agent, AgentSession, Pipeline, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.openai import OpenAILLM
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.elevenlabs import ElevenLabsTTS
@@ -26,8 +26,7 @@ class MyVoiceAgent(Agent):
 async def start_session(context: JobContext):
 
     agent = MyVoiceAgent()
-    conversation_flow = ConversationFlow(agent)
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt=DeepgramSTT(),
         llm=OpenAILLM(),
         tts=ElevenLabsTTS(),
@@ -38,7 +37,6 @@ async def start_session(context: JobContext):
     session = AgentSession(
         agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow
     )
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)

@@ -1,5 +1,5 @@
 import logging
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, function_tool, WorkerJob ,ConversationFlow, JobContext, RoomOptions
+from videosdk.agents import Agent, AgentSession, Pipeline, function_tool, WorkerJob, JobContext, RoomOptions
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.google import GoogleLLM
 from videosdk.plugins.cartesia import CartesiaTTS
@@ -79,9 +79,8 @@ You are NOT a doctor — provide general support and routing only.
 
 async def entrypoint(ctx: JobContext):
     agent = HealthcareAgent()
-    conversation_flow = ConversationFlow(agent)
 
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt=DeepgramSTT(),
         llm=GoogleLLM(),
         tts=CartesiaTTS(),
@@ -89,9 +88,8 @@ async def entrypoint(ctx: JobContext):
         turn_detector=TurnDetector()
     )
     session = AgentSession(
-        agent=agent, 
+        agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow
     )
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)

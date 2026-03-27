@@ -96,13 +96,13 @@ A2A/
 ## 🔧 Agent Configuration
 
 ### Customer Service Agent
-- **RealTimePipeline** with Gemini Realtime model for low-latency voice interaction
+- **Pipeline (Realtime Pipeline Mode)** with Gemini Realtime model for low-latency voice interaction
 - **Audio-enabled** with voice "Leda" for real-time conversation
 - **Joins VideoSDK meeting** for user communication
 - **Routes queries** to appropriate specialists
 
 ### Loan Specialist Agent
-- **CascadingPipeline** with OpenAI LLM for efficient text processing
+- **Pipeline (Cascade Pipeline Mode)** with OpenAI LLM for efficient text processing
 - **Text-based processing** for specialist responses
 - **Background operation** (no meeting join required)
 - **Domain expertise** in loan products and rates
@@ -111,14 +111,14 @@ A2A/
 
 The system uses a **hybrid pipeline approach** for optimal performance:
 
-### RealTimePipeline (Customer Agent)
+### Pipeline — Realtime Mode (Customer Agent)
 - **Model**: Gemini Realtime (`gemini-2.5-flash-native-audio-preview-09-2025`)
 - **Voice**: "Leda" with audio response modality
 - **Purpose**: Low-latency voice interaction with users
 - **Benefits**: Natural conversation flow, real-time audio processing
 
-### CascadingPipeline (Specialist Agent)
-- **Model**: OpenAI LLM 
+### Pipeline — Cascade Mode (Specialist Agent)
+- **Model**: OpenAI LLM
 - **Processing**: Text-only for efficient specialist responses
 - **Purpose**: Background processing of domain-specific queries
 - **Benefits**: Cost-effective, optimized for text-based reasoning
@@ -127,19 +127,19 @@ This architecture ensures **fast user interaction** while maintaining **efficien
 
 ### 🔧 Pipeline Flexibility
 
-The VideoSDK AI Agents framework provides **flexible pipeline configurations**. You can run a full **RealTimePipeline** or **CascadingPipeline** for both modalities, or create a **hybrid setup** that combines the two. This allows you to tailor the use of STT, TTS, and LLM to suit your specific use case, whether for low-latency interactions, complex processing flows, or a mix of both.
+The VideoSDK AI Agents framework provides **flexible pipeline configurations**. You can run a full **Pipeline (Realtime Mode)** or **Pipeline (Cascade Mode)** for both modalities, or create a **hybrid setup** that combines the two. This allows you to tailor the use of STT, TTS, and LLM to suit your specific use case, whether for low-latency interactions, complex processing flows, or a mix of both.
 
 **Configuration Examples** (available in `session_manager.py`):
-- **Hybrid Setup** (Current): RealTimePipeline + CascadingPipeline
-- **Full RealTime**: Both agents using RealTimePipeline
-- **Full Cascading**: Both agents using CascadingPipeline  
+- **Hybrid Setup** (Current): Pipeline (Realtime Mode) + Pipeline (Cascade Mode)
+- **Full Realtime**: Both agents using Pipeline (Realtime Mode)
+- **Full Cascading**: Both agents using Pipeline (Cascade Mode)
 - **Custom Mix**: Any combination based on your requirements
 
 ### ⚠️ Important
 > While setting up pipelines:
-> 
-> - The **customer agent** must have **voice capabilities only** using the `RealTimePipeline`.
-> - The **specialist agent** should operate in **text-only mode** using the `CascadingPipeline`.
+>
+> - The **customer agent** must have **voice capabilities only** using `Pipeline` in Realtime Mode.
+> - The **specialist agent** should operate in **text-only mode** using `Pipeline` in Cascade Mode.
 
 ## 🌟 Benefits
 

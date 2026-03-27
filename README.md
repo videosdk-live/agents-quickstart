@@ -1,16 +1,18 @@
 # 🚀 VideoSDK AI Agent Quick Start
 
-This repository contains quick start examples for integrating AI-powered voice agents into VideoSDK meetings using different LLM providers (OpenAI, Google Gemini LiveAPI, and AWS NovaSonic). **Featured**: Complete **Agent to Agent (A2A)** multi-agent system implementation.and support for virtual avatars—realistic, lip-synced avatars that mirror speech in real time and give your AI agents a visual, human-like presence.
+This repository contains quick start examples for integrating AI-powered voice agents into VideoSDK meetings. **Featured**: Complete **Agent to Agent (A2A)** multi-agent system, **Hybrid Mode** for mixing realtime models with custom voices, **Pipeline Hooks** for intercepting and modifying pipeline stages, and virtual avatars with realistic lip-sync.
 
 ## What are VideoSDK AI Agents?
 
-The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents to join VideoSDK rooms as participants. This framework serves as a real-time bridge between AI models (like OpenAI, Google Gemini LiveAPI, and AWS) and your users, facilitating seamless voice and media interactions.
+The VideoSDK AI Agent framework is a Python SDK that enables AI-powered agents to join VideoSDK rooms as participants. The framework serves as a real-time bridge between AI models (OpenAI, Google Gemini, AWS, xAI, and more) and your users, facilitating seamless voice and media interactions.
 
-The framework offers two distinct approaches to building AI agents:
+The framework offers three pipeline modes, all using the unified `Pipeline` class:
 
-1. **Integrated Real-time Pipelines**: Use providers like Google Gemini Live API for end-to-end, low-latency conversational AI with built-in STT, LLM, and TTS capabilities.
+1. **Cascade Pipeline Mode** — Build agents by mixing and matching providers for STT, LLM, and TTS. Full control over every component, optimized for cost, language support, or compliance.
 
-2. **Cascading Pipelines**: Build custom AI agents by mixing and matching different providers for Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS). This approach gives you complete control over your agent's architecture, allowing you to optimize for cost, performance, language support, or specific use cases.
+2. **Realtime Pipeline Mode** — Use a single realtime model (Gemini Live, OpenAI Realtime, xAI Grok, AWS Nova Sonic, Ultravox) that handles STT, LLM, and TTS in one ultra-low-latency model.
+
+3. **Hybrid Mode** — Combine a realtime model with a custom TTS voice, or a custom STT with a realtime model. Best of both worlds.
 
 ### Architecture Overview
 
@@ -20,113 +22,138 @@ The framework offers two distinct approaches to building AI agents:
 
 ## ✨ Key Features
 
-- **Voice-Enabled AI Agents**: Integrate AI agents that can speak and listen in real-time meetings
-- **Multiple LLM Providers**: Support for OpenAI, Google Gemini LiveAPI, and AWS Nova Sonic
-- **Modular & Flexible Pipelines**: Choose between integrated real-time pipelines or build your own with the `CascadingPipeline` to mix and match STT, LLM, and TTS providers
-- **🤖 Agent to Agent (A2A) Communication**: Enable specialized agents to collaborate and share domain expertise
-- **Function Tools**: Enable your agents with capabilities like retrieving data or performing actions
-- **Real-time Communication**: Seamless integration with VideoSDK's real-time communication platform
-- **Vision Support**: Direct video input from VideoSDK rooms to Gemini Live by setting `vision=True` in the session context.(Note: Vision is exclusively supported with Gemini models via the Gemini Live API)
-- **Virtual Avatar**: Enhance your AI agents with realistic, lip-synced virtual avatars using the [Simli](https://simli.com/) or [Anam](https://www.anam.ai/) integrations. Create more engaging and interactive experiences.(Works with both RealtimePipeline and CascadingPipeline approaches)
-- **Human in the Loop (HITL)**: Escalate specific queries to a human operator via Discord, then relay responses back to users
-- **Wake Up Call**: Detect user inactivity and trigger callbacks to re-engage users automatically
-- **Recording**: Record complete sessions (audio and transcripts) for playback and analysis; enable by setting `recording=True` in `RoomOptions`
-- **Background Audio**: Enhance the user experience by playing background audio while the agent is in a "thinking" state.
-- **Pub/Sub Messaging**: Enable real-time, bidirectional communication between the agent and the user with Pub/Sub messaging.
-- **Reply and Interrupt**: Programmatically trigger the agent to speak a predefined message or immediately stop its current speech/action.
-
-### 🔧 Why Choose Cascading Pipeline?
-
-The `CascadingPipeline` approach is particularly powerful for:
-
-- **Cost Optimization**: Mix premium and cost-effective services (e.g., use Deepgram for STT, OpenAI for LLM, and a budget TTS provider)
-- **Multi-language Support**: Use specialized STT providers for different languages while keeping the same LLM
-- **Performance Tuning**: Choose the fastest provider for each component based on your requirements
-- **Compliance & Regional Requirements**: Use specific providers that meet your regulatory or data residency needs
-- **Custom Processing**: Add your own logic between STT and LLM processing through `ConversationFlow`
+- **Voice-Enabled AI Agents**: AI agents that can speak and listen in real-time meetings
+- **Three Pipeline Modes**: Cascade, Realtime, and Hybrid — all via the unified `Pipeline` class
+- **Pipeline Hooks**: Intercept and modify any pipeline stage (`stt`, `tts`, `llm`, turn events) with `@pipeline.on()` decorators
+- **Multiple LLM Providers**: OpenAI, Google Gemini, AWS Nova Sonic, xAI Grok, Ultravox, Anthropic, Cerebras
+- **Hybrid Mode**: Realtime LLM + custom TTS voice, or custom STT + Realtime LLM
+- **🤖 Agent to Agent (A2A)**: Specialized agents collaborate and share domain expertise
+- **Function Tools**: Enable agents with custom capabilities via `@function_tool`
+- **MCP Integration**: Connect to external data sources with `MCPServerStdio` or `MCPServerHTTP`
+- **Memory**: Long-term memory across sessions using Mem0
+- **RAG**: Retrieval-Augmented Generation with ChromaDB and OpenAI embeddings
+- **Virtual Avatar**: Realistic lip-synced avatars using [Simli](https://simli.com/) or [Anam](https://www.anam.ai/)
+- **Human in the Loop (HITL)**: Escalate queries to a human operator via Discord
+- **Vision**: Direct video input from VideoSDK rooms to Gemini Live
+- **Wake Up Call**: Detect user inactivity and trigger callbacks
+- **Recording**: Record complete sessions (audio and transcripts)
+- **Background Audio**: Play audio while the agent is in thinking state
+- **Pub/Sub Messaging**: Bidirectional text communication between agent and user
+- **Reply and Interrupt**: Programmatically trigger speech or stop the agent
+- **n8n Workflow Integration**: Automate outbound calls and workflow triggers via n8n MCP
 
 ## 🧠 Core Components
 
-The SDK is built around several core components that work together to create powerful AI agents:
+- **Agent**: Base class for your agent — define instructions, tools, MCP servers, and lifecycle hooks (`on_enter`, `on_exit`)
+- **Pipeline**: Unified pipeline class that auto-detects the execution mode based on the components you provide:
+  - `Pipeline(stt, llm, tts, vad, turn_detector)` → **Cascade Pipeline Mode**
+  - `Pipeline(llm=realtimeModel)` → **Realtime Pipeline Mode**
+  - `Pipeline(llm=realtimeModel, tts=customTTS)` → **Hybrid Mode** (custom voice)
+  - `Pipeline(stt=customSTT, llm=realtimeModel, vad=...)` → **Hybrid Mode** (custom STT)
+- **Pipeline Hooks**: `@pipeline.on("event")` decorators to intercept audio, text, and turn events at any stage
+- **AgentSession**: Brings together the agent and pipeline to manage the full session lifecycle
 
-- **Agent**: The base class for defining your agent's identity, including its instructions, tools (functions), and connections to external services via MCP.
-- **Pipeline**: Manages the real-time flow of audio and data between the user and the AI models. The SDK offers two types of pipelines:
-    - **`RealtimePipeline`**: An all-in-one pipeline for providers like Google Gemini Live, optimized for low-latency, conversational AI.
-    - **`CascadingPipeline`**: A modular pipeline that gives you the flexibility to mix and match different providers for Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS). This allows you to tailor your agent's stack for cost, performance, or specific language needs. See our [Cascading Pipeline example](./Cascading%20Pipeline) to learn more.
-- **Conversation Flow**: An inheritable class that works with the `CascadingPipeline` to let you define custom turn-taking logic, preprocess transcripts, and integrate memory or Retrieval-Augmented Generation (RAG) before the LLM is called.
-- **Agent Session**: Manages the agent's lifecycle within a VideoSDK meeting, bringing together the agent, pipeline, and conversation flow to create a seamless interactive experience.
+```python
+from videosdk.agents import Agent, AgentSession, Pipeline
+
+class MyAgent(Agent):
+    def __init__(self):
+        super().__init__(instructions="You are a helpful assistant.", tools=[...])
+
+    async def on_enter(self):
+        await self.session.say("Hello!")
+
+# Cascade Pipeline Mode
+pipeline = Pipeline(stt=DeepgramSTT(), llm=OpenAILLM(), tts=ElevenLabsTTS(), vad=SileroVAD(), turn_detector=TurnDetector())
+
+# Realtime Pipeline Mode
+pipeline = Pipeline(llm=GeminiRealtime(...))
+
+# Hybrid Mode — realtime model + custom voice
+pipeline = Pipeline(llm=OpenAIRealtime(...), tts=CartesiaTTS())
+
+session = AgentSession(agent=MyAgent(), pipeline=pipeline)
+await session.start(wait_for_participant=True, run_until_shutdown=True)
+```
+
+## 🔗 Pipeline Hooks
+
+Pipeline hooks let you intercept and modify any stage of the pipeline using the `@pipeline.on()` decorator — no subclassing required.
+
+```python
+# Normalize STT transcript (strip filler words)
+@pipeline.on("stt")
+async def stt_hook(audio_stream):
+    async for event in run_stt(audio_stream):
+        if event.data and event.data.text:
+            event.data.text = re.sub(r"\b(uh|um)\b", "", event.data.text)
+        yield event
+
+# Inject context at turn start (RAG, memory, etc.)
+@pipeline.on("user_turn_start")
+async def on_user_turn_start(transcript: str):
+    docs = await retrieve(transcript)
+    agent.chat_context.add_message(role="system", content=f"Context: {docs}")
+
+# Observe/modify text before TTS synthesis
+@pipeline.on("tts")
+async def tts_hook(text_stream):
+    async def fix_text():
+        async for text in text_stream:
+            yield text.replace("AM", "A M")
+    async for audio in run_tts(fix_text()):
+        yield audio
+```
+
+Available hooks: `stt`, `tts`, `llm`, `user_turn_start`, `user_turn_end`, `agent_turn_start`, `agent_turn_end`, `vision_frame`
+
+See the [Pipeline Hooks example](./Pipeline%20Hooks/pipeline_hooks_agent.py) for a complete walkthrough.
 
 ## 🤖 Agent to Agent (A2A) Multi-Agent System
 
-Our **featured A2A implementation** enables seamless collaboration between specialized AI agents, similar to [Google's A2A protocol](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/). This allows different agents to communicate, share knowledge, and coordinate responses based on their unique capabilities.
+Enable seamless collaboration between specialized AI agents, similar to [Google's A2A protocol](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/).
 
-### **How A2A Works**
+### How A2A Works
 
-1. **Agent Registration**: Agents register themselves with an `AgentCard` containing their capabilities and domain expertise
-2. **Client Query**: Client sends a query to the main agent
-3. **Agent Discovery**: Main agent discovers relevant specialist agents using agent cards
-4. **Query Forwarding**: Main agent forwards specialized queries to appropriate agents
-5. **Response Chain**: Specialist agents process queries and respond back to the main agent
-6. **Client Response**: Main agent formats and delivers the final response to the client
-
-### **Example A2A Use Case**:
-When a user asks about loan rates, the Customer Service Agent (with audio capabilities) automatically forwards the query to the Loan Agent (text-based specialist), receives the expert response, and relays it back to the user - all within a single conversation flow.
+1. Agents register with `AgentCard` containing their domain and capabilities
+2. Main agent discovers specialists using `a2a.registry.find_agents_by_domain(domain)`
+3. Main agent forwards queries with `a2a.send_message(to_agent, message_type, content)`
+4. Specialist processes and responds back
+5. Main agent relays response to the user
 
 ```
 Client → "I want to know about personal loan rates"
    ↓
-Customer Service Agent → Discovers Loan Specialist Agent
-   ↓  
-Customer Service Agent → Forwards loan query to Loan Specialist
+Customer Service Agent → Discovers Loan Specialist
    ↓
-Loan Specialist → Processes query and responds back (text format)
+Customer Service Agent → Forwards loan query to Specialist
    ↓
-Customer Service Agent → Relays response to client (audio format)
+Loan Specialist → Responds back
+   ↓
+Customer Service Agent → Relays response to client (audio)
 ```
-
-### **Key A2A Features**:
-- **Multi-Modal Communication**: Audio agents for user interaction, text agents for specialized processing  
-- **Domain Specialization**: Customer service agents coordinate with loan specialists, tech support, financial advisors
-- **Intelligent Query Routing**: Automatic detection and forwarding of domain-specific queries
-- **Real-Time Collaboration**: Agents communicate seamlessly without user intervention
 
 For detailed A2A implementation, see the [A2A README](./A2A/README.md).
 
 ## Human in the Loop (HITL)
 
-Enable human oversight by escalating specific queries (e.g., discounts, policy decisions) to a human operator via Discord, then relay the response back to the user while preserving conversation flow.
-
-- Escalate low-confidence or policy-bound requests to humans
-- Uses a Discord-backed MCP server for human responses
-- Seamless handoff between AI automation and human intervention
-
-See the example in `Human In The Loop/` and the official guide: [Human in the Loop](https://docs.videosdk.live/ai_agents/human-in-the-loop).
+Escalate specific queries to a human operator via Discord, then relay the response back while preserving conversation flow. See `Human In The Loop/` and the [official guide](https://docs.videosdk.live/ai_agents/human-in-the-loop).
 
 ## Wake Up Call
 
-Detect user inactivity and automatically trigger a callback to re-engage users after a configured timeout in `AgentSession`.
-
-- Monitor inactivity during sessions
-- Trigger custom async callbacks after specified timeouts
-- Re-engage users with proactive prompts or actions
-
-See the example in `Wakeup Call/` and the official guide: [Wake Up Call](https://docs.videosdk.live/ai_agents/wakeup-call).
+Detect user inactivity and automatically trigger a callback to re-engage users. See `Wakeup Call/` and the [official guide](https://docs.videosdk.live/ai_agents/wakeup-call).
 
 ## Prerequisites
 
-Before you begin, ensure you have:
-
 - Python 3.12 or higher
-- A VideoSDK authentication token (generate from [app.videosdk.live](https://app.videosdk.live))
-- A VideoSDK meeting ID (you can generate one using the [Create Room API](https://docs.videosdk.live/api-reference/realtime-communication/create-room))
-- API key for your chosen LLM provider (OpenAI, Google Gemini LiveAPI, or AWS)
+- A VideoSDK authentication token (from [app.videosdk.live](https://app.videosdk.live))
+- A VideoSDK meeting ID (from the [Create Room API](https://docs.videosdk.live/api-reference/realtime-communication/create-room))
+- API key for your chosen LLM/STT/TTS provider
 - Client-side implementation with any VideoSDK SDK
 
 ## 🛠️ Installation
 
 ### Quick Setup with uv (Recommended)
-
-[uv](https://docs.astral.sh/uv/) is a fast Python package manager. This is the recommended way to get started:
 
 ```bash
 # 1. Install uv (if not already installed)
@@ -142,124 +169,25 @@ cd agents-quickstart
 uv sync
 
 # 5. Run any example
-uv run python "Cascading Pipeline/cascading_agent_quickstart.py"
+uv run python "Cascade Pipeline Mode/cascade_agent_quickstart.py"
 ```
 
 ### Quick Setup with pip
 
-For setup using pip, install all dependencies at once using the provided requirements file:
-
 ```bash
-# 1. Clone this repository
 git clone https://github.com/videosdk-live/agents-quickstart
-
-# 2. Navigate to the project directory
 cd agents-quickstart
-
-# 3. Create and activate a virtual environment with Python 3.12 or higher
-# On macOS/Linux
 python3.12 -m venv venv
-source venv/bin/activate
-
-# On Windows
-python -m venv venv
-venv\Scripts\activate
-
-# 4. Install all dependencies from requirements.txt
+source venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 ### Manual Installation
 
-Alternatively, you can install packages individually:
-
-1. Clone this repository:
-```bash
-git clone https://github.com/videosdk-live/agents-quickstart
-```
-
-2. Create and activate a virtual environment with Python 3.12 or higher:
-```bash
-# On macOS/Linux
-python3.12 -m venv venv
-source venv/bin/activate
-
-# On Windows
-python -m venv venv
-venv\Scripts\activate
-```
-
-3. Install the base package:
 ```bash
 pip install videosdk-agents
-```
-
-4. Then navigate to your choice of example available:
-- [🤖 Agent to Agent (A2A) Multi-Agent System](./A2A) **← Featured**
-- [🎭 Virtual Avatar Examples](./Virtual%20Avatar) **← With Simli & Anam Integration**
-- [Realtime Pipeline Examples](./Realtime%20Pipeline)
-- [Cascading Pipeline Agent](./Cascading%20Pipeline)
-- [Human in the Loop](./Human%20In%20The%20Loop)
-- [Wake Up Call](./Wakeup%20Call)
-- [Recording](./Recording)
-- [Background Audio](./Background%20Audio)
-- [Pubsub](./Pubsub)
-- [Reply Interrupt Agent](./Reply%20Interrupt%20Agent)
-- [🔗 MCP Examples](./MCP)
-
-## 🔗 Model Context Protocol (MCP) Integration
-
-All agent examples include Model Context Protocol (MCP) support for connecting to external data sources and tools:
-
-- **Local MCP Servers**: Use `MCPServerStdio` for development and testing
-- **Remote MCP Services**: Use `MCPServerHTTP` for production integrations
-- **Multiple Servers**: Connect to various data sources simultaneously
-
-For detailed MCP integration examples, see the [MCP Server README](./MCP%20Server/README.md).
-
-## Environment Setup
-
-It's recommended to use environment variables for secure storage of API keys and tokens. Create a `.env` file in your project root:
-
-```bash
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-```
-
-## Generating a VideoSDK Meeting ID
-
-Before your AI agent can join a meeting, you'll need to create a meeting ID. You can generate one using the VideoSDK Create Room API:
-
-### Using cURL
-
-```bash
-curl -X POST https://api.videosdk.live/v2/rooms \
-  -H "Authorization: VIDEOSDK_AUTH_TOKEN" \
-  -H "Content-Type: application/json"
-```
-
-For more details on the Create Room API, refer to the [VideoSDK documentation](https://docs.videosdk.live/api-reference/realtime-communication/create-room).
-
-## Connecting with VideoSDK Client Applications
-
-After setting up your AI Agent, you'll need a client application to connect with it. You can use any of the VideoSDK quickstart examples to create a client that joins the same meeting:
-
-- [JavaScript](https://github.com/videosdk-live/quickstart/tree/main/js-rtc)
-- [React](https://github.com/videosdk-live/quickstart/tree/main/react-rtc)
-- [React Native](https://github.com/videosdk-live/quickstart/tree/main/react-native)
-- [Android](https://github.com/videosdk-live/quickstart/tree/main/android-rtc)
-- [Flutter](https://github.com/videosdk-live/quickstart/tree/main/flutter-rtc)
-- [iOS](https://github.com/videosdk-live/quickstart/tree/main/ios-rtc)
-
-When setting up your client application, make sure to use the same meeting ID that your AI Agent is using.
-
-### Playground Mode
-
-All quickstart examples are configured to run in playground mode by default (`playground=True`). When you run an agent, a direct link to the VideoSDK Playground will be printed in your console. You can open this link in your browser to interact with your agent without needing a separate client application.
-
-```
-Agent started in playground mode
-Interact with agent here at:
-https://playground.videosdk.live?token=...&meetingId=...
+# Then install provider plugins as needed:
+# pip install videosdk-plugins-openai videosdk-plugins-deepgram videosdk-plugins-elevenlabs ...
 ```
 
 ## 📁 Repository Structure
@@ -270,76 +198,142 @@ agents-quickstart/
 ├── A2A/                           # Featured: Complete A2A multi-agent system
 │   ├── agents/
 │   │   ├── customer_agent.py      # Voice-enabled customer service agent
-│   │   ├── loan_agent.py          # Text-based loan specialist agent
-│   │   └── README.md              # Detailed A2A implementation guide
+│   │   └── loan_agent.py          # Text-based loan specialist agent
 │   ├── session_manager.py         # Session and pipeline management
 │   ├── main.py                    # A2A system entry point
-│   └── README.md                  # A2A overview and setup
-│
-├── Virtual Avatar/                # Virtual avatar integration examples (Simli & Anam)
-│   ├── simli_cascading_example.py # Cascading pipeline with Simli avatar
-│   ├── simli_realtime_example.py  # Realtime pipeline with Simli avatar
-│   ├── anam_cascading_example.py  # Cascading pipeline with Anam avatar
-│   ├── anam_realtime_example.py   # Realtime pipeline with Anam avatar
-│   └── README.md                  # Virtual avatar setup and configuration
-│
-├── Realtime Pipeline/             # Examples for real-time, low-latency pipelines
-│   ├── OpenAI/                    # OpenAI-based agent examples
-│   ├── Google Gemini (LiveAPI)/   # Google Gemini LiveAPI examples  
-│   └── AWS Nova Sonic/            # AWS Nova Sonic examples
-│
-├── Cascading Pipeline/            # Example of a modular pipeline
-│
-├── Human In The Loop/             # Discord-based human oversight example
-│   ├── customer_agent.py
-│   ├── discord_mcp_server.py
 │   └── README.md
 │
-├── Wakeup Call/                   # Inactivity detection and callback example
-│   ├── wakeup_call.py
+├── Hybrid Mode/                   # Hybrid Mode examples
+│   ├── hybrid_realtime_custom_tts.py  # Realtime LLM + custom TTS voice
+│   └── hybrid_custom_stt_realtime.py  # Custom STT + Realtime LLM
+│
+├── Pipeline Hooks/                # Pipeline interception and modification
+│   └── pipeline_hooks_agent.py    # All hook types demonstrated
+│
+├── n8n Workflow/                  # n8n workflow automation integration
+│   ├── appointment_telephony.py   # Outbound appointment follow-up agent
+│   ├── customer_followup_agent.json  # n8n workflow import file
 │   └── README.md
 │
-├── Recording/                     # Session recording example
-│   ├── recording_example.py
-│   └── README.md
+├── Realtime Pipeline Mode/             # Realtime Pipeline Mode examples
+│   ├── OpenAI/                    # OpenAI Realtime
+│   ├── Google Gemini (LiveAPI)/   # Gemini Live
+│   ├── AWS Nova Sonic/            # AWS Nova Sonic
+│   ├── xAI(Grok)/                 # xAI Grok Realtime
+│   └── Ultravox/                  # Ultravox
 │
-├── Reply Interrupt Agent/         # Example for reply and interrupt
-│   ├── reply_interrupt_agent.py
-│   └── README.md
+├── Cascade Pipeline Mode/            # Cascade Pipeline Mode (basic)
+│   └── cascade_agent_quickstart.py
 │
-├── Background Audio/              # Example for background audio
-│   ├── background_audio.py
-│   └── README.md
+├── Advanced Cascade Pipeline Mode/   # Cascade Pipeline Mode (with EOUConfig, InterruptConfig)
+│   └── advanced_cascade_pipeline.py
 │
-├── Pubsub/                        # Example for Pub/Sub messaging
-│   ├── pubsub_agent.py
-│   └── README.md
+├── Memory/                        # Long-term memory with Mem0
+│   ├── agent.py
+│   └── memory_utils.py
 │
+├── RAG/                           # Retrieval-Augmented Generation with ChromaDB
+│   └── rag.py
+│
+├── Virtual Avatar/                # Simli & Anam avatar integration
+│   ├── simli_cascading_example.py
+│   ├── simli_realtime_example.py
+│   ├── anam_cascading_example.py
+│   └── anam_realtime_example.py
+│
+├── Human In The Loop/             # Discord-based human oversight
+├── Wakeup Call/                   # Inactivity detection and callback
+├── Recording/                     # Session recording (audio, video, screen share modes)
+├── Room Options/                  # Full RoomOptions config (telemetry, transports, session mgmt)
+├── Reply Interrupt Agent/         # Reply and interrupt control
+├── Background Audio/              # Background audio during thinking state
+├── Pubsub/                        # Pub/Sub messaging
 ├── MCP/                           # Model Context Protocol examples
-│   ├── mcp_agent.py
-│   ├── mcp_stdio_server.py
-│   └── README.md
+├── Vision/                        # Vision / video frame processing
+├── Fallback Recovery/             # Fallback providers (FallbackSTT, FallbackTTS)
+├── Multi Agent Switch/            # Dynamic agent switching via function tools
+├── Call Transfer/                 # Call transfer examples
+├── DTMF Handler/                  # DTMF tone handling
+├── Voice Mail Detector/           # Voicemail detection
+├── Knowledge Base/                # Custom knowledge base integration
+├── Conversational Graph/          # State-based workflow agent
+├── Utterance Handle/              # Utterance tracking and interruption handling
+├── Transports/                    # Custom transport layer examples
+├── mobile-quickstarts/            # Mobile-specific examples
+├── IoT-quickstart/                # IoT integration
+├── Unity-quickstart/              # Unity integration
 │
+├── pyproject.toml                 # Project configuration and dependencies
 ├── requirements.txt               # All dependencies
 └── README.md                      # This file
 ```
 
+## Environment Setup
+
+Create a `.env` file in your project root:
+
+```bash
+VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
+OPENAI_API_KEY=your_openai_key
+GOOGLE_API_KEY=your_google_key
+DEEPGRAM_API_KEY=your_deepgram_key
+ELEVENLABS_API_KEY=your_elevenlabs_key
+# Add other provider keys as needed
+```
+
+## Generating a VideoSDK Meeting ID
+
+```bash
+curl -X POST https://api.videosdk.live/v2/rooms \
+  -H "Authorization: VIDEOSDK_AUTH_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+See the [Create Room API docs](https://docs.videosdk.live/api-reference/realtime-communication/create-room).
+
+## Connecting with VideoSDK Client Applications
+
+Use any VideoSDK quickstart to build a client joining the same meeting:
+
+- [JavaScript](https://github.com/videosdk-live/quickstart/tree/main/js-rtc)
+- [React](https://github.com/videosdk-live/quickstart/tree/main/react-rtc)
+- [React Native](https://github.com/videosdk-live/quickstart/tree/main/react-native)
+- [Android](https://github.com/videosdk-live/quickstart/tree/main/android-rtc)
+- [Flutter](https://github.com/videosdk-live/quickstart/tree/main/flutter-rtc)
+- [iOS](https://github.com/videosdk-live/quickstart/tree/main/ios-rtc)
+
+### Playground Mode
+
+All examples are configured with `playground=True` by default. When you run an agent, a direct playground link is printed in your console:
+
+```
+Agent started in playground mode
+Interact with agent here at:
+https://playground.videosdk.live?token=...&meetingId=...
+```
+
+## 🔗 Model Context Protocol (MCP) Integration
+
+All agent examples support MCP for connecting to external data sources and tools:
+
+- **Local MCP Servers**: Use `MCPServerStdio` for development and testing
+- **Remote MCP Services**: Use `MCPServerHTTP` for production integrations
+
 ## Learn More
 
-For more information about VideoSDK AI Agents:
 - [Official Documentation](https://docs.videosdk.live/ai_agents/introduction)
 - [AI Voice Agent Quick Start Guide](https://docs.videosdk.live/ai_agents/voice-agent-quick-start)
 - [Core Components Overview](https://docs.videosdk.live/ai_agents/core-components/overview)
-- [Cascading Pipeline Documentation](https://docs.videosdk.live/ai_agents/core-components/cascading-pipeline)
-- [Conversation Flow Documentation](https://docs.videosdk.live/ai_agents/core-components/conversation-flow)
+- [Cascade Pipeline Documentation](https://docs.videosdk.live/ai_agents/core-components/cascading-pipeline)
 - [MCP Integration](https://docs.videosdk.live/ai_agents/mcp-integration)
 - [A2A Integration Documentation](https://docs.videosdk.live/ai_agents/a2a/overview)
 - [Virtual Avatar](https://docs.videosdk.live/ai_agents/plugins/avatar/simli)
 - [Human in the Loop](https://docs.videosdk.live/ai_agents/human-in-the-loop)
 - [Wake Up Call](https://docs.videosdk.live/ai_agents/wakeup-call)
 - [Recording](https://docs.videosdk.live/ai_agents/recording)
+
 ---
 
 🤝 Join our [Discord community](https://discord.com/invite/f2WsNDN9S5) for support and discussions.
 
-Made with ❤️ by the [VideoSDK](https://videosdk.live) Team 
+Made with ❤️ by the [VideoSDK](https://videosdk.live) Team

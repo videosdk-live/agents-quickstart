@@ -1,4 +1,4 @@
-from videosdk.agents import Agent, AgentSession, RealTimePipeline,MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob
+from videosdk.agents import Agent, AgentSession, Pipeline, MCPServerStdio, MCPServerHTTP, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 import sys
 import logging
@@ -39,7 +39,7 @@ async def start_session(context: JobContext):
         )
     )
 
-    pipeline = RealTimePipeline(model=model)
+    pipeline = Pipeline(llm=model)
     session = AgentSession(
         agent=agent,
         pipeline=pipeline

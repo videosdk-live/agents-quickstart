@@ -1,7 +1,7 @@
 import asyncio
 import os
 from typing import Optional
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, WorkerJob, ConversationFlow, JobContext, RoomOptions
+from videosdk.agents import Agent, AgentSession, Pipeline, WorkerJob, JobContext, RoomOptions
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.silero import SileroVAD
 from videosdk.plugins.turn_detector import TurnDetector, pre_download_model
@@ -29,9 +29,8 @@ class VoiceAgent(Agent):
 async def entrypoint(ctx: JobContext):
     
     agent = VoiceAgent(ctx)
-    conversation_flow = ConversationFlow(agent)
 
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt= DeepgramSTT(api_key=os.getenv("DEEPGRAM_API_KEY")),
         llm=AnthropicLLM(api_key=os.getenv("ANTHROPIC_API_KEY")),
         tts=GoogleTTS(api_key=os.getenv("GOOGLE_API_KEY")),
@@ -39,9 +38,8 @@ async def entrypoint(ctx: JobContext):
         turn_detector=TurnDetector(threshold=0.8)
     )
     session = AgentSession(
-        agent=agent, 
+        agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow,
         wake_up=30
     )
     
