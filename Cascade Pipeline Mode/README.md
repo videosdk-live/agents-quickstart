@@ -1,10 +1,10 @@
-# 🚀 Cascading Pipeline Agent Quick Start
+# 🚀 Cascade Pipeline Mode Agent Quick Start
 
-This example demonstrates how to use the `CascadingPipeline` to build a flexible and powerful AI voice agent. The `CascadingPipeline` allows you to mix and match different providers for Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS), giving you complete control over your agent's architecture.
+This example demonstrates how to use `Pipeline` (Cascade Pipeline Mode) to build a flexible and powerful AI voice agent. The `Pipeline` in Cascade mode allows you to mix and match different providers for Speech-to-Text (STT), Large Language Models (LLM), and Text-to-Speech (TTS), giving you complete control over your agent's architecture.
 
-## ✨ What is the Cascading Pipeline?
+## ✨ What is the Cascade Pipeline Mode?
 
-The `CascadingPipeline` is a core component of the VideoSDK AI Agent framework that provides a modular approach to building AI agents. Instead of being locked into a single provider, you can choose the best service for each part of your pipeline, optimizing for cost, performance, or specific features.
+`Pipeline` (Cascade Pipeline Mode) is a core component of the VideoSDK AI Agent framework that provides a modular approach to building AI agents. Instead of being locked into a single provider, you can choose the best service for each part of your pipeline, optimizing for cost, performance, or specific features.
 
 ### Key Features:
 
@@ -13,18 +13,16 @@ The `CascadingPipeline` is a core component of the VideoSDK AI Agent framework t
 - **Provider Agnostic**: Integrate a wide range of supported AI services.
 - **Advanced Control**: Fine-tune each component to meet your application's needs.
 
-For more in-depth information, please refer to the [official documentation on Cascading Pipeline](https://docs.videosdk.live/ai_agents/core-components/cascading-pipeline).
+For more in-depth information, please refer to the [official documentation on Cascade Pipeline Mode](https://docs.videosdk.live/ai_agents/core-components/cascading-pipeline).
 
-## 💬 Conversation Flow
+## 💬 Pipeline Hooks
 
-The `CascadingPipeline` works together with the `ConversationFlow` class to manage the turn-based logic of the conversation. `ConversationFlow` allows you to implement custom logic for handling user input, preprocessing transcripts, and managing the state of the conversation before it's processed by the LLM. This is essential for building sophisticated, stateful AI agents.
+`Pipeline` (Cascade Pipeline Mode) uses the `@pipeline.on()` hooks pattern to intercept and modify pipeline stages. These hooks allow you to implement custom logic for handling user input, preprocessing transcripts, and managing conversation state before it is processed by the LLM. This is essential for building sophisticated, stateful AI agents.
 
-In this example, the `MyConversationFlow` class is used to:
-- Receive the transcript from the pipeline.
-- Add the user's message to the agent's chat context.
-- Process the context with the LLM to generate a response.
-
-For a deeper dive into its capabilities, check out the [Conversation Flow documentation](https://docs.videosdk.live/ai_agents/core-components/conversation-flow).
+Common hooks include:
+- `@pipeline.on("user_turn_start")` — runs at the start of a user's turn (e.g. retrieve memories, inject context)
+- `@pipeline.on("user_turn_end")` — runs after the user finishes speaking (e.g. store important information)
+- `@pipeline.on("stt")` — intercepts and normalizes transcripts before LLM processing
 
 ## 🛠️ Supported Providers
 
@@ -138,7 +136,7 @@ def make_context() -> JobContext:
 Execute the script from your terminal:
 
 ```bash
-python "Cascading Pipeline/cascading_agent_quickstart.py"
+python "Cascade Pipeline Mode/cascading_agent_quickstart.py"
 ```
 
 The agent will start and print a playground link to your console, which you can use to interact with it directly in your browser. 

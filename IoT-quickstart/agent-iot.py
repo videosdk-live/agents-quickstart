@@ -1,4 +1,4 @@
-from videosdk.agents import Agent, AgentSession, RealTimePipeline,JobContext, RoomOptions, WorkerJob
+from videosdk.agents import Agent, AgentSession, Pipeline, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.google import GeminiRealtime, GeminiLiveConfig
 import logging
 logging.getLogger().setLevel(logging.INFO)
@@ -27,7 +27,7 @@ async def start_session(context: JobContext):
         )
     )
 
-    pipeline = RealTimePipeline(model=model)
+    pipeline = Pipeline(llm=model)
     session = AgentSession(
         agent=agent,
         pipeline=pipeline

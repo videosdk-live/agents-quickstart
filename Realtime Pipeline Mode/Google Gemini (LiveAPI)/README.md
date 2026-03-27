@@ -15,7 +15,7 @@ pip install fastmcp  # For MCP server support
 
 Before running the agent, make sure to:
 
-1. Replace the placeholder API key in `gemini_agent_quickstart.py` with your actual Google Gemini (LiveAPI) API key
+1. Replace the placeholder API key in `gemini_realtime_agent.py` with your actual Google Gemini (LiveAPI) API key
    ```python
    model = GeminiRealtime(
        model="gemini-2.5-flash-native-audio-preview-09-2025",
@@ -46,7 +46,7 @@ Before running the agent, make sure to:
 To run the Gemini-powered agent:
 
 ```bash
-python gemini_agent_quickstart.py
+python gemini_realtime_agent.py
 ```
 
 When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.

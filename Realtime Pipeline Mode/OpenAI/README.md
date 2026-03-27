@@ -15,7 +15,7 @@ pip install fastmcp  # For MCP server support
 
 Before running the agent, make sure to:
 
-1. Replace the placeholder API key in `openai_agent_quickstart.py` with your actual OpenAI API key
+1. Replace the placeholder API key in `openai_realtime_agent.py` with your actual OpenAI API key
    ```python
    model = OpenAIRealtime(
        model="gpt-4o-realtime-preview",
@@ -45,7 +45,7 @@ Before running the agent, make sure to:
 To run the OpenAI-powered agent:
 
 ```bash
-python openai_agent_quickstart.py
+python openai_realtime_agent.py
 ```
 
 When running in playground mode (`playground=True` in `RoomOptions`), a direct link will be printed to your console. You can open this link in your browser to interact with the agent.

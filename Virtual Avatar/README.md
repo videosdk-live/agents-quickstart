@@ -38,12 +38,12 @@ SIMLI_FACE_ID=your_face_id_here  # Optional - has default value
 ANAM_API_KEY=your_anam_api_key_here
 ANAM_AVATAR_ID=your_anam_avatar_id_here
 
-# For Cascading Pipeline examples
+# For Cascade Pipeline Mode examples
 DEEPGRAM_API_KEY=your_deepgram_api_key
 OPENAI_API_KEY=your_openai_api_key
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 
-# For Realtime Pipeline examples (Gemini Live API)
+# For Realtime Pipeline Mode examples (Gemini Live API)
 GOOGLE_API_KEY=your_google_api_key
 ```
 
@@ -63,7 +63,7 @@ GOOGLE_API_KEY=your_google_api_key
 
 ### Simli Avatar Examples
 
-#### 1. Cascading Pipeline with Simli Avatar
+#### 1. Cascade Pipeline Mode with Simli Avatar
 
 **File:** `simli_cascading_example.py`
 
@@ -80,7 +80,7 @@ This example uses a cascading pipeline with:
 python simli_cascading_example.py
 ```
 
-#### 2. Realtime Pipeline with Simli Avatar
+#### 2. Realtime Pipeline Mode with Simli Avatar
 
 **File:** `simli_realtime_example.py`
 
@@ -96,7 +96,7 @@ python simli_realtime_example.py
 
 ### Anam Avatar Examples
 
-#### 3. Cascading Pipeline with Anam Avatar
+#### 3. Cascade Pipeline Mode with Anam Avatar
 
 **File:** `anam_cascading_example.py`
 
@@ -113,7 +113,7 @@ This example uses a cascading pipeline with:
 python anam_cascading_example.py
 ```
 
-#### 4. Realtime Pipeline with Anam Avatar
+#### 4. Realtime Pipeline Mode with Anam Avatar
 
 **File:** `anam_realtime_example.py`
 
@@ -182,7 +182,7 @@ Ask about weather in any location:
 
 ## Customization
 
-### Changing Voice (Realtime Pipeline)
+### Changing Voice (Realtime Pipeline Mode)
 
 For the realtime pipeline examples, you can change the Gemini voice:
 
@@ -199,7 +199,7 @@ config=GeminiLiveConfig(
 
 **Anam:** Use different avatars by setting the `ANAM_AVATAR_ID` environment variable or browsing available avatars on the [Anam platform](https://www.anam.ai/).
 
-### Adding More Providers (Cascading Pipeline)
+### Adding More Providers (Cascade Pipeline Mode)
 
 The cascading examples can be easily modified to use different providers for STT, LLM, or TTS. Check the commented lines in the scripts for alternatives like OpenAI, ElevenLabs, Deepgram, etc.
 

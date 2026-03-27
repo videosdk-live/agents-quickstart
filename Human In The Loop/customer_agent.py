@@ -1,7 +1,7 @@
 import asyncio
 import os
 from typing import Optional
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, WorkerJob, MCPServerStdio, ConversationFlow, JobContext, RoomOptions
+from videosdk.agents import Agent, AgentSession, Pipeline, WorkerJob, MCPServerStdio, JobContext, RoomOptions
 from videosdk.plugins.google import GoogleTTS
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.silero import SileroVAD
@@ -45,9 +45,8 @@ class CustomerAgent(Agent):
 async def entrypoint(ctx: JobContext):
     
     agent = CustomerAgent(ctx)
-    conversation_flow = ConversationFlow(agent)
 
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt=DeepgramSTT(api_key=os.getenv("DEEPGRAM_API_KEY")),  
         llm=AnthropicLLM(api_key=os.getenv("ANTHROPIC_API_KEY")),
         tts=GoogleTTS(api_key=os.getenv("GOOGLE_API_KEY")),
@@ -56,9 +55,8 @@ async def entrypoint(ctx: JobContext):
     )
     
     session = AgentSession(
-        agent=agent, 
+        agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow,
     )
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)

@@ -137,9 +137,9 @@ pip install videosdk-agents  # VideoSDK agents with MCP support
 ## 🤝 Examples in Action
 
 Check out the working examples in:
-- `../OpenAI/openai_agent_quickstart.py`
-- `../Google Gemini (LiveAPI)/gemini_agent_quickstart.py` 
-- `../AWS Nova Sonic/aws_novasonic_agent_quickstart.py`
+- `../OpenAI/openai_realtime_agent.py`
+- `../Google Gemini (LiveAPI)/gemini_realtime_agent.py` 
+- `../AWS Nova Sonic/aws_novasonic_realtime_agent.py`
 
 Each example demonstrates MCP integration with different Plugins.
 For More Infromation, see the [official VideoSDK MCP documentation](https://docs.videosdk.live/ai_agents/mcp-integration).

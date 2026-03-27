@@ -1,5 +1,5 @@
 import logging
-from videosdk.agents import Agent, AgentSession, CascadingPipeline,WorkerJob,ConversationFlow, JobContext, RoomOptions, Options,DTMFHandler
+from videosdk.agents import Agent, AgentSession, Pipeline, WorkerJob, JobContext, RoomOptions, Options, DTMFHandler
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.openai import OpenAILLM
 from videosdk.plugins.elevenlabs import ElevenLabsTTS
@@ -22,9 +22,8 @@ class VoiceAgent(Agent):
 async def entrypoint(ctx: JobContext):
     
     agent = VoiceAgent()
-    conversation_flow = ConversationFlow(agent)
 
-    pipeline=CascadingPipeline(
+    pipeline=Pipeline(
         stt=DeepgramSTT(),
         llm=OpenAILLM(),
         tts=ElevenLabsTTS(),
@@ -38,9 +37,8 @@ async def entrypoint(ctx: JobContext):
     dtmf_handler = DTMFHandler(dtmf_callback)
 
     session = AgentSession(
-        agent=agent, 
+        agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow,
         dtmf_handler = dtmf_handler,
     )
 

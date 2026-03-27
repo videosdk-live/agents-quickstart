@@ -1,7 +1,6 @@
 import asyncio
 import aiohttp
-from typing import AsyncIterator
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, function_tool, JobContext, RoomOptions, WorkerJob, ConversationFlow, ChatRole
+from videosdk.agents import Agent, AgentSession, Pipeline, function_tool, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.openai import OpenAILLM
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.elevenlabs import ElevenLabsTTS
@@ -53,10 +52,10 @@ class MyVoiceAgent(Agent):
 
     async def on_enter(self) -> None:
         await self.session.say("Hello, how can I help you today?")
-    
+
     async def on_exit(self) -> None:
         await self.session.say("Goodbye!")
-        
+
     @function_tool
     async def get_horoscope(self, sign: str) -> dict:
         """Get today's horoscope for a given zodiac sign.
@@ -73,46 +72,20 @@ class MyVoiceAgent(Agent):
             "sign": sign,
             "horoscope": horoscopes.get(sign, "The stars are aligned for you today!"),
         }
-    
+
     @function_tool
     async def end_call(self) -> None:
         """End the call upon request by the user"""
         await self.session.say("Goodbye!")
         await asyncio.sleep(1)
         await self.session.leave()
-        
-
-class MyConversationFlow(ConversationFlow):
-    def __init__(self, agent: Agent):
-        super().__init__(agent)
-
-    async def run(self, transcript: str) -> AsyncIterator[str]:
-        """Main conversation loop: handle a user turn."""
-        await self.on_turn_start(transcript)
-        processed_transcript = transcript.lower().strip()
-        self.agent.chat_context.add_message(
-            role=ChatRole.USER, content=processed_transcript
-        )
-        async for response_chunk in self.process_with_llm():
-            yield response_chunk
-        await self.on_turn_end()
-
-    async def on_turn_start(self, transcript: str) -> None:
-        """Called at the start of a user turn."""
-        self.is_turn_active = True
-        print(f"User transcript: {transcript}")
-
-    async def on_turn_end(self) -> None:
-        """Called at the end of a user turn."""
-        self.is_turn_active = False
-        print("Agent turn ended.")
 
 
 async def start_session(context: JobContext):
 
     agent = MyVoiceAgent()
-    conversation_flow = MyConversationFlow(agent)
-    pipeline = CascadingPipeline(
+
+    pipeline = Pipeline(
         stt=DeepgramSTT(),
         llm=OpenAILLM(),
         tts=ElevenLabsTTS(),
@@ -123,7 +96,6 @@ async def start_session(context: JobContext):
     session = AgentSession(
         agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow
     )
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)
@@ -140,4 +112,4 @@ def make_context() -> JobContext:
 
 if __name__ == "__main__":
     job = WorkerJob(entrypoint=start_session, jobctx=make_context)
-    job.start() 
+    job.start()

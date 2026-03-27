@@ -1,7 +1,7 @@
 
 import logging
 from pydantic import Field
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, WorkerJob, ConversationFlow, JobContext, RoomOptions
+from videosdk.agents import Agent, AgentSession, Pipeline, WorkerJob, JobContext, RoomOptions
 from videosdk.plugins.deepgram import DeepgramSTT
 from videosdk.plugins.google import GoogleTTS
 from videosdk.plugins.openai import OpenAILLM
@@ -179,9 +179,8 @@ class WorkflowAgent(Agent):
 async def entrypoint(ctx: JobContext):
     
     agent = WorkflowAgent()
-    conversation_flow = ConversationFlow(agent)
 
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt= DeepgramSTT(),
         llm=OpenAILLM(),
         tts=GoogleTTS(),
@@ -190,9 +189,8 @@ async def entrypoint(ctx: JobContext):
         conversational_graph = loan_application
     )
     session = AgentSession(
-        agent=agent, 
+        agent=agent,
         pipeline=pipeline,
-        conversation_flow=conversation_flow
     )
 
     await session.start(wait_for_participant=True, run_until_shutdown=True)

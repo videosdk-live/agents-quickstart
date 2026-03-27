@@ -1,4 +1,4 @@
-# Advanced Cascading Pipeline
+# Advanced Cascade Pipeline Mode
 
 This Example showcases an advanced cascading pipeline with enhanced features for End-of-Utterance (EOU) handling, improved interruption detection, interruptible speech support, and false-interruption handling.
 
@@ -20,7 +20,7 @@ The pipeline offers flexible EOU handling to accurately determine when a user ha
 **Usage Example:**
 
 ```python
-pipeline = CascadingPipeline(
+pipeline = Pipeline(
     # ...
     eou_config=EOUConfig(
         mode='ADAPTIVE',
@@ -46,7 +46,7 @@ Introduces new modes for more granular control over interruption detection, comb
 **Usage Example:**
 
 ```python
-pipeline = CascadingPipeline(
+pipeline = Pipeline(
     # ...
     interrupt_config=InterruptConfig(
         mode="HYBRID",
@@ -83,7 +83,7 @@ Introduces a mechanism to detect and gracefully handle brief or accidental user 
 **Usage Example:**
 
 ```python
-pipeline = CascadingPipeline(
+pipeline = Pipeline(
     # ...
     interrupt_config=InterruptConfig(
         # ...
@@ -97,8 +97,8 @@ pipeline = CascadingPipeline(
 
 ## Running the Example
 
-To run the advanced cascading pipeline example, execute the `advanced_cascading_pipeline.py` script:
+To run the advanced cascading pipeline example, execute the `advanced_cascade_pipeline.py` script:
 
 ```bash
-python advanced_cascading_pipeline.py
+python advanced_cascade_pipeline.py
 ```
