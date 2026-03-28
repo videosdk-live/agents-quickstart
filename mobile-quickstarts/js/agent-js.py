@@ -18,7 +18,7 @@ class MyVoiceAgent(Agent):
 async def start_session(context: JobContext):
     agent = MyVoiceAgent()
     model = GeminiRealtime(
-        model="gemini-2.5-flash-native-audio-preview-09-2025",
+        model="gemini-3.1-flash-live-preview",
         # When GOOGLE_API_KEY is set in .env - DON'T pass api_key parameter
         # api_key="AIXXXXXXXXXXXXXXXXXXXX", 
         config=GeminiLiveConfig(

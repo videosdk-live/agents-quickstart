@@ -41,7 +41,7 @@ class HybridVoiceAgent(Agent):
 async def entrypoint(ctx: JobContext):
     # Realtime model handles LLM + audio output (TTS built-in)
     llm = GeminiRealtime(
-        model="gemini-2.5-flash-native-audio-preview-12-2025",
+        model="gemini-3.1-flash-live-preview",
         # When GOOGLE_API_KEY is set in .env - DON'T pass api_key parameter
         # api_key="AI...",
         config=GeminiLiveConfig(

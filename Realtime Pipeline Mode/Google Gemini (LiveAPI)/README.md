@@ -18,7 +18,7 @@ Before running the agent, make sure to:
 1. Replace the placeholder API key in `gemini_realtime_agent.py` with your actual Google Gemini (LiveAPI) API key
    ```python
    model = GeminiRealtime(
-       model="gemini-2.5-flash-native-audio-preview-09-2025",
+       model="gemini-3.1-flash-live-preview",
        api_key="your-google-api-key",  # Or use environment variable
        # ...
    )
@@ -73,7 +73,7 @@ https://playground.videosdk.live?token=...&meetingId=...
 
 The agent uses Google's Gemini models for real-time, multi-modal AI interactions. Configuration options include:
 
-- `model`: The Gemini model to use (e.g., `"gemini-2.5-flash-native-audio-preview-09-2025"`) and Other supported models include: "gemini-2.5-flash-preview-native-audio-dialog" and "gemini-2.5-flash-exp-native-audio-thinking-dialog".
+- `model`: The Gemini model to use (e.g., `"gemini-3.1-flash-live-preview"`) and Other supported models include: "gemini-2.5-flash-preview-native-audio-dialog" and "gemini-2.5-flash-exp-native-audio-thinking-dialog".
 - `api_key`: Your Google API key (can also be set via environment variable)
 - `config`: Advanced configuration options including voice, language code, temperature, etc.
 

@@ -9,7 +9,7 @@ def create_pipeline(agent_type: str):
         # Realtime Pipeline Mode for voice-enabled customer-facing agent
         return Pipeline(
             llm=GeminiRealtime(
-                model="gemini-2.5-flash-native-audio-preview-09-2025",
+                model="gemini-3.1-flash-live-preview",
                 config=GeminiLiveConfig(
                     voice="Leda",
                     response_modalities=["AUDIO"]
