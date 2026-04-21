@@ -1,36 +1,36 @@
 # VideoSDK AI Agents Core
-videosdk-agents>=1.0.1
+videosdk-agents>=1.0.9
 
 # Real-time API and LLM-based TTS/STT Providers
-videosdk-plugins-openai>=1.0.1
-videosdk-plugins-google>=1.0.1
-videosdk-plugins-aws>=1.0.1
-videosdk-plugins-sarvamai>=1.0.1
-videosdk-plugins-cartesia>=1.0.1
+videosdk-plugins-openai>=1.0.9
+videosdk-plugins-google>=1.0.9
+videosdk-plugins-aws>=1.0.9
+videosdk-plugins-sarvamai>=1.0.9
+videosdk-plugins-cartesia>=1.0.9
 
 
 # Speech-to-Text (STT) Plugins
-videosdk-plugins-deepgram>=1.0.1
+videosdk-plugins-deepgram>=1.0.9
 
 
 # Voice Activity Detection (VAD) and Turn Detection Plugins
-videosdk-plugins-silero>=1.0.1
-videosdk-plugins-turn-detector>=1.0.1
+videosdk-plugins-silero>=1.0.9
+videosdk-plugins-turn-detector>=1.0.9
 
 # Text-to-Speech (TTS) Plugins
-videosdk-plugins-elevenlabs>=1.0.1
+videosdk-plugins-elevenlabs>=1.0.9
 
 # LLM Plugins
-videosdk-plugins-anthropic>=1.0.1
-videosdk-plugins-cerebras>=1.0.1
+videosdk-plugins-anthropic>=1.0.9
+videosdk-plugins-cerebras>=1.0.9
 
 # Virtual Avatar Plugins
-videosdk-plugins-simli>=1.0.1
-videosdk-plugins-anam>=1.0.1
+videosdk-plugins-simli>=1.0.9
+videosdk-plugins-anam>=1.0.9
 
 # Real-time Plugins
-videosdk-plugins-xai>=1.0.1
-videosdk-plugins-ultravox>=1.0.1
+videosdk-plugins-xai>=1.0.9
+videosdk-plugins-ultravox>=1.0.9
 
 # # Core Dependencies
 fastmcp
