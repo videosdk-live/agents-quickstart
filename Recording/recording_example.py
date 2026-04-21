@@ -4,19 +4,21 @@ Recording Example
 Demonstrates all recording modes supported by VideoSDK AI Agents:
 
   - "off"               : No recording, vision enabled (agent still sees the screen)
-  - "audio_only"        : Audio track recording only (default when recording=True)
+  - "audio_only"        : Audio track recording only (default RecordingOptions)
   - "audio_video"       : Audio + camera video (composite participant recording)
-  - "audio_screen"      : Audio + screen-share track (requires vision=True)
+  - "audio_screen"      : Audio + screen-share track (requires vision=True on RoomOptions)
   - "audio_video_screen": Audio + camera video + screen-share (requires vision=True)
 
-Recording types overview:
-  - Participant Recording  : Built-in automatic recording managed by the agent framework (recording=True)
-  - RecordingOptions.video : Adds composite video+audio participant recording
-  - RecordingOptions.screen_share : Records screen-share tracks (requires vision=True)
+Recording is configured via `ObservabilityOptions(recording=RecordingOptions(...))`
+passed to `session.start(...)` — not via `RoomOptions`.
+
+  - RecordingOptions()              : Default audio track recording
+  - RecordingOptions.video          : Adds composite video+audio participant recording
+  - RecordingOptions.screen_share   : Records screen-share tracks (requires vision=True)
 
 See docs: https://docs.videosdk.live/ai_agents/core-components/recording
 
-Env: VIDEOSDK_AUTH_TOKEN, DEEPGRAM_API_KEY, GOOGLE_API_KEY, CARTESIA_API_KEY
+Env: see `.env.example` at the repo root for all variables (VideoSDK auth + provider keys).
 """
 
 import logging
@@ -25,6 +27,8 @@ from videosdk.agents import (
     Agent,
     AgentSession,
     JobContext,
+    LoggingOptions,
+    ObservabilityOptions,
     Pipeline,
     RecordingOptions,
     RoomOptions,
@@ -97,6 +101,35 @@ class VoiceAgent(Agent):
         }
 
 
+# ---------------------------------------------------------------------------
+# Recording mode selector
+# Set RECORDING_MODE to exercise each RecordingOptions configuration.
+#
+# Recording is enabled by passing `ObservabilityOptions(recording=RecordingOptions(...))`
+# to `session.start(...)`. RecordingOptions() defaults to audio track recording.
+# `video=True` adds composite camera video; `screen_share=True` requires `vision=True` on RoomOptions.
+# ---------------------------------------------------------------------------
+RECORDING_MODE = "audio_only"
+# Choices: "off" | "audio_only" | "audio_video" | "audio_screen" | "audio_video_screen"
+
+
+def make_recording_options() -> RecordingOptions | None:
+    if RECORDING_MODE == "off":
+        return None
+    if RECORDING_MODE == "audio_only":
+        return RecordingOptions()
+    if RECORDING_MODE == "audio_video":
+        return RecordingOptions(video=True)
+    if RECORDING_MODE == "audio_screen":
+        return RecordingOptions(screen_share=True)
+    if RECORDING_MODE == "audio_video_screen":
+        return RecordingOptions(video=True, screen_share=True)
+    raise ValueError(
+        f"Unknown RECORDING_MODE={RECORDING_MODE!r}. "
+        'Use "off", "audio_only", "audio_video", "audio_screen", or "audio_video_screen".'
+    )
+
+
 async def entrypoint(ctx: JobContext):
     agent = VoiceAgent()
 
@@ -109,19 +142,20 @@ async def entrypoint(ctx: JobContext):
     )
 
     session = AgentSession(agent=agent, pipeline=pipeline)
-    await session.start(wait_for_participant=True, run_until_shutdown=True)
 
+    recording = make_recording_options()
+    observability = ObservabilityOptions(
+        recording=recording,
+        logs=LoggingOptions(level=["INFO", "DEBUG"]),
+    ) if recording is not None else ObservabilityOptions(
+        logs=LoggingOptions(level=["INFO", "DEBUG"]),
+    )
 
-# ---------------------------------------------------------------------------
-# Recording mode selector
-# Set RECORDING_MODE to exercise each RoomOptions recording configuration.
-#
-# recording=True always enables audio (track API).
-# RecordingOptions adds camera video and/or screen-share on top.
-# screen_share=True requires vision=True (validated at connect time).
-# ---------------------------------------------------------------------------
-RECORDING_MODE = "audio_only"
-# Choices: "off" | "audio_only" | "audio_video" | "audio_screen" | "audio_video_screen"
+    await session.start(
+        wait_for_participant=True,
+        run_until_shutdown=True,
+        observability=observability,
+    )
 
 
 def make_context() -> JobContext:
@@ -129,57 +163,15 @@ def make_context() -> JobContext:
     name = "Recording Agent"
     playground = True
 
-    if RECORDING_MODE == "off":
-        # No recording; vision still enabled so agent can see the screen
-        room_options = RoomOptions(
-            room_id=room_id,
-            name=name,
-            playground=playground,
-            recording=False,
-            vision=True,
-        )
-    elif RECORDING_MODE == "audio_only":
-        # Audio-only track recording (default behavior when recording=True)
-        room_options = RoomOptions(
-            room_id=room_id,
-            name=name,
-            playground=playground,
-            recording=True,
-        )
-    elif RECORDING_MODE == "audio_video":
-        # Composite participant recording: audio + camera video
-        room_options = RoomOptions(
-            room_id=room_id,
-            name=name,
-            playground=playground,
-            recording=True,
-            recording_options=RecordingOptions(video=True),
-        )
-    elif RECORDING_MODE == "audio_screen":
-        # Audio track + screen-share track; vision=True required
-        room_options = RoomOptions(
-            room_id=room_id,
-            name=name,
-            playground=playground,
-            recording=True,
-            vision=True,
-            recording_options=RecordingOptions(screen_share=True),
-        )
-    elif RECORDING_MODE == "audio_video_screen":
-        # Audio + camera video + screen-share; vision=True required
-        room_options = RoomOptions(
-            room_id=room_id,
-            name=name,
-            playground=playground,
-            recording=True,
-            vision=True,
-            recording_options=RecordingOptions(video=True, screen_share=True),
-        )
-    else:
-        raise ValueError(
-            f"Unknown RECORDING_MODE={RECORDING_MODE!r}. "
-            'Use "off", "audio_only", "audio_video", "audio_screen", or "audio_video_screen".'
-        )
+    # vision=True is required for any mode that records the screen-share track.
+    needs_vision = RECORDING_MODE in ("audio_screen", "audio_video_screen", "off")
+
+    room_options = RoomOptions(
+        room_id=room_id,
+        name=name,
+        playground=playground,
+        vision=needs_vision,
+    )
 
     return JobContext(room_options=room_options)
 

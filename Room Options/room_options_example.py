@@ -1,25 +1,34 @@
 """
 RoomOptions Configuration Example
 
-Demonstrates the full range of RoomOptions parameters:
+Demonstrates the full range of RoomOptions parameters AND the new
+`ObservabilityOptions` surface (passed to `session.start(...)`):
 
-  - Connection & Identity    : room_id, auth_token, name, agent_participant_id
-  - Session Management       : auto_end_session, session_timeout_seconds, no_participant_timeout_seconds
-  - Media & Features         : vision, recording, RecordingOptions, background_audio
-  - Telemetry                : TracesOptions, MetricsOptions, LoggingOptions (OpenTelemetry export)
-  - Dashboard                : send_logs_to_dashboard, dashboard_log_level
-  - Transport Modes          : VideoSDK (default), WebSocket, WebRTC
+  RoomOptions:
+    - Connection & Identity    : room_id, name, agent_participant_id
+    - Session Management       : auto_end_session, session_timeout_seconds, no_participant_timeout_seconds
+    - Media & Features         : vision, background_audio
+    - Dashboard                : send_logs_to_dashboard, dashboard_log_level
+    - Transport Modes          : VideoSDK (default), WebSocket, WebRTC
+
+  ObservabilityOptions (passed to session.start):
+    - recording : RecordingOptions       (audio / video / screen-share recording)
+    - traces    : TracesOptions          (OpenTelemetry trace export)
+    - metrics   : MetricsOptions         (OpenTelemetry metrics export)
+    - logs      : LoggingOptions         (log levels + OTel log export)
+
+VideoSDK auth is read from env vars (`VIDEOSDK_AUTH_TOKEN` OR
+`VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY`) — no `auth_token=` argument needed.
 
 Select a configuration by setting CONFIG_MODE at the bottom of this file:
   "basic"       — minimal setup, playground mode
-  "production"  — session timeouts, recording, no playground
+  "production"  — session timeouts, recording on session.start, no playground
   "telemetry"   — OpenTelemetry traces + metrics + log export
   "websocket"   — WebSocket transport
   "webrtc"      — WebRTC transport with custom signaling
 
 See docs: https://docs.videosdk.live/ai_agents/core-components/room-options
-
-Env: VIDEOSDK_AUTH_TOKEN, OPENAI_API_KEY, DEEPGRAM_API_KEY, ELEVENLABS_API_KEY
+Env: see `.env.example` at the repo root for all variables.
 """
 
 import logging
@@ -27,14 +36,15 @@ from videosdk.agents import (
     Agent,
     AgentSession,
     JobContext,
-    Pipeline,
-    RoomOptions,
-    RecordingOptions,
-    TracesOptions,
-    MetricsOptions,
     LoggingOptions,
-    WebSocketConfig,
+    MetricsOptions,
+    ObservabilityOptions,
+    Pipeline,
+    RecordingOptions,
+    RoomOptions,
+    TracesOptions,
     WebRTCConfig,
+    WebSocketConfig,
     WorkerJob,
 )
 from videosdk.plugins.openai import OpenAILLM
@@ -58,6 +68,47 @@ class VoiceAgent(Agent):
         await self.session.say("Goodbye!")
 
 
+# ---------------------------------------------------------------------------
+# Configuration selector
+# Set CONFIG_MODE to switch between different RoomOptions configurations.
+# ---------------------------------------------------------------------------
+CONFIG_MODE = "basic"
+# Choices: "basic" | "production" | "telemetry" | "websocket" | "webrtc"
+
+
+def make_observability() -> ObservabilityOptions | None:
+    """Build the ObservabilityOptions for the current CONFIG_MODE."""
+    if CONFIG_MODE == "production":
+        # Recording (audio + composite camera video) plus structured logs
+        return ObservabilityOptions(
+            recording=RecordingOptions(video=True),
+            logs=LoggingOptions(level=["INFO", "DEBUG"]),
+        )
+
+    if CONFIG_MODE == "telemetry":
+        # Full OpenTelemetry observability: traces, metrics, logs
+        return ObservabilityOptions(
+            traces=TracesOptions(
+                enabled=True,
+                export_url="https://your-otel-collector.example.com/v1/traces",
+                export_headers={"Authorization": "Bearer YOUR_TOKEN"},
+            ),
+            metrics=MetricsOptions(
+                enabled=True,
+                export_url="https://your-otel-collector.example.com/v1/metrics",
+                export_headers={"Authorization": "Bearer YOUR_TOKEN"},
+            ),
+            logs=LoggingOptions(
+                enabled=True,
+                level=["INFO", "DEBUG"],
+                export_url="https://your-otel-collector.example.com/v1/logs",
+                export_headers={"Authorization": "Bearer YOUR_TOKEN"},
+            ),
+        )
+
+    return None
+
+
 async def entrypoint(ctx: JobContext):
     agent = VoiceAgent()
 
@@ -70,15 +121,13 @@ async def entrypoint(ctx: JobContext):
     )
 
     session = AgentSession(agent=agent, pipeline=pipeline)
-    await session.start(wait_for_participant=True, run_until_shutdown=True)
 
+    observability = make_observability()
+    start_kwargs = {"wait_for_participant": True, "run_until_shutdown": True}
+    if observability is not None:
+        start_kwargs["observability"] = observability
 
-# ---------------------------------------------------------------------------
-# Configuration selector
-# Set CONFIG_MODE to switch between different RoomOptions configurations.
-# ---------------------------------------------------------------------------
-CONFIG_MODE = "basic"
-# Choices: "basic" | "production" | "telemetry" | "websocket" | "webrtc"
+    await session.start(**start_kwargs)
 
 
 def make_context() -> JobContext:
@@ -93,7 +142,8 @@ def make_context() -> JobContext:
         )
 
     elif CONFIG_MODE == "production":
-        # Production-ready: timeouts, recording, no playground
+        # Production-ready: timeouts, no playground.
+        # Recording is configured via ObservabilityOptions on session.start (see make_observability).
         room_options = RoomOptions(
             room_id=room_id,
             name="Production Agent",
@@ -102,36 +152,14 @@ def make_context() -> JobContext:
             auto_end_session=True,
             session_timeout_seconds=10,         # Wait 10s after last participant leaves before ending
             no_participant_timeout_seconds=60,  # Shut down if no participant joins within 60s
-            # Audio recording (default track recording)
-            recording=True,
-            recording_options=RecordingOptions(video=True),  # Also capture composite video
         )
 
     elif CONFIG_MODE == "telemetry":
-        # Full OpenTelemetry observability: traces, metrics, logs exported to your collector
+        # Telemetry mode — traces/metrics/logs flow through ObservabilityOptions on session.start.
         room_options = RoomOptions(
             room_id=room_id,
             name="Telemetry Agent",
             playground=True,
-            # OpenTelemetry trace export
-            traces=TracesOptions(
-                enabled=True,
-                export_url="https://your-otel-collector.example.com/v1/traces",
-                export_headers={"Authorization": "Bearer YOUR_TOKEN"},
-            ),
-            # OpenTelemetry metrics export
-            metrics=MetricsOptions(
-                enabled=True,
-                export_url="https://your-otel-collector.example.com/v1/metrics",
-                export_headers={"Authorization": "Bearer YOUR_TOKEN"},
-            ),
-            # Log export
-            logs=LoggingOptions(
-                enabled=True,
-                level="DEBUG",  # DEBUG | INFO | WARNING | ERROR
-                export_url="https://your-otel-collector.example.com/v1/logs",
-                export_headers={"Authorization": "Bearer YOUR_TOKEN"},
-            ),
             # Also send logs to the VideoSDK dashboard
             send_logs_to_dashboard=True,
             dashboard_log_level="INFO",
