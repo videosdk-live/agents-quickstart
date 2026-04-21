@@ -12,7 +12,7 @@ Available hooks:
   - "agent_turn_end"   : Called when agent finishes responding
   - "vision_frame"     : Preprocess video frames before passing to LLM
 
-Env: VIDEOSDK_AUTH_TOKEN, DEEPGRAM_API_KEY, GOOGLE_API_KEY, CARTESIA_API_KEY
+Env: see `.env.example` at the repo root for all variables (VideoSDK auth + provider keys).
 """
 
 import logging

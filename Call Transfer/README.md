@@ -23,15 +23,9 @@ You will need to provide the destination (phone number or SIP URI) and a VideoSD
 
 2.  **Set up your environment variables**:
 
-    Create a `.env` file in the root of the project and add the following:
+    Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in: `DEEPGRAM_API_KEY`, `GOOGLE_API_KEY`, `CARTESIA_API_KEY`. Also set `CALL_TRANSFER_TO=<phone_number_or_sip_uri_to_transfer_to>`.
 
-    ```
-    DEEPGRAM_API_KEY=<your_deepgram_api_key>
-    GOOGLE_API_KEY=<your_google_api_key>
-    CARTESIA_API_KEY=<your_cartesia_api_key>
-    VIDEOSDK_AUTH_TOKEN=<your_videosdk_auth_token>
-    CALL_TRANSFER_TO=<phone_number_or_sip_uri_to_transfer_to>
-    ```
+    For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime). **Note**: the `transfer_call()` tool in `call_transfer.py` calls the VideoSDK Call Transfer REST API directly with a JWT, so it still reads `VIDEOSDK_AUTH_TOKEN` explicitly — set that one if you want to use the transfer tool.
 
 3.  **Run the agent**:
     ```bash

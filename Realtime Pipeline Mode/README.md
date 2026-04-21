@@ -40,15 +40,7 @@ uv run python "Realtime Pipeline Mode/Google Gemini (LiveAPI)/agent.py"
 
 ## Environment Variables
 
-Set the appropriate API keys for your chosen provider. At minimum you will need:
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in:
 
-```
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-```
-
-Plus the provider-specific key, for example:
-
-```
-OPENAI_API_KEY=your_openai_api_key
-GOOGLE_API_KEY=your_google_api_key
-```
+- **VideoSDK auth** (pick one): `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT).
+- **Provider key** for your chosen realtime model: `OPENAI_API_KEY`, `GOOGLE_API_KEY`, `XAI_API_KEY`, `ULTRAVOX_API_KEY`, or `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY`.

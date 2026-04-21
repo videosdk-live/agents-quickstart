@@ -35,14 +35,9 @@ The `KnowledgeBaseConfig` is used to configure the knowledge base with its ID.
 
 3.  **Set up your environment variables**:
 
-    Create a `.env` file in the root of the project and add the following:
+    Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in: `KNOWLEDGE_BASE_ID`, `GOOGLE_API_KEY`, `SARVAMAI_API_KEY`.
 
-    ```
-    KNOWLEDGE_BASE_ID=<your_knowledge_base_id>
-    GOOGLE_API_KEY=<your_google_api_key>
-    SARVAMAI_API_KEY=<your_sarvamai_api_key>
-    VIDEOSDK_AUTH_TOKEN=<your_videosdk_auth_token>
-    ```
+    For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 4.  **Run the agent**:
     ```bash

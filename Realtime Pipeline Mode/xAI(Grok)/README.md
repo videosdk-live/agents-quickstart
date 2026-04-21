@@ -29,21 +29,20 @@ Before running the agent, make sure to:
 
    **Optional**: To use collections for additional context, create a collection in the [xAI Console](https://console.x.ai) storage section and pass the collection ID in the config. See the [Collection Storage](#-collection-storage) section below for detailed instructions.
 
-2. Set your VideoSDK credentials in the `make_context` function:
+2. Set your VideoSDK credentials via environment variables — set **either** `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT). No `auth_token=` argument needed on `RoomOptions`:
    ```python
    from videosdk.agents import JobContext, RoomOptions
 
    def make_context() -> JobContext:
        room_options = RoomOptions(
            room_id="your-meeting-id",                 # VideoSDK meeting ID
-           auth_token="your-videosdk-auth-token",     # Or use environment variable VIDEOSDK_AUTH_TOKEN
            name="xAI(Grok) Agent",
            playground=True,
        )
        return JobContext(room_options=room_options)
    ```
 
-   You can also use environment variables for `VIDEOSDK_MEETING_ID` and `VIDEOSDK_AUTH_TOKEN`.
+   See [`.env.example`](../../.env.example) at the repo root for all variables (`XAI_API_KEY` plus VideoSDK auth).
 
 ## Running the Example
 

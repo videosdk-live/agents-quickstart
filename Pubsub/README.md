@@ -23,12 +23,9 @@ The agent also subscribes to the "CHAT" topic and uses the `on_pubsub_message` c
    pip install -r requirements.txt
    ```
 2. **Set up your environment variables**:
-   Create a `.env` file in the root of the project and add the following:
-   ```
-   DEEPGRAM_API_KEY=<your_deepgram_api_key>
-   ELEVENLABS_API_KEY=<your_elevenlabs_api_key>
-   ANTHROPIC_API_KEY=<your_anthropic_api_key>
-   ```
+   Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in: `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY`, `ANTHROPIC_API_KEY`.
+
+   For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 3. **Run the agent**:
    ```bash
    python pubsub_agent.py

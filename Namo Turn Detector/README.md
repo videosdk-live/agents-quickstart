@@ -4,14 +4,11 @@ The Namo Turn Detector v1 utilizes a custom fine-tuned model from VideoSDK to ac
 
 ## Get Started
 
-1. Add .env variables
+1. Set environment variables
 
-```bash
-DEEPGRAM_API_KEY=""
-ELEVENLABS_API_KEY=""
-OPENAI_API_KEY=""
-VIDEOSDK_AUTH_TOKEN=""
-```
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in: `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY`, `OPENAI_API_KEY`.
+
+For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 2. Create the environment
 

@@ -23,13 +23,9 @@ The `inherit_context` flag in the agent's constructor controls whether the conve
 
 2.  **Set up your environment variables**:
 
-    Create a `.env` file in the root of the project and add the following:
+    Copy [`.env.example`](../../.env.example) at the repo root to `.env` and fill in: `DEEPGRAM_API_KEY`, `GOOGLE_API_KEY`, `CARTESIA_API_KEY`.
 
-    ```
-    DEEPGRAM_API_KEY=<your_deepgram_api_key>
-    GOOGLE_API_KEY=<your_google_api_key>
-    CARTESIA_API_KEY=<your_cartesia_api_key>
-    ```
+    For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 3.  **Run the agent**:
     ```bash

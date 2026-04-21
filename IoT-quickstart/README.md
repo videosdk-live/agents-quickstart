@@ -140,10 +140,7 @@ pip install videosdk-agents
 pip install "videosdk-plugins-google"
 ```
 
-```.env
-VIDEOSDK_AUTH_TOKEN="your_authtoken_here"
-GOOGLE_API_KEY="your_google_api_key_here"
-```
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in `GOOGLE_API_KEY`. For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 ### 3) Run the agent
 

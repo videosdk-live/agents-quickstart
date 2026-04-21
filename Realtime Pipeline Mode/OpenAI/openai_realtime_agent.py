@@ -95,8 +95,10 @@ async def start_session(context: JobContext):
 def make_context() -> JobContext:
     room_options = RoomOptions(
         room_id="<room_id>", # Replace it with your actual room_id
-        # auth_token = "<VIDEOSDK_AUTH_TOKEN>", # When VIDEOSDK_AUTH_TOKEN is set in .env - DON'T include videosdk_auth
-        name="OpenAI Agent", 
+        # VideoSDK auth is read from env: set either VIDEOSDK_AUTH_TOKEN, or
+        # VIDEOSDK_API_KEY + VIDEOSDK_SECRET_KEY (the SDK auto-mints a JWT).
+        # No auth_token=... arg needed here.
+        name="OpenAI Agent",
         playground=True,
     )
     

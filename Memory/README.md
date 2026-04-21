@@ -13,42 +13,19 @@ A voice concierge agent that remembers conversations using [Mem0](https://app.me
 
 ### 1. Get API Keys
 
-You'll need several API keys to run this agent:
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in:
 
-#### Mem0 API Key (Required for Memory)
-
-1. Visit [https://app.mem0.ai/](https://app.mem0.ai/)
-2. Sign up or log in to your account
-3. Navigate to your dashboard to get your API key
-4. Set it as an environment variable:
-   ```bash
-   export MEM0_API_KEY="your_mem0_api_key_here"
-   ```
-
-#### Other Required API Keys
-
-- **OpenAI API Key**: For the LLM (GPT-4o)
-  ```bash
-  export OPENAI_API_KEY="your_openai_api_key_here"
-  ```
-- **Deepgram API Key**: For speech-to-text
-  ```bash
-  export DEEPGRAM_API_KEY="your_deepgram_api_key_here"
-  ```
-- **ElevenLabs API Key**: For text-to-speech
-  ```bash
-  export ELEVENLABS_API_KEY="your_elevenlabs_api_key_here"
-  ```
+- **Mem0** (required for memory): `MEM0_API_KEY` — get it from [https://app.mem0.ai/](https://app.mem0.ai/)
+- **OpenAI** (LLM — GPT-4o): `OPENAI_API_KEY`
+- **Deepgram** (STT): `DEEPGRAM_API_KEY`
+- **ElevenLabs** (TTS): `ELEVENLABS_API_KEY`
+- **VideoSDK auth** (pick one): `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT)
 
 ### 2. Optional Environment Variables
 
 ```bash
-# Mem0 configuration
-export MEM0_DEFAULT_USER_ID="demo-voice-user"  # Default user ID for memories
-export MEM0_MEMORY_LIMIT="5"                   # Number of recent memories to load
-
-# VideoSDK configuration
-export VIDEOSDK_API_KEY="your_videosdk_api_key"  # If using VideoSDK cloud
+MEM0_DEFAULT_USER_ID=demo-voice-user   # Default user ID for memories
+MEM0_MEMORY_LIMIT=5                    # Number of recent memories to load
 ```
 
 ### 3. Install Dependencies

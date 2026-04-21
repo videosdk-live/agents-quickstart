@@ -23,14 +23,9 @@ If the detector determines it's a voicemail within the specified duration, it wi
 
 2.  **Set up your environment variables**:
 
-    Create a `.env` file in the root of the project and add the following:
+    Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in the keys this example uses: `DEEPGRAM_API_KEY`, `OPENAI_API_KEY`, `ELEVENLABS_API_KEY`.
 
-    ```
-    DEEPGRAM_API_KEY=<your_deepgram_api_key>
-    OPENAI_API_KEY=<your_openai_api_key>
-    ELEVENLABS_API_KEY=<your_elevenlabs_api_key>
-    VIDEOSDK_AUTH_TOKEN=<your_videosdk_auth_token>
-    ```
+    For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 3.  **Run the agent**:
     ```bash

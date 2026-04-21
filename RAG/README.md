@@ -67,12 +67,9 @@ Documents are chunked and embedded automatically. The vector store persists loca
 
 ## Required Environment Variables
 
-```
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-OPENAI_API_KEY=your_openai_api_key
-DEEPGRAM_API_KEY=your_deepgram_api_key
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-```
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in: `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY`.
+
+For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 ## Running the Example
 

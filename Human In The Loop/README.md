@@ -80,6 +80,12 @@ async def ask_human(question: str) -> str:
 
 ## Environment Variables
 
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in the provider keys this example uses (`DEEPGRAM_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`).
+
+For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
+
+Add the Discord-specific variables alongside them:
+
 ```bash
 DISCORD_TOKEN=your_discord_bot_token
 DISCORD_USER_ID=human_operator_user_id

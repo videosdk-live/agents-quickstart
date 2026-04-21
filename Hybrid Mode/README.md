@@ -45,18 +45,10 @@ A VAD (Voice Activity Detection) model is typically required when supplying a cu
 
 ## Required Environment Variables
 
-```
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-```
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in:
 
-Plus the keys for whichever providers you configure, for example:
-
-```
-OPENAI_API_KEY=your_openai_api_key        # for OpenAI realtime LLM or TTS
-DEEPGRAM_API_KEY=your_deepgram_api_key    # for Deepgram STT
-ELEVENLABS_API_KEY=your_elevenlabs_api_key  # for ElevenLabs TTS
-GOOGLE_API_KEY=your_google_api_key        # for Gemini realtime LLM
-```
+- **VideoSDK auth** (pick one): `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT).
+- **Provider keys** for whichever providers you configure, for example: `OPENAI_API_KEY` (OpenAI realtime LLM/TTS), `DEEPGRAM_API_KEY` (Deepgram STT), `ELEVENLABS_API_KEY` (ElevenLabs TTS), `GOOGLE_API_KEY` (Gemini realtime), `XAI_API_KEY` (xAI realtime), `CARTESIA_API_KEY` (Cartesia TTS), `SARVAMAI_API_KEY` (SarvamAI STT).
 
 ## Run Commands
 

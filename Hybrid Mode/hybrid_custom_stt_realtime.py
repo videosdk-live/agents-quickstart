@@ -12,7 +12,7 @@ Use this when:
 
 Pipeline auto-detects Hybrid Mode when both stt= and llm= (realtime model) are provided.
 
-Env: VIDEOSDK_AUTH_TOKEN, GOOGLE_API_KEY, SARVAMAI_API_KEY
+Env: see `.env.example` at the repo root for all variables (VideoSDK auth + provider keys).
 """
 
 import logging

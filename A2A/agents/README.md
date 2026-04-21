@@ -96,7 +96,7 @@ A2A/
 - Both agents are created and configured with their respective pipelines
 - Customer agent joins VideoSDK meeting for user interaction
 - Specialist agent runs in background mode
-- Environment requires `VIDEOSDK_AUTH_TOKEN`, `GOOGLE_API_KEY`, and `OPENAI_API_KEY`
+- Environment requires `GOOGLE_API_KEY`, `OPENAI_API_KEY`, and VideoSDK auth — either `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT)
 
 **Resource Management**:
 - Proper startup sequence ensures agents register before queries arrive

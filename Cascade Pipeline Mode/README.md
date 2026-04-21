@@ -82,15 +82,9 @@ Here are the installation commands for the providers used in this example:
 
 ### 1. Set Up Your Environment
 
-Before running the script, make sure you have the necessary API keys for the providers you intend to use. Store them in a `.env` file at the root of the project.
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in the keys for the providers you intend to use (e.g. `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY`, `GOOGLE_API_KEY`, `CARTESIA_API_KEY`, `ANTHROPIC_API_KEY`, …).
 
-```
-# .env
-GOOGLE_API_KEY=your_google_api_key
-OPENAI_API_KEY=your_openai_api_key
-DEEPGRAM_API_KEY=your_deepgram_api_key
-# ... and so on for other services
-```
+For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 ### 2. Configure the Pipeline
 

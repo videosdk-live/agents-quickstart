@@ -1,4 +1,3 @@
-import os
 from typing import AsyncIterator
 from videosdk.agents import Agent, AgentSession, Pipeline, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.openai import OpenAILLM
@@ -45,7 +44,6 @@ def make_context() -> JobContext:
     room_options = RoomOptions(
         room_id="<room_id>",
         name="Namo Turn Detector Agent",
-        auth_token=os.getenv("VIDEOSDK_AUTH_TOKEN"),
         playground=True,
     )
 

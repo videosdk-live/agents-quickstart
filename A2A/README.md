@@ -31,7 +31,7 @@ Customer Service Agent → Relays response to client
 
 ### Prerequisites
 - Python 3.12 or higher
-- VideoSDK authentication token
+- VideoSDK credentials — either `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT)
 - Google Gemini API key
 - OpenAI API key (for specialist agents)
 - VideoSDK meeting ID
@@ -49,11 +49,10 @@ pip install videosdk-agents
 ```
 
 3. **Set environment variables**:
-```bash
-export VIDEOSDK_AUTH_TOKEN="your_videosdk_token"
-export GOOGLE_API_KEY="your_gemini_api_key"
-export OPENAI_API_KEY="your_openai_api_key"
-```
+
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in: `GOOGLE_API_KEY`, `OPENAI_API_KEY`.
+
+For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).
 
 4. **Update meeting ID** in `main.py`:
 ```python

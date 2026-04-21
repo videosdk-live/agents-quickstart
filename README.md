@@ -146,7 +146,7 @@ Detect user inactivity and automatically trigger a callback to re-engage users. 
 ## Prerequisites
 
 - Python 3.12 or higher
-- A VideoSDK authentication token (from [app.videosdk.live](https://app.videosdk.live))
+- VideoSDK credentials from [app.videosdk.live](https://app.videosdk.live) — either a pre-minted `VIDEOSDK_AUTH_TOKEN`, **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT at runtime)
 - A VideoSDK meeting ID (from the [Create Room API](https://docs.videosdk.live/api-reference/realtime-communication/create-room))
 - API key for your chosen LLM/STT/TTS provider
 - Client-side implementation with any VideoSDK SDK
@@ -270,16 +270,22 @@ agents-quickstart/
 
 ## Environment Setup
 
-Create a `.env` file in your project root:
+A single `.env.example` lives at the **repo root**. Copy it to `.env` and fill in only the variables you actually need:
 
 ```bash
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-OPENAI_API_KEY=your_openai_key
-GOOGLE_API_KEY=your_google_key
-DEEPGRAM_API_KEY=your_deepgram_key
-ELEVENLABS_API_KEY=your_elevenlabs_key
-# Add other provider keys as needed
+cp .env.example .env
 ```
+
+### VideoSDK Auth — pick ONE setup
+
+- **Setup A — pre-minted token**: set `VIDEOSDK_AUTH_TOKEN` (generated from the VideoSDK dashboard).
+- **Setup B — API key + secret**: set `VIDEOSDK_API_KEY` and `VIDEOSDK_SECRET_KEY` (your dashboard credentials). The SDK auto-mints a JWT at runtime and uses it for meeting creation, join, recording, SIP, analytics, and inference.
+
+Setup B is used **only when `VIDEOSDK_AUTH_TOKEN` is not set**. You don't need to pass anything to `RoomOptions(...)` — the SDK reads these env vars automatically.
+
+### Provider keys
+
+Set keys only for the providers used by the example you're running (e.g. `OPENAI_API_KEY`, `DEEPGRAM_API_KEY`, `ELEVENLABS_API_KEY`, `GOOGLE_API_KEY`, `CARTESIA_API_KEY`, …). See `.env.example` for the complete list.
 
 ## Generating a VideoSDK Meeting ID
 

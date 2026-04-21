@@ -108,11 +108,6 @@ async def on_vision_frame(agent, frame, **kwargs):
 uv run python "Pipeline Hooks/pipeline_hooks_agent.py"
 ```
 
-Make sure the following environment variables are set:
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in the keys this example uses: `DEEPGRAM_API_KEY`, `GOOGLE_API_KEY`, `CARTESIA_API_KEY`.
 
-```
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-OPENAI_API_KEY=your_openai_api_key
-DEEPGRAM_API_KEY=your_deepgram_api_key
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-```
+For VideoSDK auth, set **either** `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY` (the SDK auto-mints a JWT from the API key/secret at runtime).

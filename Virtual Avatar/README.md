@@ -24,28 +24,13 @@ pip install "videosdk-plugins-anam"
 
 ### API Keys Required
 
-You'll need the following API keys in your `.env` file:
+Copy [`.env.example`](../.env.example) at the repo root to `.env` and fill in the keys you need:
 
-```env
-# Required for VideoSDK
-VIDEOSDK_AUTH_TOKEN=your_videosdk_auth_token
-
-# --- For Simli Avatar ---
-SIMLI_API_KEY=your_simli_api_key_here
-SIMLI_FACE_ID=your_face_id_here  # Optional - has default value
-
-# --- For Anam Avatar ---
-ANAM_API_KEY=your_anam_api_key_here
-ANAM_AVATAR_ID=your_anam_avatar_id_here
-
-# For Cascade Pipeline Mode examples
-DEEPGRAM_API_KEY=your_deepgram_api_key
-OPENAI_API_KEY=your_openai_api_key
-ELEVENLABS_API_KEY=your_elevenlabs_api_key
-
-# For Realtime Pipeline Mode examples (Gemini Live API)
-GOOGLE_API_KEY=your_google_api_key
-```
+- **VideoSDK auth** (pick one): `VIDEOSDK_AUTH_TOKEN` **or** `VIDEOSDK_API_KEY` + `VIDEOSDK_SECRET_KEY`
+- **Simli avatar examples**: `SIMLI_API_KEY` (and optionally `SIMLI_FACE_ID`)
+- **Anam avatar examples**: `ANAM_API_KEY`, `ANAM_AVATAR_ID`
+- **Cascade Pipeline Mode examples**: `DEEPGRAM_API_KEY`, `OPENAI_API_KEY`, `ELEVENLABS_API_KEY`
+- **Realtime Pipeline Mode examples (Gemini Live API)**: `GOOGLE_API_KEY`
 
 ### Getting Avatar Credentials
 
